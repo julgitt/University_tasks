@@ -1,0 +1,1 @@
+CMakeLists.txt not found in C:\Users\julka\Desktop\Studia\git\ask\1pracownia Select CMakeLists.txt

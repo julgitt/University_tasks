@@ -1,0 +1,17 @@
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\bin\Debug\netcoreapp3.1\My_Dictionary.exe
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\bin\Debug\netcoreapp3.1\My_Dictionary.deps.json
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\bin\Debug\netcoreapp3.1\My_Dictionary.runtimeconfig.json
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\bin\Debug\netcoreapp3.1\My_Dictionary.runtimeconfig.dev.json
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\bin\Debug\netcoreapp3.1\My_Dictionary.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\bin\Debug\netcoreapp3.1\My_Dictionary.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\bin\Debug\netcoreapp3.1\ClassLibrary.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\bin\Debug\netcoreapp3.1\ClassLibrary.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.csproj.AssemblyReference.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.AssemblyInfoInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.AssemblyInfo.cs
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.csproj.CoreCompileInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.csproj.CopyComplete
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\My_Dictionary\obj\Debug\netcoreapp3.1\My_Dictionary.genruntimeconfig.cache

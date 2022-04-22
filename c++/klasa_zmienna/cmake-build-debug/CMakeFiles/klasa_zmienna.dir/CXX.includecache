@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/julka/Desktop/Studia/c++/klasa zmienna/classes.h
+iostream
+-
+string
+-
+
+C:/Users/julka/Desktop/Studia/c++/klasa zmienna/main.cpp
+classes.h
+C:/Users/julka/Desktop/Studia/c++/klasa zmienna/classes.h
+
+C:/Users/julka/Desktop/Studia/c++/klasa zmienna/set_of_variables.cpp
+utility
+-
+classes.h
+C:/Users/julka/Desktop/Studia/c++/klasa zmienna/classes.h
+

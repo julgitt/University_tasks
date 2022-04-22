@@ -1,0 +1,28 @@
+#lang racket
+
+
+(define (split xs)
+  (define (lists ys zs)
+    (cond
+      [(null? xs)
+       (cons ys zs)]
+      [(> (lenght ys)(lenght zs))
+       (append zs (car xs))]
+      [else
+       (append ys (car xs))]))
+  (lists null null))
+    
+       
+    
+• (split xs) – zwraca parę dwóch list różniących się długością o co najwyżej 1,
+oraz zawierających wszystkie elementy listy xs. Przykład:
+> ( split ( list 8 2 4 7 4 2 1) )
+'((8 4 4 1) 2 7 2)
+; albo: '((8 2 4 7) 4 2 1)
+• (merge xs ys) – dla argumentów będących posortowanymi listami zwraca
+posortowaną listę wszystkich elementów xs i ys. Przykład:
+> ( merge ( list 1 4 4 8) ( list 2 2 7) )
+'(1 2 2 4 4 7 8)
+• (merge-sort xs) – sortuje listę algorytmem sortowania przez złączanie. Dla list
+długości większej niż 1, procedura ta dzieli listę wejściową na dwie prawie równe
+części, sortuje je rekurencyjnie, a następnie złącza posortowane wyniki.

@@ -1,0 +1,17 @@
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\bin\Debug\netcoreapp3.1\Wektor.exe
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\bin\Debug\netcoreapp3.1\Wektor.deps.json
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\bin\Debug\netcoreapp3.1\Wektor.runtimeconfig.json
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\bin\Debug\netcoreapp3.1\Wektor.runtimeconfig.dev.json
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\bin\Debug\netcoreapp3.1\Wektor.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\bin\Debug\netcoreapp3.1\Wektor.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\bin\Debug\netcoreapp3.1\Vectors_dll.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\bin\Debug\netcoreapp3.1\Vectors_dll.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.AssemblyInfoInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.AssemblyInfo.cs
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.csproj.CoreCompileInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.csproj.CopyComplete
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.genruntimeconfig.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Wektor\obj\Debug\netcoreapp3.1\Wektor.csproj.AssemblyReference.cache

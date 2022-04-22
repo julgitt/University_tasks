@@ -1,0 +1,3 @@
+C:/Users/julka/Desktop/Studia/c++/czynniki_pierwsze/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/julka/Desktop/Studia/c++/czynniki_pierwsze/cmake-build-debug/CMakeFiles/czynniki_pierwsze.dir
+C:/Users/julka/Desktop/Studia/c++/czynniki_pierwsze/cmake-build-debug/CMakeFiles/rebuild_cache.dir

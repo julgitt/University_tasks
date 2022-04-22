@@ -1,0 +1,14 @@
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\obj\Debug\netcoreapp3.1\Stream.csproj.AssemblyReference.cache
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\obj\Debug\netcoreapp3.1\Stream.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\obj\Debug\netcoreapp3.1\Stream.AssemblyInfoInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\obj\Debug\netcoreapp3.1\Stream.AssemblyInfo.cs
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\obj\Debug\netcoreapp3.1\Stream.csproj.CoreCompileInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\bin\Debug\netcoreapp3.1\Stream.exe
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\bin\Debug\netcoreapp3.1\Stream.deps.json
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\bin\Debug\netcoreapp3.1\Stream.runtimeconfig.json
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\bin\Debug\netcoreapp3.1\Stream.runtimeconfig.dev.json
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\bin\Debug\netcoreapp3.1\Stream.dll
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\bin\Debug\netcoreapp3.1\Stream.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\obj\Debug\netcoreapp3.1\Stream.dll
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\obj\Debug\netcoreapp3.1\Stream.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\strumien_wejsciowy\Stream\obj\Debug\netcoreapp3.1\Stream.genruntimeconfig.cache

@@ -1,0 +1,6 @@
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Vectors_dll\obj\Debug\Vectors_dll.csproj.AssemblyReference.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Vectors_dll\obj\Debug\Vectors_dll.csproj.CoreCompileInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Vectors_dll\bin\Debug\Vectors_dll.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Vectors_dll\bin\Debug\Vectors_dll.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Vectors_dll\obj\Debug\Vectors_dll.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\Vectors\Vectors_dll\obj\Debug\Vectors_dll.pdb

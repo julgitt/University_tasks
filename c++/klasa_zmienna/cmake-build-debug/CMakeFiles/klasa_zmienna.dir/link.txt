@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\klasa_zmienna.dir/objects.a
+C:\PROGRA~1\CODEBL~1\MinGW\bin\ar.exe cr CMakeFiles\klasa_zmienna.dir/objects.a @CMakeFiles\klasa_zmienna.dir\objects1.rsp
+C:\PROGRA~1\CODEBL~1\MinGW\bin\G__~1.EXE -g -Wl,--whole-archive CMakeFiles\klasa_zmienna.dir/objects.a -Wl,--no-whole-archive -o klasa_zmienna.exe -Wl,--out-implib,libklasa_zmienna.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\klasa_zmienna.dir\linklibs.rsp

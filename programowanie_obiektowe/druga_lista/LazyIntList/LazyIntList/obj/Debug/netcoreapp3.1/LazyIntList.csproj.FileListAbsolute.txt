@@ -1,0 +1,14 @@
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\bin\Debug\netcoreapp3.1\LazyIntList.exe
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\bin\Debug\netcoreapp3.1\LazyIntList.deps.json
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\bin\Debug\netcoreapp3.1\LazyIntList.runtimeconfig.json
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\bin\Debug\netcoreapp3.1\LazyIntList.runtimeconfig.dev.json
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\bin\Debug\netcoreapp3.1\LazyIntList.dll
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\bin\Debug\netcoreapp3.1\LazyIntList.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\obj\Debug\netcoreapp3.1\LazyIntList.csproj.AssemblyReference.cache
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\obj\Debug\netcoreapp3.1\LazyIntList.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\obj\Debug\netcoreapp3.1\LazyIntList.AssemblyInfoInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\obj\Debug\netcoreapp3.1\LazyIntList.AssemblyInfo.cs
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\obj\Debug\netcoreapp3.1\LazyIntList.csproj.CoreCompileInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\obj\Debug\netcoreapp3.1\LazyIntList.dll
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\obj\Debug\netcoreapp3.1\LazyIntList.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\LazyIntList\LazyIntList\obj\Debug\netcoreapp3.1\LazyIntList.genruntimeconfig.cache

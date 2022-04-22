@@ -1,0 +1,36 @@
+#lang racket
+(define-type (NNF 'v)
+  (nnf-lit (polarity : Boolean)(var : 'v))
+  (nnf-conj (l :(nnf 'v)) (r: (nnf 'v)))
+  (nnf-disj (l :(nnf 'v)) (r: (nnf 'v))))
+
+(define (neg-nnf a)
+  (cond [(nnf-lit? a)
+        ((nnf-lit (not nnf-lit-polarity a) (nnf-lit-var a))]
+        [(nnf-conj? a)
+         (nnf-disj (neg-nnf (nnf-conj-l a))(neg-nnf (nnf-conj-r a)))]
+        [(nnf-disj? a)
+         (nnf-conj (neg-nnf (nnf-disj-l a))(neg-nnf (nnf-disj-r a)))]))
+;(neg-nnf (neg-nnf ϕ))≡ ϕ
+;1) wezmy dowolne 'v typu nnf-lit
+;(neg-nnf(neg-nnf 'v)) ≡
+;≡ (neg-nnf (nnf-lit (not nnf-lit-polarity 'v)(nnf-lit-var 'v)))≡ 
+;≡ (nnf-lit (not(not nnf-lit-polarity 'v)) (nnf-lit-var 'v)) ≡
+;≡(nnf-lit  (nnf-lit-polarity 'v) (nnf-lit-var 'v))≡'v
+
+;2) Wezmy dowolne ϕ i ψ i zalozmy ze
+;(neg-nnf (neg-nnf ϕ))≡ ϕ
+;(neg-nnf (neg-nnf ψ))≡ ψ
+
+;(neg-nnf (neg-nnf (nnf-conj ϕ ψ))≡
+;≡(neg-nnf (nnf-disj (neg-nnf ϕ) (neg-nnf ψ)))≡
+;≡(nnf-conj (neg-nnf(neg-nnf ϕ)) (neg-nnf(neg-nnf ψ))))≡
+;≡(nnf-conj ϕ ψ)
+;z zal
+;(neg-nnf (neg-nnf (nnf-disj ϕ ψ))≡
+;≡(neg-nnf (nnf-conj (neg-nnf ϕ) (neg-nnf ψ)))≡
+;≡(nnf-disj (neg-nnf(neg-nnf ϕ)) (neg-nnf(neg-nnf ψ))))≡
+;≡(nnf-disj ϕ ψ)
+;z zal
+
+; Zatem zachodzi (neg-nnf (neg-nnf ϕ))≡ ϕ dla dow ϕ

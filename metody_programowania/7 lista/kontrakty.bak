@@ -1,0 +1,8 @@
+#lang racket
+
+(define/contract (suffixes xs)
+  (-> list? list)
+    (cond
+      [(null? xs) (list xs)]
+      [else
+       (cons xs (suffixes (cdr xs)))]))

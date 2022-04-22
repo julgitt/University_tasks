@@ -1,0 +1,54 @@
+#lang racket
+
+
+
+
+(define-struct column-info (name type) #:transparent)
+
+(define-struct table (schema rows) #:transparent)
+
+(define cities
+  (table
+   (list (column-info 'city    'string)
+         (column-info 'country 'string)
+         (column-info 'area    'number)
+         (column-info 'capital 'boolean))
+   (list (list "Wrocław" "Poland"  293 #f)
+         (list "Warsaw"  "Poland"  517 #t)
+         (list "Poznań"  "Poland"  262 #f)
+         (list "Berlin"  "Germany" 892 #t)
+         (list "Munich"  "Germany" 310 #f)
+         (list "Paris"   "France"  105 #t)
+         (list "Rennes"  "France"   50 #f))))
+
+(define countries
+  (table
+   (list (column-info 'country 'string)
+         (column-info 'population 'number))
+   (list (list "Poland" 38)
+         (list "Germany" 83)
+         (list "France" 67)
+         (list "Spain" 47))))
+
+(define (empty-table columns) (table columns '()))
+
+; Wstawianie
+
+(define (table-insert row tab)
+  (define (compare a b) 
+  (cond
+    [(and (null? a) (null? b)) #t]
+    [(or (null? a) (null? b)) #f]
+    [(and (number? (car a)) (number?  (car b)))
+     (compare (cdr a)(cdr b))]
+    [(and (string? (car a)) (string?  (car b)))
+     (compare (cdr a)(cdr b))]
+    [(and (boolean? (car a)) (boolean?  (car b)))
+     (compare (cdr a)(cdr b))]
+    [else #f])) 
+  (compare row (table-rows(car tab))))
+
+
+
+; Projekcja
+

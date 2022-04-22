@@ -1,0 +1,6 @@
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\ClassLibrary\bin\Debug\ClassLibrary.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\ClassLibrary\bin\Debug\ClassLibrary.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\ClassLibrary\obj\Debug\ClassLibrary.csproj.AssemblyReference.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\ClassLibrary\obj\Debug\ClassLibrary.csproj.CoreCompileInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\ClassLibrary\obj\Debug\ClassLibrary.dll
+C:\Users\julka\Desktop\Studia\obiektowe\trzecia_lista\MyDictionary\ClassLibrary\obj\Debug\ClassLibrary.pdb

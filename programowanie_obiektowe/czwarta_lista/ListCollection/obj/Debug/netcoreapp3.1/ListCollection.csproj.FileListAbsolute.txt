@@ -1,0 +1,14 @@
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\bin\Debug\netcoreapp3.1\ListCollection.exe
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\bin\Debug\netcoreapp3.1\ListCollection.deps.json
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\bin\Debug\netcoreapp3.1\ListCollection.runtimeconfig.json
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\bin\Debug\netcoreapp3.1\ListCollection.runtimeconfig.dev.json
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\bin\Debug\netcoreapp3.1\ListCollection.dll
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\bin\Debug\netcoreapp3.1\ListCollection.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\obj\Debug\netcoreapp3.1\ListCollection.csproj.AssemblyReference.cache
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\obj\Debug\netcoreapp3.1\ListCollection.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\obj\Debug\netcoreapp3.1\ListCollection.AssemblyInfoInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\obj\Debug\netcoreapp3.1\ListCollection.AssemblyInfo.cs
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\obj\Debug\netcoreapp3.1\ListCollection.csproj.CoreCompileInputs.cache
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\obj\Debug\netcoreapp3.1\ListCollection.dll
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\obj\Debug\netcoreapp3.1\ListCollection.pdb
+C:\Users\julka\Desktop\Studia\obiektowe\czwarta_lista\ListCollection\obj\Debug\netcoreapp3.1\ListCollection.genruntimeconfig.cache
