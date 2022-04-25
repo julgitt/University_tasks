@@ -1,0 +1,54 @@
+	movq 	%rdi, %rdx
+        movq	%rdi, %rcx
+
+        shrq 	$32, %rdx			/*zamieniam miejscami dwie połowy rejestru*/
+        shlq 	$32, %rcx
+        orq	%rdx, %rcx			
+
+        movq	$0xffff0000ffff0000, %rdx	/*wyłuskuję pierwsze ćwiartki obu połówek*/
+        andq	%rcx, %rdx
+        shrq	$16, %rdx			/*przesuwam je na miejsce drugich ćwiartek*/
+
+        movq	$0x0000ffff0000ffff, %rax	/*wyłuskuję drugie ćwiartki obu połówek do innego rejestru*/
+        andq 	%rax, %rcx			
+        shlq 	$16, %rcx			/*przesuwam je na miejsce pierwszych ćwiartek*/		
+        orq 	%rdx, %rcx			/*łączę oba rejestry instrukcją or, dzięki czemu uzyskuję zamienione miejscami ćwiartki*/
+
+        movq 	$0xff00ff00ff00ff00, %rdx	/*dalej zamieniam coraz mniejsze fragmenty w analogiczny sposób*/
+        andq	%rcx, %rdx
+        shrq	$8, %rdx
+
+        movq	$0x00ff00ff00ff00ff, %rax
+        andq 	%rax, %rcx
+        shlq 	$8, %rcx
+        orq 	%rdx, %rcx			
+
+
+        movq	$0xf0f0f0f0f0f0f0f0, %rdx
+        andq 	%rcx, %rdx
+        shrq 	$4, %rdx
+
+        movq 	$0x0f0f0f0f0f0f0f0f, %rax
+        andq 	%rax, %rcx
+        shlq 	$4, %rcx
+        orq 	%rdx, %rcx
+	
+        movq 	$0xcccccccccccccccc, %rdx	/*11001100...*/
+        andq 	%rcx, %rdx
+        shrq 	$2, %rdx
+
+        movq 	$0x3333333333333333, %rax	/*00110011...*/
+        andq	%rax, %rcx
+        shlq	$2, %rcx
+        orq	%rdx, %rcx
+
+        movq 	$0xaaaaaaaaaaaaaaaa, %rdx	/*10101010...*/
+        andq 	%rcx, %rdx
+        shrq 	$1, %rdx
+
+        movq	$0x5555555555555555, %rax	/*01010101...*/
+        andq	%rcx, %rax
+        shlq	$1, %rax
+        orq	%rdx, %rax
+
+        ret

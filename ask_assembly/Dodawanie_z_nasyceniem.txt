@@ -1,0 +1,17 @@
+	lea	(%rdi, %rsi), %rax
+	movq	%rax, %rdx
+	
+	movq	0x80000000000000ff, %rcx
+	andq	%rcx, %rdx			/*zmniejszony zakres do -128, 128*/
+	movq	%rdx, %rcx
+	
+	xor	0x8000000000000000, %rcx	/*zmieniam bit znaku na przeciwny*/
+	subq	0x8000000000000000, %rcx	/*odejmuje jedynkę od bitu znaku*/
+	adc	%rax, %rax			/*jeżeli liczba była ujemna (po zmianie znaku dodatnia), to przy odejmowaniu zapala się flaga CF*/
+	shl	%8, %rax			/* wtedy ósmy najmłodszy bit jest zapalony*/			
+	xor	0x0000000000000007f, rax	/* 127 jeżeli liczba była dodatnia, 128 jeżeli była ujemna*/	
+	xor	0x8000000000000000, %rcx	/* przywracam pierwotny bit znaku*/	
+	or 	rcx, rax			/*127 jeżeli liczba była dodatnia, -128 jeżeli była ujemna*/
+	and	rdx, rax
+	
+        ret

@@ -1,0 +1,3 @@
+C:/Users/julka/Desktop/Studia/git/wstep_do_c/Dynamiczny_przydzial_pamieci/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/julka/Desktop/Studia/git/wstep_do_c/Dynamiczny_przydzial_pamieci/cmake-build-debug/CMakeFiles/Dynamiczny_przydzial_pamieci.dir
+C:/Users/julka/Desktop/Studia/git/wstep_do_c/Dynamiczny_przydzial_pamieci/cmake-build-debug/CMakeFiles/rebuild_cache.dir

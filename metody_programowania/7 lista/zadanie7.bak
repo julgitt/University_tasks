@@ -1,0 +1,13 @@
+#lang plait
+
+(fold-right (f x xs)
+  (if (null? xs)
+      x
+      (f (car xs) (fold-right f x (cdr xs)))))
+
+;(parametric->/c [a] (-> (-> a (listof a) (listof a)) a (listof a) (listof a) ))
+(define (fold-r f x xs)
+  (if (empty? xs)
+      x
+      (f(f (first xs) (fold-r f x (rest xs))) x)))
+(fold-r + 0 '(0 1 2 3))

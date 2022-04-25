@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/julka/Desktop/Studia/git/wstep_do_c/zegar/main.c
+stdio.h
+-
+stdlib.h
+-
+time.h
+-
+

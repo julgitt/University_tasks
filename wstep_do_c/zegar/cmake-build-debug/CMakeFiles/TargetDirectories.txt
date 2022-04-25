@@ -1,0 +1,3 @@
+C:/Users/julka/Desktop/Studia/git/wstep_do_c/zegar/cmake-build-debug/CMakeFiles/zegar.dir
+C:/Users/julka/Desktop/Studia/git/wstep_do_c/zegar/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/julka/Desktop/Studia/git/wstep_do_c/zegar/cmake-build-debug/CMakeFiles/rebuild_cache.dir

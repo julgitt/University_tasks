@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2021.2.3\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\Priority_queue_sort.dir/objects.a
+C:\PROGRA~1\CODEBL~1\MinGW\bin\ar.exe cr CMakeFiles\Priority_queue_sort.dir/objects.a @CMakeFiles\Priority_queue_sort.dir\objects1.rsp
+C:\PROGRA~1\CODEBL~1\MinGW\bin\gcc.exe -g -Wl,--whole-archive CMakeFiles\Priority_queue_sort.dir/objects.a -Wl,--no-whole-archive -o Priority_queue_sort.exe -Wl,--out-implib,libPriority_queue_sort.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Priority_queue_sort.dir\linklibs.rsp
