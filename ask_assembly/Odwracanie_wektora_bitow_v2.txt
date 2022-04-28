@@ -12,6 +12,7 @@ bitrev:
 	rol	$8, %cx
 	shlq 	$32, %rcx
 	orq 	%rdx, %rcx
+	movq	%rcx, %rdx
 	
    	movq	$0xf0f0f0f0f0f0f0f0, %rdx 	/*odwrocenie kolejnosci "czwórek" bitów*/
         andq 	%rcx, %rdx			/*aby wyłuskuję pierwsze czwórki bitów*/
@@ -23,19 +24,19 @@ bitrev:
         orq 	%rdx, %rcx			
 						/*odwrocenie kolejnosci par bitów analogicznie*/
         movq 	$0xcccccccccccccccc, %rdx	/*maska 11001100...*/
-        leaq 	(, %rcx, 4), %rax
+        leaq 	(,%rcx, 4) %rax
         andq 	%rdx, %rcx
         shrq 	$2, %rcx
 	
         andq	%rdx, %rax
-        orq	%rax, %rcx
+        orq	%rdx, %rax
 						/*odwrocenie kolejnosci sąsiadujących bitów analogicznie*/
         movq 	$0xaaaaaaaaaaaaaaaa, %rdx	/*maska 10101010...*/
-	leaq 	(,%rcx,2), %rax
+	leaq 	(,%rcx,2) %rax
         andq 	%rdx, %rcx
         shrq 	$1, %rcx
 	
         andq	%rdx, %rax
-        orq	%rcx, %rax
+        orq	%rdx, %rax
 
         ret

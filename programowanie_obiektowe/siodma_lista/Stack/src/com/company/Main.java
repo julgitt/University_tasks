@@ -6,13 +6,23 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Objects;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException, ClassNotFoundException, NoSuchMethodException {
+    public static void main(String[] args) throws Exception {
         if (args.length == 2) {
-            Class<?> figure = Class.forName(args[1]);
-            Class<?>[] classes = {args[1].getClass()};
+            Figure figure;
+
+            if (Objects.equals(args[1], "Figure"))
+                figure = new Figure();
+            else if (Objects.equals(args[1], "Circle"))
+                figure = new Circle();
+            else if (Objects.equals(args[1], "Triangle"))
+                figure = new Triangle();
+            else
+                throw new Exception("Wrong class name in argument");
+
 
             MyFrame frame = new MyFrame();
             File file = new File(args[0]);
@@ -21,43 +31,21 @@ public class Main {
                     FileInputStream input = new FileInputStream(args[0]);
                     ObjectInputStream objInput = new ObjectInputStream(input);
 
-                    figure = (Class<?>) objInput.readObject();
+                    figure = (Figure) objInput.readObject();
 
                     objInput.close();
                     input.close();
                 } catch (IOException | ClassNotFoundException ioe) {
                     ioe.printStackTrace();
                 }
-            }
-            else if(file.createNewFile())
+            } else if (file.createNewFile())
                 System.out.println("File has been created");
-            figure.getMethod("Edit", classes);
-        }
-        else
+            figure.Edit(frame, args[0]);
+        } else
             System.out.println(args.length);
     }
 }
 
-  /*  public static void main(String[] args) throws IOException {
 
-        MyFrame frame = new MyFrame();
-        Circle figure = new Circle();
-        File file = new File("Circle.ser");
-        if (file.isFile() && file.canRead()) {
-            try {
-                FileInputStream input = new FileInputStream("Circle.ser");
-                ObjectInputStream objInput = new ObjectInputStream(input);
 
-                figure = (Circle) objInput.readObject();
 
-                objInput.close();
-                input.close();
-            } catch (IOException | ClassNotFoundException ioe) {
-                ioe.printStackTrace();
-            }
-        }
-        else if(file.createNewFile())
-            System.out.println("File has been created");
-
-        figure.Edit(frame,"Circle.ser");
-    }*/
