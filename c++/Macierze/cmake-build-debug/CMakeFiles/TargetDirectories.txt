@@ -1,0 +1,3 @@
+C:/Users/julka/Desktop/Studia/git/c++/Macierze/cmake-build-debug/CMakeFiles/Macierze.dir
+C:/Users/julka/Desktop/Studia/git/c++/Macierze/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/julka/Desktop/Studia/git/c++/Macierze/cmake-build-debug/CMakeFiles/rebuild_cache.dir

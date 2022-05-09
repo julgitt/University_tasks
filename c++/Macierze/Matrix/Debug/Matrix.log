@@ -1,0 +1,73 @@
+﻿  Main.cpp
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\classes.h(37,1): error C2440: 'return': cannot convert from 'calculations::Vector *' to 'double *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\classes.h(37,37): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\classes.h(42,1): error C2440: '=': cannot convert from 'double *' to 'calculations::Vector *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\classes.h(42,30): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(5,5): error C2653: 'Variable': is not a class or namespace name
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(5,15): error C3861: 'add_Variable': identifier not found
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(6,5): error C2653: 'Variable': is not a class or namespace name
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(6,15): error C3861: 'add_Variable': identifier not found
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(9,5): error C2065: 'Expression': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(9,17): error C2065: 'w': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(9,25): error C2061: syntax error: identifier 'Subtraction'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(19,5): error C2065: 'Expression': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(19,17): error C2065: 'w1': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(19,26): error C2061: syntax error: identifier 'Division'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(28,5): error C2065: 'Expression': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(28,17): error C2065: 'w2': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(28,26): error C2061: syntax error: identifier 'Division'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(38,5): error C2065: 'Expression': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(38,17): error C2065: 'w3': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(38,26): error C2061: syntax error: identifier 'Subtraction'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(51,5): error C2065: 'Expression': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(51,17): error C2065: 'w4': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(51,26): error C2061: syntax error: identifier 'Division'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(65,13): error C2065: 'w': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(65,40): error C2065: 'w': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(66,13): error C2065: 'w1': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(66,41): error C2065: 'w1': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(67,13): error C2065: 'w2': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(67,41): error C2065: 'w2': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(68,13): error C2065: 'w3': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(68,41): error C2065: 'w3': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(69,13): error C2065: 'w4': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(69,41): error C2065: 'w4': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(72,9): error C2653: 'Variable': is not a class or namespace name
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(72,19): error C3861: 'modify_Variable': identifier not found
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(74,13): error C2653: 'Variable': is not a class or namespace name
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(74,23): error C3861: 'modify_Variable': identifier not found
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(75,82): error C2065: 'w3': undeclared identifier
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Main.cpp(76,40): error C2065: 'w3': undeclared identifier
+  Methods.cpp
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Classes.h(37,1): error C2440: 'return': cannot convert from 'calculations::Vector *' to 'double *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Classes.h(37,37): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Classes.h(42,1): error C2440: '=': cannot convert from 'double *' to 'calculations::Vector *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Classes.h(42,30): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(6,12): error C2062: type 'int' unexpected
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(6,60): error C2143: syntax error: missing ';' before '{'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(6,60): error C2447: '{': missing function header (old-style formal list?)
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(16,12): error C2588: '::~Vector': illegal global destructor
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(16,15): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(18,5): warning C4508: 'calculations::Vector': function should return a value; 'void' return type assumed
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(50,36): error C2440: '=': cannot convert from 'double *' to 'calculations::Vector *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(50,35): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(51,30): error C2440: '=': cannot convert from 'double *' to 'calculations::Vector *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(51,26): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(188,63): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(224,52): error C2440: '=': cannot convert from 'double **' to 'calculations::Vector **'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(224,27): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(228,62): error C2440: '=': cannot convert from 'double *' to 'calculations::Vector *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(228,36): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(262,41): error C2440: '=': cannot convert from 'double **' to 'calculations::Vector **'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(262,23): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(268,48): error C2440: '=': cannot convert from 'double *' to 'calculations::Vector *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(268,32): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(286,41): error C2440: '=': cannot convert from 'double **' to 'calculations::Vector **'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(286,23): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(292,51): error C2440: '=': cannot convert from 'double *' to 'calculations::Vector *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(292,32): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(305,47): error C2440: '=': cannot convert from 'double **' to 'calculations::Vector **'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(305,23): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(309,51): error C2440: '=': cannot convert from 'double *' to 'calculations::Vector *'
+C:\Users\julka\Desktop\Studia\git\c++\Macierze\Matrix\Methods.cpp(309,32): message : Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
+  Generating Code...
