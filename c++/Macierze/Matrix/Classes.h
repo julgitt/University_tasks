@@ -13,23 +13,46 @@ using namespace std;
 namespace calculations
 {
     class Vector {
-    protected:
+    public:
         double* arr = nullptr; // macierz liczb zmiennopozycyjnych
         int size; // rozmiar tablicy: k pozycji
     public:
-        Vector(int size,const initializer_list<double>& list);
+        Vector(const initializer_list<double>& list);
         ~Vector();
+
+
+    public:
+        friend Vector operator-(const Vector &v); // zmiana znaku
+        friend Vector operator+(const Vector &x, const Vector &y);
+        friend Vector operator-(const Vector &x, const Vector &y);
+        friend Vector operator*(const Vector &v, double d);
+        friend Vector operator*(double d, const Vector &v);
+        // iloczyn skalarny x*y
+        friend double operator*(const Vector &x, const Vector &y);
+        Vector& operator+=(const Vector &v);
+        Vector& operator-=(const Vector &v);
+        Vector& operator*=(double d);
+
     };
 
     class Matrix {
     protected:
-        Vector** array;
+        Vector** array = nullptr;
         int rows;
         int columns;
     public:
 
+        // Konstruktory.
+        Matrix(int rows, int columns);
+        Matrix(const initializer_list<Vector>& list);
+        Matrix(const Matrix& matrix);
+        Matrix(Matrix&& matrix);
+
+        // Destruktor.
+        ~Matrix();
+
         //getter
-        inline auto operator[] (int index) const -> double*
+        inline double* operator[] (int index)
         {
             if (index < 0 || index >= this->rows)
                 throw new exception("out of range");
@@ -45,57 +68,25 @@ namespace calculations
         int get_width();
         int get_height();
 
-        // Metody modyfikujπce macierz.
-        void swap_columns(int i, int j);
-        void swap_rows(int i, int j);
-
-        void multiply_columns(int i, float scalar);
-        void multiply_rows(int i, float scalar);
-
-        void add_columns(int which, float mult, int to);
-        void add_rows(int which, float mult, int to);
-
-        // Metody zwracajπce nowπ macierz.
-        auto removed_row_and_column(int row, int column) const->Matrix;
-        auto transposed()->Matrix;
 
         // Operatory przypisania.
-        auto operator= (const Matrix& matrix)->Matrix&;
-        auto operator= (Matrix&& matrix)->Matrix&;
+        Matrix& operator= (const Matrix& matrix);
+        Matrix& operator= (Matrix&& matrix);
 
-        // Operatory modyfikujπce macierz.
-        auto operator+= (const Matrix& matrix)->Matrix&;
-        auto operator-= (const Matrix& matrix)->Matrix&;
-        auto operator*= (const Matrix& matrix)->Matrix&;
-        auto operator*= (float scalar)->Matrix&;
 
-        // Konstruktory.
-        Matrix(int size);
-        Matrix(int rows, int columns);
-        Matrix(const Matrix& matrix);
-        Matrix(Matrix&& matrix);
+        friend std::ostream& operator<< (std::ostream& out, const Matrix& A);
+        friend std::istream& operator>> (std::istream& in, const Matrix& A);
 
-        // Destruktor.
-        ~Matrix();
 
-        // Zaprzyjaünione funkcje wejúcia/wyjúcia.
-        friend auto operator<< (std::ostream& out, const Matrix& A)->std::ostream&;
-        friend auto operator>> (std::istream& in, const Matrix& A)->std::istream&;
-
-        // Zaprzyjaünione operatory tworzπce nowe macierze.1
-        friend auto operator+ (const Matrix& A, const Matrix& B)->Matrix;
-        friend auto operator- (const Matrix& A, const Matrix& B)->Matrix;
-        friend auto operator* (const Matrix& A, const Matrix& B)->Matrix;
-        friend auto operator* (const Matrix& A, float scalar)->Matrix;
+        friend Matrix operator+ (const Matrix& A, const Matrix& B);
+        friend Matrix operator- (const Matrix& A, const Matrix& B);
+        friend Matrix operator* (const Matrix& A, const Matrix& B);
+        friend Matrix operator* (const Matrix& A, double scalar);
     };
 
-    auto operator<< (std::ostream& out, const Matrix& A)->std::ostream&;
-    auto operator>> (std::istream& in, const Matrix& A)->std::istream&;
+    std::ostream& operator<< (std::ostream& out, const Matrix& A);
+    std::istream& operator>> (std::istream& in, const Matrix& A);
 
-    auto operator+ (const Matrix& A, const Matrix& B)->Matrix;
-    auto operator- (const Matrix& A, const Matrix& B)->Matrix;
-    auto operator* (const Matrix& A, const Matrix& B)->Matrix;
-    auto operator* (const Matrix& A, float scalar)->Matrix;
 }
 
 

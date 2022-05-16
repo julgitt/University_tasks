@@ -10,7 +10,7 @@
 ; 2 + 3 * (7 - 21)
 
 (define-type Op
-  (op-add) (op-sub) (op-mul) (op-div))
+  (op-add) (op-sub) (op-mul) (op-div) );(op-exp) (op-fac) (op-inv)
 
 (define-type Exp
   (exp-number [n : Number])
