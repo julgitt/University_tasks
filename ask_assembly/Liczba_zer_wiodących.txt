@@ -1,3 +1,11 @@
+clz:        .text
+        .globl  clz
+        .type   clz, @function
+
+/*
+ * W moim rozwiązaniu używam następującej techniki: przeszukiwanie binarne
+ */
+
 clz:
         movq	%rdi, %rdx			/* wykonywanie operacji na rdx działa szybiej, więc przenoszę do niego argument (nazwijmy go x) */		
 	
@@ -58,6 +66,12 @@ clz:
 	
 	
 	test	%rdx, %rdx			/*jeżeli x = 0, to n++*/           
+	sete	%al
+	leaq	(%r8, %rax), %rax  
+
+        ret
+
+        .size   clz, .-clz        
 	sete	%al
 	leaq	(%r8, %rax), %rax  
 
