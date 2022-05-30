@@ -46,11 +46,13 @@
 (define (sim-time sim) ;getter
   (sim-current-time sim))
 
-
 (define (sim-wait! sim time)
-  (begin
-    (set-sim-current-time! sim (+ (sim-time sim) time))
-    (call-event-queue (sim-event-queue sim))))
+  (if (= time 0)
+      (void)
+      (begin
+        (set-sim-current-time! sim (+ (sim-time sim) 1))
+        (call-event-queue (sim-event-queue sim) sim)
+        (sim-wait! sim (- time 1)))))
 
 (define (call-event-queue events-heap sim)
   (cond
@@ -60,18 +62,18 @@
      (begin
        (action-function (heap-min events-heap)) ;wywołujemy funcję
        (heap-remove-min! events-heap) ;usuwamy ją z kolejki
-       (call-event-queue events-heap))] ;sprawdzamy dla reszty akcji
+       (call-event-queue events-heap sim))] ;sprawdzamy dla reszty akcji
     [else (void)]))
      
 (define (sim-add-action! sim time f)
-  (set-sim-event-queue! sim (heap-add! (sim-event-queue sim) (action time f))))
+ (heap-add! (sim-event-queue sim) (action (+ (sim-current-time sim) time) f)))
 
 ;____________________________WIRE__________________________________
 
 (struct wire ([value #:mutable] [sim  #:mutable] [actions #:mutable]))
 
 (define (make-wire sim)
-  (wire #f sim (make-heap action<=?)))
+  (wire #f sim (list)))
 
 (define (wire-on-change! wire f)
   (begin
@@ -86,7 +88,7 @@
         (call-actions (cdr xs)))))
 
 (define (wire-set! wire value) ;setter przewodu
-  (if (eq? value (wire-value wire))
+  (if (equal? value (wire-value wire))
       (void)
       (begin
         (set-wire-value! wire value)
@@ -119,44 +121,45 @@
   ;_________________________________GATES________________________________
 
 (define (gate-not out in)
-  (sim-add-action! (wire-sim out) 1.0 (wire-on-change! in (wire-set! out (not (wire-value in))))))
+  (define not-action
+    (wire-set! out (not (wire-value in))))
+  (wire-on-change! in (lambda () (sim-add-action! (wire-sim out) 1 not-action))))
 
 (define (gate-and out in1 in2)
   (define and-action
     (wire-set! out (and (wire-value in1)(wire-value in2))))
-  (sim-add-action! (wire-sim out) 1.0 (begin
-                                       (wire-on-change! in1 and-action)
-                                       (wire-on-change! in2 and-action))))
+  (begin 
+    (wire-on-change! in1 (lambda () (sim-add-action! (wire-sim out) 1 and-action)))
+    (wire-on-change! in2 (lambda () (sim-add-action! (wire-sim out) 1 and-action)))))
 
 (define (gate-nand out in1 in2)
   (define (nand-action)
-    (wire-set! out (not (and (wire-value in1) (wire-value in2)))))
-  (sim-add-action! (wire-sim out) 1.0 (and
-                                       (wire-on-change! in1 nand-action)
-                                       (wire-on-change! in2 nand-action))))
+    (wire-set! out (nand (wire-value in1) (wire-value in2))))
+  (begin
+    (wire-on-change! in1 (lambda () (sim-add-action! (wire-sim out) 1 nand-action)))
+    (wire-on-change! in2 (lambda () (sim-add-action! (wire-sim out) 1 nand-action)))))
 
 (define (gate-or out in1 in2)
   (define or-action
     (wire-set! out (or (wire-value in1)(wire-value in2))))
-  (sim-add-action! (wire-sim out) 1.0 (and
-                                       (wire-on-change! in1 or-action)
-                                       (wire-on-change! in2 or-action))))
+  (begin
+    (wire-on-change! in1 (lambda () (sim-add-action! (wire-sim out) 1 or-action)))
+    (wire-on-change! in2 (lambda () (sim-add-action! (wire-sim out) 1 or-action)))))
 
 (define (gate-nor out in1 in2)
    (define nor-action
-    (wire-set! out (not (or (wire-value in1)(wire-value in2)))))
-  (sim-add-action! (wire-sim out) 1.0 (and
-                                       (wire-on-change! in1 nor-action)
-                                       (wire-on-change! in2 nor-action))))
-
+    (wire-set! out (nor (wire-value in1)(wire-value in2))))
+  (begin
+    (wire-on-change! in1 (lambda () (sim-add-action! (wire-sim out) 1 nor-action)))
+    (wire-on-change! in2 (lambda () (sim-add-action! (wire-sim out) 1 nor-action)))))
+  
 
 (define (gate-xor out in1 in2) ;and (or)(nand)
-(define xor-action
-    (wire-set! out (and (or (wire-value in1)(wire-value in2))
-                        (not(and (wire-value in1)(wire-value in2))))))
-  (sim-add-action! (wire-sim out) 2.0 (and
-                                       (wire-on-change! in1 xor-action)
-                                       (wire-on-change! in2 xor-action))))
+  (define xor-action
+    (wire-set! out (xor (wire-value in1)(wire-value in2))))
+  (begin
+    (wire-on-change! in1 (lambda () (sim-add-action! (wire-sim out) 2 xor-action)))
+    (wire-on-change! in2 (lambda () (sim-add-action! (wire-sim out) 2 xor-action)))))
 
   ;_________________________________WIRE-GATES________________________________
 ;(struct wire ([value #:mutable] [sim  #:mutable] [actions #:mutable]))
@@ -198,4 +201,66 @@
       (make-wire (wire-sim in1)))
   (gate-xor out in1 in2)
   out)
+
+;___________________________________________________________________________________
+
+
+;(define simulation (make-sim))
+;(define x (wire-xor (make-wire simulation)(make-wire simulation)))
+(define simulation (make-sim))
+
+(define (make-counter n clk en)
+  (if (= n 0)
+      '()
+      (let [(out (make-wire simulation))]
+        (flip-flop out clk (wire-xor en out))
+        (cons out (make-counter (- n 1) clk (wire-and en out))))))
+
+(define clk (make-wire simulation))
+(define en  (make-wire simulation))
+(define counter (make-counter 4 clk en))
+(wire-set! en #t)
+
+
+; Kolejne wywołania funkcji tick zwracają wartość licznika
+; w kolejnych cyklach zegara. Licznik nie jest resetowany,
+; więc początkowa wartość licznika jest trudna do określenia
+(define (probe name w)
+  (wire-on-change! w (lambda ()
+                       (display name)
+                       (display " = ")
+                       (display (wire-value w))
+                       (display "\n")
+                       (display (wire-actions w))
+                       (display "\n"))))
+(define (tick)
+  (wire-set! clk #t)
+  (sim-wait! simulation 20)
+  (wire-set! clk #f)
+  (sim-wait! simulation 20)
+  (bus-value counter))
+
+(define add_sim (make-sim))
+
+(define a (make-wire add_sim))
+(define b (make-wire add_sim))
+(define s (make-wire add_sim)) 
+(define c (make-wire add_sim)) 
+
+(probe 'a a)
+(probe 'b b)
+(probe 'c c)
+(probe 's s)
+
+(define (half-adder a b s c)
+  (let ((d (make-wire add_sim)) (e (make-wire add_sim)))
+    (gate-or d a b)
+    (gate-and c a b)
+    (gate-not e c )
+    (gate-and s d e)
+    (begin
+      (probe 'd d)
+      (probe 'e e))))
+
+
 
