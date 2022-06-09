@@ -123,6 +123,19 @@
     [(eql) (op-num-bool->proc =)]
     [(leq) (op-num-bool->proc <=)]))
 
+(define (free-vars (e : Exp)) : (Listof Symbol) ;<----------------------
+  (type-case Exp e
+    ((numE n) empty)
+    ((trueE) empty)
+    ((falseE) empty)
+    ((opE o l r) (append (free-vars  l) (free-vars r)))
+    ((ifE b l r) (append (append (free-vars  b) (free-vars l))(free-vars l)))
+    ((varE x) (list x))
+    ((letE x e1 e2)
+     (append (free-vars e1)
+             (filter (lambda (y)(not(equal? x y)))
+                     (free-vars e2)))))) ; <----- trzeba się pozbyć duplikatów
+
 (define (eval [e : Exp]) : Value
   (type-case Exp e
     [(numE n) (numV n)]
