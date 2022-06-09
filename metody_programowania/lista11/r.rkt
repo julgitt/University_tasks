@@ -31,54 +31,60 @@
 
           [flip-flop (-> wire? wire? wire? void?)]))
 
-;____________________________SIMULATION____________________________
+;_____________________________SIMULATION__________________________________________
 
-(struct sim ([current-time #:mutable] [event-queue #:mutable]))
+(struct sim ([current-time #:mutable]
+             [event-queue #:mutable]))
 
-(struct action ([time #:mutable] [function #:mutable]))
+(struct event ([time #:mutable]
+               [action #:mutable]))
 
-(define (action<=? a1 a2)
-  (<= (action-time a1)(action-time a2)))
+(define (event<=? e1 e2)
+  (if (<= (event-time e1) (event-time e2))
+      #t
+      #f))
 
 (define (make-sim)
-  (sim 0 (make-heap action<=?)))
+  (sim 0 (make-heap event<=?)))
 
-(define (sim-time sim) ;getter
-  (sim-current-time sim))
+;(define (call-event-queue event-heap sim)
+;  (cond [(eq? (heap-count event-heap) 0) (void)]
+;        [(> (sim-time sim) (event-time (heap-min event-heap)))
+;         (begin
+;           (event-action (heap-min event-heap))
+;           (heap-remove-min! event-heap)
+;           (call-event-queue event-heap sim))]))
+
+;(define (sim-wait! sim time)
+;  (if (equal? time 0)
+;      (void)
+;      (begin
+;        (set-sim-current-time! sim (+ (sim-current-time sim) 1))
+;        (call-event-queue (sim-event-queue sim) sim)
+;        (sim-wait! sim (- time 1)))))
 
 (define (sim-wait! sim time)
-  (if (or (= time 0) (< time 0))
-      (void)
+  (if (and (not (= (heap-count (sim-event-queue sim)) 0)) (< 0 time))
       (begin
-        (set-sim-current-time! sim (+ (sim-time sim) 1))
-        (call-event-queue (sim-event-queue sim) sim)
-        (sim-wait! sim (- time 1)))))
+      (let [(curr-act (heap-min (sim-event-queue sim)))
+            (old-time (sim-time sim))] 
+        (set-sim-current-time! sim (event-time curr-act))
+        (heap-remove-min! (sim-event-queue sim))
+        (event-action curr-act)
+        (sim-wait! sim (- time (- (event-time curr-act) old-time)))))
+      (set-sim-current-time! sim (+ (sim-time sim) time))))
+;.
 
-(define (call-event-queue events-heap sim)
-  (cond
-    [(equal? (heap-count events-heap) 0) ;jeżeli kolejka zdarzeń jest pusta
-      (void)]
-    [(<= (action-time (heap-min events-heap)) (sim-time sim)) ;jeżeli czas jakiejś akcji upłynął
-     (begin
-       ((action-function (heap-min events-heap))) ;wywołujemy funcję
-       (heap-remove-min! events-heap) ;usuwamy ją z kolejki
-       (call-event-queue events-heap sim))] ;sprawdzamy dla reszty akcji
-    [else (void)]))
-     
-(define (sim-add-action! sim time f)
- (heap-add! (sim-event-queue sim) (action (+ (sim-current-time sim) time) f)))
+(define (sim-time sim)
+  (sim-current-time sim))
 
-;____________________________WIRE__________________________________
+(define (sim-add-action! sim time action)
+  (heap-add! (sim-event-queue sim) (event (+ (sim-current-time sim) time) action)))
+;______________________________________________WIRE__________________________________
 
-(struct wire ([value #:mutable] [sim  #:mutable] [actions #:mutable]))
-
-(define (make-wire sim)
-  (wire #f sim (list)))
-
-(define (wire-on-change! wire f)
-  (begin
-    (f) ;wywołujemy akcję
-    (set-wire-actions! wire (cons f (wire-actions wire))))) ; dodajemy akcję do listy akcji przewodu
+(struct wire ([value #:mutable]
+              [action-list #:mutable]
+              [sim #:mutable]))
 
 (define (call-actions xs)
   (if (null? xs)
@@ -87,38 +93,22 @@
         ((car xs))
         (call-actions (cdr xs)))))
 
-(define (wire-set! wire value) ;setter przewodu
+(define (make-wire sim)
+  (wire #f null sim))
+
+(define (wire-set! wire value)
   (if (equal? value (wire-value wire))
       (void)
       (begin
         (set-wire-value! wire value)
-        (call-actions (wire-actions wire)))))
+        (call-actions (wire-action-list wire)))))
 
-  ;_________________________________BUS________________________________
+(define (wire-on-change! wire action)
+  (begin
+    (action)
+    (set-wire-action-list! wire  (append (wire-action-list wire) (list action)))))
 
-(define (bus-set! wires value) ;setter magistrali
-  (match wires
-    ['() (void)]
-    [(cons w wires)
-     (begin
-       (wire-set! w (= (modulo value 2) 1)) ;?
-       (bus-set! wires (quotient value 2)))]))
-
-(define (bus-value ws) ;getter?
-  (foldr (lambda (w value) (+ (if (wire-value w) 1 0) (* 2 value)))
-         0
-         ws))
-
-(define (flip-flop out clk data)
-  (define sim (wire-sim data))
-  (define w1  (make-wire sim))
-  (define w2  (make-wire sim))
-  (define w3  (wire-nand (wire-and w1 clk) w2))
-  (gate-nand w1 clk (wire-nand w2 w1))
-  (gate-nand w2 w3 data)
-  (gate-nand out w1 (wire-nand out w3)))
-
-  ;_________________________________GATES________________________________
+;_____________________________________GATES__________________________________________________
 
 (define (gate-not out in)
   (define (not-action)
@@ -161,8 +151,9 @@
     (wire-on-change! in1 xor-action)
     (wire-on-change! in2 xor-action)))
 
-  ;_________________________________WIRE-GATES________________________________
-;(struct wire ([value #:mutable] [sim  #:mutable] [actions #:mutable]))
+;___________________________________WIRE LOGIC________________________________________________
+
+
 
 (define (wire-not in)
   (define out
@@ -203,42 +194,37 @@
   out)
 
 ;___________________________________________________________________________________
+(define (bus-set! wires value)
+  (match wires
+    ['() (void)]
+    [(cons w wires)
+     (begin
+       (wire-set! w (= (modulo value 2) 1))
+       (bus-set! wires (quotient value 2)))]))
 
+(define (bus-value ws)
+  (foldr (lambda (w value) (+ (if (wire-value w) 1 0) (* 2 value)))
+         0
+         ws))
 
-;(define simulation (make-sim))
-;(define x (wire-xor (make-wire simulation)(make-wire simulation)))
-(define simulation (make-sim))
+(define (flip-flop out clk data)
+  (define sim (wire-sim data))
+  (define w1  (make-wire sim))
+  (define w2  (make-wire sim))
+  (define w3  (wire-nand (wire-and w1 clk) w2))
+  (gate-nand w1 clk (wire-nand w2 w1))
+  (gate-nand w2 w3 data)
+  (gate-nand out w1 (wire-nand out w3)))
 
-(define (make-counter n clk en)
-  (if (= n 0)
-      '()
-      (let [(out (make-wire simulation))]
-        (flip-flop out clk (wire-xor en out))
-        (cons out (make-counter (- n 1) clk (wire-and en out))))))
-
-(define clk (make-wire simulation))
-(define en  (make-wire simulation))
-(define counter (make-counter 4 clk en))
-(wire-set! en #t)
-
-
-; Kolejne wywołania funkcji tick zwracają wartość licznika
-; w kolejnych cyklach zegara. Licznik nie jest resetowany,
-; więc początkowa wartość licznika jest trudna do określenia
+;______________________________________________________________________________________
 (define (probe name w)
   (wire-on-change! w (lambda ()
                        (display name)
                        (display " = ")
                        (display (wire-value w))
                        (display "\n")
-                       (display (wire-actions w))
+                       (display (wire-action-list w))
                        (display "\n"))))
-(define (tick)
-  (wire-set! clk #t)
-  (sim-wait! simulation 20)
-  (wire-set! clk #f)
-  (sim-wait! simulation 20)
-  (bus-value counter))
 
 (define add_sim (make-sim))
 
@@ -262,5 +248,28 @@
       (probe 'd d)
       (probe 'e e))))
 
+;__________________________________________________________________________________________
+(define sime (make-sim))
 
+(define (make-counter n clk en)
+  (if (= n 0)
+      '()
+      (let [(out (make-wire sime))]
+        (flip-flop out clk (wire-xor en out))
+        (cons out (make-counter (- n 1) clk (wire-and en out))))))
 
+(define clk (make-wire sime))
+(define en  (make-wire sime))
+(define counter (make-counter 4 clk en))
+
+(wire-set! en #t)
+
+; Kolejne wywołania funkcji tick zwracają wartość licznika
+; w kolejnych cyklach zegara. Licznik nie jest resetowany,
+; więc początkowa wartość licznika jest trudna do określenia
+(define (tick)
+  (wire-set! clk #t)
+  (sim-wait! sime 20)
+  (wire-set! clk #f)
+  (sim-wait! sime 20)
+  (bus-value counter))
