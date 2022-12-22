@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Form</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    input {
+      display: block;
+    }
+  </style> 
+</head>
+<body>
+  <form action="/", method="POST", enctype="application/x-www-form-urlencoded">
+    <label for="firstName">First Name</label>
+    <input id="firstName" type="text" name="firstName" value="<%= firstName %>">
+    <label for="lastName">Last Name</label>
+    <input id="lastName" type="text" name="lastName" value="<%= lastName %>">
+    <label for="subject">Subject</label>
+    <input id="subject" type="text" name="subject" value="<%= subject %>">
+    <% for (let i = 0; i < numOfExcercises; i++) { %>
+      <label for="ex<%= i %>">Exercise <%= i %> score</label>
+      <input id="ex<%= i %>" type="number" name="exercises[<%= i %>]" value = "<%= ex_score[i] %>">
+    <% } %>
+    <button>Submit</button> 
+  </form>
+</body>
+</html>
