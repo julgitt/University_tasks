@@ -20,7 +20,7 @@
 ## SECOND YEAR
 ### III TERM
 - [Selected Elements of Software Design Practice](https://github.com/julgitt/University_tasks/tree/master/weppo)
-- Operation Systems
+- Operating Systems
 - Discrete Mathematics
 - Numerical Analysis
 
