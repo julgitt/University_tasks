@@ -11,7 +11,7 @@
 - Logic for Computer Scientists
 
 ### II TERM
-- [Computer Systems Architecture] (https://github.com/julgitt/University_tasks/tree/master/ask_assembly)
+- [Computer Systems Architecture](https://github.com/julgitt/University_tasks/tree/master/ask_assembly)
 - [Object-oriented programming](https://github.com/julgitt/University_tasks/tree/master/programowanie_obiektowe)
 - [Programming Methods](https://github.com/julgitt/University_tasks/tree/master/metody_programowania)
 - [C++ Course](https://github.com/julgitt/University_tasks/tree/master/c%2B%2B)
@@ -19,7 +19,7 @@
 
 ## SECOND YEAR
 ### III TERM
-- [Selected Elements of Software Design Practice] (https://github.com/julgitt/University_tasks/tree/master/weppo)
+- [Selected Elements of Software Design Practice](https://github.com/julgitt/University_tasks/tree/master/weppo)
 - Operation Systems
 - Discrete Mathematics
 - Numerical Analysis
