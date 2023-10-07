@@ -1,0 +1,3 @@
+/home/julia/CLionProjects/Codeforces/zad1/cmake-build-debug/CMakeFiles/zad1.dir
+/home/julia/CLionProjects/Codeforces/zad1/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/julia/CLionProjects/Codeforces/zad1/cmake-build-debug/CMakeFiles/rebuild_cache.dir
