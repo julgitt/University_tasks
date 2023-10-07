@@ -29,3 +29,11 @@
 - [Design and Development of .NET Windows Applications](https://github.com/julgitt/University_tasks/tree/master/.net)
 - Design of Database Applications
 - Probability and Statistics
+
+## THIRD YEAR
+### V TERM
+- [Methods of Implementing Algorithms](https://github.com/julgitt/University_tasks/tree/master/MIA)
+- [Advanced Python Programming](https://github.com/julgitt/University_tasks/tree/master/Python)
+- [Embedded Systems](https://github.com/julgitt/University_tasks/tree/master/Wbudowane)
+- [Functional Programming](https://github.com/julgitt/University_tasks/tree/master/Funkcyjne)
+  
