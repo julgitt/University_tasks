@@ -7,17 +7,19 @@ alphabet = string.ascii_lowercase + "ąćęńłóśżź" + "äöüß"
 
 def create_stats_from_files (language2files):
     texts = {}
+
     for language, files in language2files.items():
-        texts[language] = [return_file_content(file_name) for file_name in files]
+        texts[language] = [read_text_from_file(file_name) for file_name in files]
+        
     return calc_language_statistics(texts)
 
 
 def identify_language_from_file (file_name):
-    text = return_file_content(file_name)
+    text = read_text_from_file(file_name)
     return identify_language(text)
 
 
-def return_file_content(file_name):
+def read_text_from_file(file_name):
     try:
         with open(f'Texts/{file_name}', "r", encoding='utf-8') as f:
             return combine_text(f.readlines())
@@ -60,7 +62,6 @@ def calc_letters_frequency(text):
     letter2frequency = {letter: percentAmount(letter_count, letters_total_count) for letter, letter_count in result.items()}
     return letter2frequency
         
-        
 def percentAmount(a, b):
     return round((a / b) * 100, 2)
 
@@ -89,12 +90,14 @@ def read_all_stats():
 
 def read__stats_from_file(file_name):
     stats = {}
-    with open(f"Stats/{file_name}", 'r', encoding='utf-8') as f:
-        for line in f:
-            (letter, frequency) = line.split(": ")
-            stats[letter] = float(frequency)
-    return stats
-
+    try:
+        with open(f"Stats/{file_name}", 'r', encoding='utf-8') as f:
+            for line in f:
+                (letter, frequency) = line.split(": ")
+                stats[letter] = float(frequency)
+            return stats
+    except FileNotFoundError:
+        print(f'File {file_name} not found')
 
 
 
