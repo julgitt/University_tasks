@@ -5,6 +5,11 @@ from os.path import isfile, join
 alphabet = string.ascii_lowercase + "ąćęńłóśżź" + "äöüß"
 
 
+def save_and_create_stats_from_files(language2files):
+	stats = create_stats_from_files(language2files)
+	save_stats_to_files(stats)
+	return stats
+	
 def create_stats_from_files (language2files):
     texts = {}
 
@@ -101,9 +106,8 @@ def read__stats_from_file(file_name):
 
 
 
-statistics = create_stats_from_files({"deutsch" : ["CierpieniaMłodegoWertera_de.txt"], 
+statistics = save_and_create_stats_from_files({"deutsch" : ["CierpieniaMłodegoWertera_de.txt"], 
                                       "english" : ["RomeoIJulia_en.txt"],
                                        "polish" : ["PanTadeusz_pl.txt"]})
-save_stats_to_files(statistics)
 
 print(identify_language_from_file("SklepyCynamonowe_pl.txt"))
