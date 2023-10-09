@@ -1,0 +1,1 @@
+CMakeLists.txt not found in /home/julia/Studia/University_tasks/Wbudowane/Lista1/Zadanie1 Select CMakeLists.txt
