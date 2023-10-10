@@ -2,12 +2,14 @@ import time
 import sys
 sys.setrecursionlimit(1500)
 
+
 def sudan(n, x, y):
     if n == 0:
         return x + y
     if y == 0 and x >= 0:
         return x
     return sudan(n - 1, sudan(n, x, y - 1), sudan(n, x, y - 1) + y)
+
 
 def memoize(func):
     def memoized_func(*args):
@@ -19,6 +21,7 @@ def memoize(func):
     memoized_func.cache = {}
     return memoized_func
 
+
 @memoize
 def m_sudan(n, x, y):
     if n == 0:
@@ -27,19 +30,22 @@ def m_sudan(n, x, y):
         return x
     return m_sudan(n - 1, m_sudan(n, x, y - 1), m_sudan(n, x, y - 1) + y)
 
+
+#  _____________TEST________________
+
 start = time.time()
 
-# przy większych liczbach trwa długo
+#  przy większych liczbach trwa długo
 sudan(2, 1, 2)
 
 end = time.time()
 
-print("%3f" %  (end - start))
+print("%3f" % (end - start))
 
 start = time.time()
 
-# przy większych liczbach ograniczeniem jest przekroczenie głęgokości rekrencji
+#  przy większych liczbach ograniczeniem jest przekroczenie głęgokości rekrencji
 m_sudan(2, 3, 2)
 
 end = time.time()
-print("%3f" %  (end - start))
+print("%3f" % (end - start))

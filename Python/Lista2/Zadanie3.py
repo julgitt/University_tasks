@@ -1,25 +1,34 @@
 import string
+import json
 from os import listdir
 from os.path import isfile, join
 
-alphabet = string.ascii_lowercase + "ąćęńłóśżź" + "äöüß"
+ALPHABET = string.ascii_lowercase + "ąćęńłóśżź" + "äöüß"
 
 
-def save_and_create_stats_from_files(language2files):
-	stats = create_stats_from_files(language2files)
-	save_stats_to_files(stats)
-	return stats
-	
-def create_stats_from_files (language2files):
+#  _______________ CREATE STATISTICS ___________________
+def save_and_create_stats_from_files(language_to_files):
+    stats = create_stats_from_files(language_to_files)
+    save_stats_to_files(stats)
+    return stats
+
+
+def create_stats_from_files(language_to_files):
     texts = {}
 
-    for language, files in language2files.items():
-        texts[language] = [read_text_from_file(file_name) for file_name in files]
-        
+    for language, files in language_to_files.items():
+        texts[language] = [read_text_from_file(
+            file_name) for file_name in files]
+
     return calc_language_statistics(texts)
 
 
-def identify_language_from_file (file_name):
+def calc_language_statistics(language_to_texts):
+    return {language: calc_letters_frequency(' '.join(texts)) for language, texts in language_to_texts.items()}
+
+
+#  ________________ IDENTIFY LANGUAGE ________________
+def identify_language_from_file(file_name):
     text = read_text_from_file(file_name)
     return identify_language(text)
 
@@ -27,87 +36,78 @@ def identify_language_from_file (file_name):
 def read_text_from_file(file_name):
     try:
         with open(f'Texts/{file_name}', "r", encoding='utf-8') as f:
-            return combine_text(f.readlines())
+            return ' '.join(f.readlines())
     except FileNotFoundError:
         print(f'File {file_name} not found')
-
-
-def calc_language_statistics(language2texts):
-    return {language: calc_letters_frequency(combine_text(texts)) for language, texts in language2texts.items()}
-
-
-def combine_text(texts):
-    return ' '.join(texts)
 
 
 def identify_language(text):
     input_text_stats = calc_letters_frequency(text)
 
-    language2stats = read_all_stats()
+    language_to_stats = read_all_stats()
     language_scores = {}
-    
-    for language, language_stats in language2stats.items():
-        score = sum((input_text_stats.get(letter) - language_stats.get(letter))**2 for letter in alphabet)
+
+    for language, language_stats in language_to_stats.items():
+        score = sum((input_text_stats.get(letter) -
+                    language_stats.get(letter))**2 for letter in ALPHABET)
         language_scores[language] = score
-    
+
     most_likely_language = min(language_scores, key=language_scores.get)
     return most_likely_language
 
 
+#  _________________ LETTERS FREQUENCY ___________________________
 def calc_letters_frequency(text):
-    alnum_text =  ''.join(char for char in text.lower() if char.isalnum())
+    alnum_text = ''.join(char for char in text.lower() if char.isalnum())
     letters_total_count = len(alnum_text)
 
-    result = {letter: 0 for letter in alphabet}
+    result = {letter: 0 for letter in ALPHABET}
 
     for letter in alnum_text:
-        if letter in alphabet: 
+        if letter in ALPHABET:
             result[letter] += 1
 
-    letter2frequency = {letter: percentAmount(letter_count, letters_total_count) for letter, letter_count in result.items()}
-    return letter2frequency
-        
-def percentAmount(a, b):
-    return round((a / b) * 100, 2)
+    letter_to_frequency = {letter: round(
+        (letter_count * 100) / letters_total_count, 2) for letter, letter_count in result.items()}
+    return letter_to_frequency
 
 
-def save_stats_to_files(language2stats):
-    for language, stats in language2stats.items():
+#  _________________ SAVING STATS TO FILES _________________________
+def save_stats_to_files(language_to_stats):
+    for language, stats in language_to_stats.items():
         save_stats_to_file(language, stats)
 
 
-def save_stats_to_file(language, stats): 
-    with open(f'Stats/{language}-stats.txt', 'w') as f:
-        for letter, frequency in stats.items():
-            f.write(f"{letter}: {frequency}\n")
+def save_stats_to_file(language, stats):
+    with open(f'Stats/{language}-stats.json', 'w') as f:
+        json.dump(stats, f)
 
 
+#  ______________  READING STATS FROM FILES _______________________
 def read_all_stats():
     file_names = [f for f in listdir("Stats/") if isfile(join("Stats/", f))]
-    language2stats = {}
+    language_to_stats = {}
 
     for file_name in file_names:
         language = file_name[:file_name.index("-stats")]
-        language2stats[language] = read__stats_from_file(file_name)
-    
-    return language2stats
+        language_to_stats[language] = read__stats_from_file(file_name)
+
+    return language_to_stats
 
 
 def read__stats_from_file(file_name):
     stats = {}
     try:
         with open(f"Stats/{file_name}", 'r', encoding='utf-8') as f:
-            for line in f:
-                (letter, frequency) = line.split(": ")
-                stats[letter] = float(frequency)
-            return stats
-    except FileNotFoundError:
-        print(f'File {file_name} not found')
+            stats = json.load(f)
+        return stats
+    except FileNotFoundError as e:
+        raise FileNotFoundError(f'File {file_name} not found') from e
 
 
-
-statistics = save_and_create_stats_from_files({"deutsch" : ["CierpieniaMłodegoWertera_de.txt"], 
-                                      "english" : ["RomeoIJulia_en.txt"],
-                                       "polish" : ["PanTadeusz_pl.txt"]})
+#  ________________   TEST _____________________
+statistics = save_and_create_stats_from_files({"deutsch": ["CierpieniaMłodegoWertera_de.txt"],
+                                               "english": ["RomeoIJulia_en.txt"],
+                                               "polish": ["PanTadeusz_pl.txt"]})
 
 print(identify_language_from_file("SklepyCynamonowe_pl.txt"))

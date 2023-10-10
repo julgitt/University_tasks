@@ -4,7 +4,7 @@ def d_Hondt(election_results, mandates):
                         if votes * 100 >= 5 * all_votes}
     quotients = {party: 2 for party in filtered_parties}
     result = {party: 0 for party in filtered_parties}
-   
+
     while (mandates > 0):
         party = max(filtered_parties, key=filtered_parties.get)
         result[party] += 1
@@ -12,9 +12,9 @@ def d_Hondt(election_results, mandates):
         quotients[party] += 1
         mandates -= 1
     return result
-    
-                
 
-election_results = {'A': 720, 'B' : 300, 'C' : 480}
+
+#  ________________TEST_______________________
+election_results = {'A': 720, 'B': 300, 'C': 480}
 mandates_number = 8
 print(d_Hondt(election_results, mandates_number))
