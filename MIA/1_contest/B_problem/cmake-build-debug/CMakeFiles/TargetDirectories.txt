@@ -1,3 +1,0 @@
-/home/julia/CLionProjects/Codeforces/Zad2v2/cmake-build-debug/CMakeFiles/Zad2v2.dir
-/home/julia/CLionProjects/Codeforces/Zad2v2/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/julia/CLionProjects/Codeforces/Zad2v2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
