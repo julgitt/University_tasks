@@ -77,7 +77,7 @@ int main()
     while(1) {
         scanf("%[^\r\n]%c", a);
         printf("Odczytano: %s\r\n", a);
-        for (int i = 0; i < strlen(a); i++) {
+        for (int i = 0; a[i] != '\0'; i++) {
             len_code = (a[i] <= '9') ? morse[a[i] - '0' + 26] : morse[a[i] - 'A'];
             len = (len_code & 0b11100000) >> 5;
             code = len_code & 0b00011111;
