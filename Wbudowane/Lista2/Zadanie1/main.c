@@ -9,21 +9,22 @@
 #define BTN_PIN PINB
 #define BTN_PORT PORTB
 
-
-
-int main() {
+int main()
+{
   BTN_PORT |= _BV(BTN);
   LED_DDR |= _BV(LED);
   unsigned char arr[100];
   int i = 0;
-  while(i < 100) {
-      arr[i] = BTN_PIN & _BV(BTN);
-      i++;
-      _delay_ms(10);
+  while (i < 100)
+  {
+    arr[i] = BTN_PIN & _BV(BTN);
+    i++;
+    _delay_ms(10);
   }
-  
+
   i = 0;
-  while (1) {
+  while (1)
+  {
     if (arr[i])
       LED_PORT &= ~_BV(LED);
     else
