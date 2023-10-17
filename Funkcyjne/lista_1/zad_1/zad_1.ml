@@ -5,7 +5,7 @@
 
 (*Napisz wyrażenie, którego wartością też jest funkcja identycznościowa, ale które ma typ int -> int.*)
 
-fun f x = x + 0
+let fun f x = x + 0
 
 (*Napisz wyrażenia, których typami są:*)
 (* (’a -> ’b) -> (’c -> ’a) -> ’c -> ’b*)
