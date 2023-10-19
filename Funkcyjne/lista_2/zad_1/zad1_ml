@@ -1,0 +1,19 @@
+let list = [3;5;6;2;3]
+
+let length l = List.fold_left(fun acc _ -> acc + 1) 0 l
+
+let rev l = List.fold_left (fun acc a -> a :: acc ) [] l
+
+let map f l = List.fold_right (fun a acc -> f a :: acc) [] l
+
+map ((+) 1) list;;
+
+let append l1 l2 = List.fold_right(fun a acc ->  a :: acc) l1 l2;;
+
+let rev_append l1 l2 = append (rev l1) l2;;
+
+let filter f l = List.fold_right (fun a acc -> if f a then a :: acc else acc) l []
+
+let f = fun x -> x != 3;;
+
+let rev_map f l = map f (rev l)

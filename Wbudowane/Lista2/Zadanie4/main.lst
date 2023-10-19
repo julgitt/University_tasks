@@ -81,9 +81,9 @@ Disassembly of section .text:
   92:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 00000096 <main>:
-#define SEVEN   right_down & right_up & up
-#define EIGHT 	up & right_down & right_up & down & left_down & left_up & middle
-#define NINE   	up & right_down & right_up & down & left_up & middle
+#define SEVEN right_down & right_up &up & dot
+#define EIGHT up & right_down & right_up & down & left_down & left_up &middle & dot
+#define NINE up & right_down & right_up & down & left_up &middle & dot
 
 int main()
 {
@@ -101,20 +101,20 @@ int main()
   aa:	80 91 c1 00 	lds	r24, 0x00C1	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
   ae:	87 7e       	andi	r24, 0xE7	; 231
   b0:	80 93 c1 00 	sts	0x00C1, r24	; 0x8000c1 <__TEXT_REGION_LENGTH__+0x7f80c1>
-    
+
     R_DDR = 0xFF;
   b4:	8f ef       	ldi	r24, 0xFF	; 255
   b6:	87 b9       	out	0x07, r24	; 7
     LED_DDR = 0xFF;
   b8:	8a b9       	out	0x0a, r24	; 10
-    
+
     LED_PORT = 0xFF;
   ba:	8b b9       	out	0x0b, r24	; 11
     R_PORT = _BV(R0_PIN) | _BV(R1_PIN);
   bc:	83 e0       	ldi	r24, 0x03	; 3
   be:	88 b9       	out	0x08, r24	; 8
- 
-    int8_t numbers[10] = { ZERO, ONE, TWO, THREE, FOUR, 
+
+    int8_t numbers[10] = {ZERO, ONE, TWO, THREE, FOUR,
   c0:	8a e0       	ldi	r24, 0x0A	; 10
   c2:	e0 e0       	ldi	r30, 0x00	; 0
   c4:	f1 e0       	ldi	r31, 0x01	; 1
@@ -130,27 +130,27 @@ int main()
   d8:	be 01       	movw	r22, r28
   da:	65 5f       	subi	r22, 0xF5	; 245
   dc:	7f 4f       	sbci	r23, 0xFF	; 255
-  
-    while(1) {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 10; j++) {
-            	for (int t = 0; t < 50; t++){
-            		R_PORT = 0b11111110;
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                for (int t = 0; t < 50; t++)
+                {
+                    R_PORT = 0b11111110;
   de:	4e ef       	ldi	r20, 0xFE	; 254
-            		LED_PORT = numbers[i];
-            		_delay_ms(10);
-            		R_PORT = 0b11111101;
+                    LED_PORT = numbers[i];
+                    _delay_ms(10);
+                    R_PORT = 0b11111101;
   e0:	3d ef       	ldi	r19, 0xFD	; 253
-            		LED_PORT = numbers[j];
-            		_delay_ms(10);
-            	}
-            }   
-        }  
+                    LED_PORT = numbers[j];
+                    _delay_ms(10);
+                }
+            }
+        }
         LED_PORT = 0b11111111;
   e2:	5f ef       	ldi	r21, 0xFF	; 255
-#define SEVEN   right_down & right_up & up
-#define EIGHT 	up & right_down & right_up & down & left_down & left_up & middle
-#define NINE   	up & right_down & right_up & down & left_up & middle
+#define SEVEN right_down & right_up &up & dot
+#define EIGHT up & right_down & right_up & down & left_down & left_up &middle & dot
+#define NINE up & right_down & right_up & down & left_up &middle & dot
 
 int main()
 {
@@ -161,14 +161,14 @@ int main()
   ec:	31 96       	adiw	r30, 0x01	; 1
   ee:	82 e3       	ldi	r24, 0x32	; 50
   f0:	90 e0       	ldi	r25, 0x00	; 0
-  
-    while(1) {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 10; j++) {
-            	for (int t = 0; t < 50; t++){
-            		R_PORT = 0b11111110;
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                for (int t = 0; t < 50; t++)
+                {
+                    R_PORT = 0b11111110;
   f2:	48 b9       	out	0x08, r20	; 8
-            		LED_PORT = numbers[i];
+                    LED_PORT = numbers[i];
   f4:	d7 01       	movw	r26, r14
   f6:	2c 91       	ld	r18, X
   f8:	2b b9       	out	0x0b, r18	; 11
@@ -184,10 +184,10 @@ int main()
  100:	f1 f7       	brne	.-4      	; 0xfe <main+0x68>
  102:	00 c0       	rjmp	.+0      	; 0x104 <main+0x6e>
  104:	00 00       	nop
-            		_delay_ms(10);
-            		R_PORT = 0b11111101;
+                    _delay_ms(10);
+                    R_PORT = 0b11111101;
  106:	38 b9       	out	0x08, r19	; 8
-            		LED_PORT = numbers[j];
+                    LED_PORT = numbers[j];
  108:	20 81       	ld	r18, Z
  10a:	2b b9       	out	0x0b, r18	; 11
  10c:	af e3       	ldi	r26, 0x3F	; 63
@@ -197,40 +197,40 @@ int main()
  114:	00 c0       	rjmp	.+0      	; 0x116 <main+0x80>
  116:	00 00       	nop
  118:	01 97       	sbiw	r24, 0x01	; 1
-    			   FIVE, SIX, SEVEN, EIGHT, NINE };
-  
-    while(1) {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 10; j++) {
-            	for (int t = 0; t < 50; t++){
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                for (int t = 0; t < 50; t++)
  11a:	59 f7       	brne	.-42     	; 0xf2 <main+0x5c>
  11c:	31 96       	adiw	r30, 0x01	; 1
-    int8_t numbers[10] = { ZERO, ONE, TWO, THREE, FOUR, 
-    			   FIVE, SIX, SEVEN, EIGHT, NINE };
-  
-    while(1) {
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 10; j++) {
+
+    while (1)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 10; j++)
  11e:	e6 17       	cp	r30, r22
  120:	f7 07       	cpc	r31, r23
  122:	29 f7       	brne	.-54     	; 0xee <main+0x58>
  124:	bf ef       	ldi	r27, 0xFF	; 255
  126:	eb 1a       	sub	r14, r27
  128:	fb 0a       	sbc	r15, r27
- 
-    int8_t numbers[10] = { ZERO, ONE, TWO, THREE, FOUR, 
-    			   FIVE, SIX, SEVEN, EIGHT, NINE };
-  
-    while(1) {
-        for (int i = 0; i < 6; i++) {
+    int8_t numbers[10] = {ZERO, ONE, TWO, THREE, FOUR,
+                          FIVE, SIX, SEVEN, EIGHT, NINE};
+
+    while (1)
+    {
+        for (int i = 0; i < 6; i++)
  12a:	0e 15       	cp	r16, r14
  12c:	1f 05       	cpc	r17, r15
  12e:	e9 f6       	brne	.-70     	; 0xea <main+0x54>
-            		LED_PORT = numbers[j];
-            		_delay_ms(10);
-            	}
-            }   
-        }  
+                    LED_PORT = numbers[j];
+                    _delay_ms(10);
+                }
+            }
+        }
         LED_PORT = 0b11111111;
  130:	5b b9       	out	0x0b, r21	; 11
  132:	2f ef       	ldi	r18, 0xFF	; 255

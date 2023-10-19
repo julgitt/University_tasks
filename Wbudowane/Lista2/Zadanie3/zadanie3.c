@@ -12,20 +12,19 @@
 #define BTN_PIN PINB
 #define BTN_PORT PORTB
 
-void gray(int x)
+static inline void gray(int x)
 {
 	LED_PORT = x ^ (x >> 1);
 }
 
-static inline void debouncing()
+static inline void debouncing(int btn)
 {
+	int counter = 0;
 	for (int i = 0; i < 500; i++)
 	{
 		if (counter > 20)
-		{
 			break;
-		}
-		if (BTN_PIN & _BV(BTN_RIGHT))
+		if (BTN_PIN & _BV(btn))
 			counter++;
 		else
 			counter = 0;
@@ -41,7 +40,7 @@ int main()
 	LED_DDR = 0xFF;
 	LED_PORT = 0;
 	int pfx = 0;
-	int counter = 0;
+	
 
 	while (1)
 	{
@@ -51,12 +50,14 @@ int main()
 		{
 			LED_PORT = 0;
 			pfx = 0;
-			debouncing();
+			//debouncing();
+			//_delay_ms(150);
 		}
 		if (!(BTN_PIN & _BV(BTN_RIGHT)))
 		{
 			pfx++;
-			debouncing();
+			debouncing(BTN_RIGHT);
+			//_delay_ms(150);
 		}
 		if (!(BTN_PIN & _BV(BTN_LEFT)))
 		{
@@ -64,7 +65,8 @@ int main()
 				pfx = 255;
 			else
 				pfx--;
-			debouncing();
+			debouncing(BTN_LEFT);
+			//_delay_ms(150);
 		}
 	}
 }
