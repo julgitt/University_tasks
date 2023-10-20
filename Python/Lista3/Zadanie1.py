@@ -4,7 +4,7 @@ def find_longest_palindromes(text):
     longest_palindromes = deque()
 
 
-    def expand_around_center(left, right):
+    def expand_palindrome_around_center(left, right):
         while left >= 0 and right < len(text) and text[left] == text[right]:
             left -= 1
             right += 1
@@ -17,10 +17,10 @@ def find_longest_palindromes(text):
     
 
     for i in range(len(text)):
-        palindrome = expand_around_center(i, i)
+        palindrome = expand_palindrome_around_center(i, i)
         add_palindrome(len(palindrome), i, 0)
 
-        palindrome = expand_around_center(i, i + 1)
+        palindrome = expand_palindrome_around_center(i, i + 1)
         add_palindrome(len(palindrome), i, 1)
 
     return longest_palindromes
@@ -31,6 +31,3 @@ def find_longest_palindromes(text):
 text = "abbaccdcddcbaab"
 result = find_longest_palindromes(text)
 print(result)
-
-
-

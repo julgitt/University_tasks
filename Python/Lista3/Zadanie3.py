@@ -4,6 +4,10 @@ def find_path(maze, start):
     rows, cols = len(maze), len(maze[0])
     directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
     visited = set()
+    start = tuple(start)
+    end = (rows - 1, cols - 1)
+    
+    queue = deque([(start, [start])])
     
     def is_valid(x, y):
         return 0 <= x < rows and 0 <= y < cols and maze[x][y] == ' '
@@ -17,17 +21,11 @@ def find_path(maze, start):
                 neighbors.append((nx, ny))
         return neighbors
     
-
-    start = tuple(start)
-    end = (rows - 1, cols - 1)  # Zakładamy, że wyjście jest w prawym dolnym rogu labiryntu
-    
-    queue = deque([(start, [start])])
-    
     while queue:
         (x, y), path = queue.popleft()
         
         if (x, y) == end:
-            return path  # Znaleziono wyjście, zwracamy ścieżkę
+            return path
         
         if (x, y) not in visited:
             visited.add((x, y))
@@ -36,12 +34,11 @@ def find_path(maze, start):
                 new_path = path + [neighbor]
                 queue.append((neighbor, new_path))
     
-    return None  # Brak ścieżki do wyjścia
+    return None
 
 
 
 
-# Przykładowe użycie funkcji:
 maze = [
     [' ', 'X', ' ', ' ', 'X', ' ', ' '],
     [' ', 'X', 'X', ' ', 'X', 'X', ' '],
