@@ -1,3 +1,0 @@
-C:/Users/julka/Desktop/home/University_tasks/MIA/3_contest/problem_B/cmake-build-debug/CMakeFiles/problem_B.dir
-C:/Users/julka/Desktop/home/University_tasks/MIA/3_contest/problem_B/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/julka/Desktop/home/University_tasks/MIA/3_contest/problem_B/cmake-build-debug/CMakeFiles/rebuild_cache.dir
