@@ -39,9 +39,11 @@
 #define TONE(step, delay) \
     for (uint16_t i = 0; i < (uint32_t)1000 * (delay) / (step) / 2; i++) { \
       BUZZ_PORT |= _BV(BUZZ); \
-      _delay_us(step); \
+      for (i = 0; i < step; i++) \
+      	_delay_us(1); \
       BUZZ_PORT &= ~_BV(BUZZ); \
-      _delay_us(step); \
+      for (i = 0; i < step; i++) \
+      	_delay_us(1); \
     }
 
 int main() {
@@ -61,15 +63,15 @@ int main() {
   int8_t i; 
   while (1) {
     TONE(pgm_read_byte(&steps[0]), pgm_read_byte(&delays[0]));
-    i = 1;
     for (uint8_t j = 0; j < 3; j++) {
+       i = 1;
        while (i < 16) {
           TONE(pgm_read_byte(&steps[i]), pgm_read_byte(&delays[i]));
           i++;
         }
     }
 
-    while (i < 21) {
+    while (i < 26) {
       TONE(pgm_read_byte(&steps[i]), pgm_read_byte(&delays[i]));
       i++;
     }

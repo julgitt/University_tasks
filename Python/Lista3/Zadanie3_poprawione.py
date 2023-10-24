@@ -5,7 +5,6 @@ def find_path(maze, start):
     directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
     visited = set()
     start = tuple(start)
-    end = (rows - 1, cols - 1)
     
     queue = deque([(start, [start])])
     
@@ -24,7 +23,7 @@ def find_path(maze, start):
     while queue:
         (x, y), path = queue.popleft()
         
-        if (x, y) == end:
+        if (x,y) != start and (x == 0 or y == 0 or x == rows - 1 or y == cols - 1):
             return path
         
         if (x, y) not in visited:
@@ -40,15 +39,15 @@ def find_path(maze, start):
 
 
 maze = [
-    [' ', 'X', ' ', ' ', 'X', ' ', ' '],
-    [' ', 'X', 'X', ' ', 'X', 'X', ' '],
+    ['X', ' ', 'X', ' ', 'X', ' ', ' '],
+    ['X', ' ', 'X', ' ', 'X', ' ', 'X'],
+    ['X', ' ', ' ', ' ', ' ', ' ', ' '],
+    ['X', 'X', ' ', 'X', 'X', 'X', 'X'],
     [' ', ' ', ' ', ' ', ' ', ' ', ' '],
-    ['X', 'X', 'X', 'X', 'X', 'X', ' '],
-    [' ', ' ', ' ', ' ', ' ', 'X', ' '],
-    ['X', 'X', 'X', 'X', 'X', 'X', ' ']
+    ['X', 'X', 'X', 'X', ' ', 'X', 'X']
 ]
 
-start_point = (0, 0)
+start_point = (0, 1)
 path = find_path(maze, start_point)
 
 if path:
