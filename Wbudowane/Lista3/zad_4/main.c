@@ -6,9 +6,6 @@
 
 #define BAUD 9600                          // baudrate
 #define UBRR_VALUE ((F_CPU)/16/(BAUD)-1)   // zgodnie ze wzorem
-#define LED_DDR  DDRB
-#define LED_PORT  PORTB
-#define LED PB5
 
 // inicjalizacja UART
 void uart_init()
@@ -50,10 +47,6 @@ void adc_init()
 
 FILE uart_file;
 
-uint32_t exps(int32_t v){
-    return (v >> 2) * (v >> 2); 
-}
-
 int main()
 {
   // zainicjalizuj UART
@@ -65,34 +58,39 @@ int main()
   // zainicjalizuj ADC
   adc_init();
 
-  LED_DDR |= _BV(LED);
-  LED_PORT &= _BV(LED);
-
-  uint32_t timer = 0;
+  float temp;
+  
   uint32_t v;
+  float vcc;
+  
+  float r1;
+  float r2 = 2200.0;
+  
+  int32_t b = 3085;
+  
+  float b2;
+  float current_temp = 294.0;
   
   // mierz napięcie
   while(1) {
-    LED_PORT = ~_BV(LED);
+   
     ADCSRA |= _BV(ADSC);           // wykonaj konwersję
     while (!(ADCSRA & _BV(ADIF))); // czekaj na wynik
     ADCSRA |= _BV(ADIF); 	   // wyczyść bit ADIF (pisząc 1!)
     
     v = ADC; 	       	           // weź zmierzoną wartość (0..1023)     
-    LED_PORT = _BV(LED);
     
-    timer = (exps(v) << 10) >> 16; // *1024 / 
+    vcc = v * 5.0 / 1024.0;
     
-    for (int i = 0; i < timer; i++){
-        _delay_us(1);
-    }
+    r1 = 5 * r2 / vcc - r2;
     
-    LED_PORT = ~_BV(LED);
- 
-    _delay_us(2);
- 
+    //b2 =  log(4700.0 / r1) / ((1.0 / 298.0) - (1 / current_temp));
+    
+    temp = 1.0 / ((1.0 / 298.0) - log(4700.0 / r1) / b) - 273.0;
+    
+    _delay_us(10);
    
-    printf("Odczytano: %"PRIu32" %"PRIu32"\r\n", (int32_t)v, timer);
+    printf("Odczytano: %f %f %f \r\n", vcc, r1, temp/*, b2*/);
   }
 }
 

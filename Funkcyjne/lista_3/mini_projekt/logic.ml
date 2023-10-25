@@ -32,7 +32,7 @@ type theorem =
 let assumptions thm =
   match thm with
   | Ax _ -> []                     (* Axiom has no assumptions *)
-  | ImplIntro premises -> premises  (* Assumptions of Implication Introduction *)
+  | ImplIntro t -> assumptions t  (* Assumptions of Implication Introduction *)
   | ImplElim (l_proof, _) -> assumptions l_proof  (* Assumptions of Implication Elimination *)
   | FalseElim premises -> premises  (* Assumptions of False Elimination *)
 
