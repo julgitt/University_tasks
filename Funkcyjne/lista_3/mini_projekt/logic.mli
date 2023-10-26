@@ -8,7 +8,7 @@
 (** reprezentacja formuł *)
 type formula =
 | Var of string
-| FalseVar
+| Bottom
 | Implication of formula * formula
 
 val pp_print_formula : Format.formatter -> formula -> unit

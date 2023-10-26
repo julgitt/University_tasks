@@ -89,6 +89,10 @@ int main()
     
     LED_PORT = ~_BV(LED);
  
+    for (int i = 0; i < 1024 - timer; i++){
+        _delay_us(1);
+    }
+    
     _delay_us(2);
  
    

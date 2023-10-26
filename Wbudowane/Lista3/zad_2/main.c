@@ -77,7 +77,7 @@ int main()
     ADCSRA |= _BV(ADIF); 	   // wyczyść bit ADIF (pisząc 1!)
     
     adc_reading = ADC; 	       	  // weź zmierzoną wartość (0..1023)
-    vcc = 1.1 * 1023 / adc_reading; 
+    vcc = 1.1 * 1024 / adc_reading; 
     printf("Odczytano: ADC:%"PRIu16" VCC:%f lampka:%"PRIu16"\r\n", adc_reading, vcc, ((LED_PORT & _BV(LED))? 1 : 0 ));
     
     _delay_ms(1000);

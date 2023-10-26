@@ -66,7 +66,7 @@ int main()
   float r1;
   float r2 = 2200.0;
   
-  int32_t b = 3085;
+  int32_t b = 3085.0;
   
   float b2;
   float current_temp = 294.0;

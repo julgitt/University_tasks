@@ -305,7 +305,7 @@ void adc_init()
     ADCSRA |= _BV(ADIF); 	   // wyczyść bit ADIF (pisząc 1!)
     
     adc_reading = ADC; 	       	  // weź zmierzoną wartość (0..1023)
-    vcc = 1.1 * 1023 / adc_reading; 
+    vcc = 1.1 * 1024 / adc_reading; 
     printf("Odczytano: ADC:%"PRIu16" VCC:%f lampka:%"PRIu16"\r\n", adc_reading, vcc, ((LED_PORT & _BV(LED))? 1 : 0 ));
      2de:	00 e0       	ldi	r16, 0x00	; 0
      2e0:	11 e0       	ldi	r17, 0x01	; 1
@@ -334,7 +334,7 @@ void adc_init()
     adc_reading = ADC; 	       	  // weź zmierzoną wartość (0..1023)
      304:	c0 91 78 00 	lds	r28, 0x0078	; 0x800078 <__TEXT_REGION_LENGTH__+0x7f8078>
      308:	d0 91 79 00 	lds	r29, 0x0079	; 0x800079 <__TEXT_REGION_LENGTH__+0x7f8079>
-    vcc = 1.1 * 1023 / adc_reading; 
+    vcc = 1.1 * 1024 / adc_reading; 
     printf("Odczytano: ADC:%"PRIu16" VCC:%f lampka:%"PRIu16"\r\n", adc_reading, vcc, ((LED_PORT & _BV(LED))? 1 : 0 ));
      30c:	85 b1       	in	r24, 0x05	; 5
      30e:	85 fb       	bst	r24, 5
@@ -350,8 +350,8 @@ void adc_init()
      322:	0e 94 b6 09 	call	0x136c	; 0x136c <__floatsisf>
      326:	9b 01       	movw	r18, r22
      328:	ac 01       	movw	r20, r24
-     32a:	6a e9       	ldi	r22, 0x9A	; 154
-     32c:	79 ea       	ldi	r23, 0xA9	; 169
+     32a:	6d ec       	ldi	r22, 0xCD	; 205
+     32c:	7c ec       	ldi	r23, 0xCC	; 204
      32e:	8c e8       	ldi	r24, 0x8C	; 140
      330:	94 e4       	ldi	r25, 0x44	; 68
      332:	0e 94 42 09 	call	0x1284	; 0x1284 <__divsf3>

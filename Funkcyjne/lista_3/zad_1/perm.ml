@@ -71,6 +71,8 @@ module Make(Key : OrderedType) = struct
                           ) (snd t2) (snd t1)
     in (first, second);;
   
-  let compare t1 t2 =  if (Function.compare Key.compare (fst t1) (fst t2)) == 0 then 1 else 0;;
+  let compare t1 t2 =  if (Function.compare Key.compare (fst t1) (fst t2)) == 0 
+  		       then 1 
+  		       else 0;;
 
 end
