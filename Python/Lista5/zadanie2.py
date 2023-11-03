@@ -25,28 +25,27 @@ class Formula:
         return True
 
 
-def simplify(self):
-    if isinstance(self, Not):
-        return Not(self.f.simplify())
+    def simplify(self):
+        if isinstance(self, Not):
+            return Not(self.f.simplify())
     
-    if isinstance(self, Or):
-        if self.left == Constant(True) or self.right == Constant(True):
-            return Constant(True)
-        if self.left == Constant(False):
-            return self.right.simplify()
-        if self.right == Constant(False):
-            return self.left.simplify()
+        if isinstance(self, Or):
+            if self.left == Constant(True) or self.right == Constant(True):
+                return Constant(True)
+            if self.left == Constant(False):
+                return self.right.simplify()
+            if self.right == Constant(False):
+                return self.left.simplify()
     
-    if isinstance(self, And):
-        if self.left == Constant(False) or self.right == Constant(False):
-            return Constant(False)
-        if self.left == Constant(True):
-            return self.right.simplify()
-        if self.right == Constant(True):
-            return self.left.simplify()
+        if isinstance(self, And):
+            if self.left == Constant(False) or self.right == Constant(False):
+                return Constant(False)
+            if self.left == Constant(True):
+                return self.right.simplify()
+            if self.right == Constant(True):
+                return self.left.simplify()
     
-    return self
-
+        return self
 
 class Variable(Formula):
     def __init__(self, name):
@@ -141,4 +140,4 @@ if taut.tautology(['p']):
 else:
     print(f"Formula: {str(taut)} is not tautology.")
 
-print(f"for: {str(f)}, symplify():  {str(f.symplify())}")
+print(f"for: {str(f)}, simplify():  {str(f.simplify())}")
