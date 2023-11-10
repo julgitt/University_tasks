@@ -18,7 +18,6 @@ class WebsiteMonitor:
             return None
 
 
-
     def check_for_changes(self, url):
         current_html = self.get_page_content(url)
         if current_html is None:
