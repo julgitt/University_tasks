@@ -50,25 +50,23 @@ void adc_init()
 
 FILE uart_file;
 
-uint32_t exps(int32_t v){
-    return (v >> 2) * (v >> 2); 
-}
 
 void timer1_init()
 {
   // ustaw tryb licznika
   // COM1A = 10   -- non-inverting mode
   // WGM1  = 1110 -- fast PWM top=ICR1
-  // CS1   = 101  -- prescaler 1024 
-  // ICR1  = 15624
+  // CS1   = CS10 - bez prescalera
+  // ICR1  = 1023
   // częstotliwość 16e6/(1024*(1+15624)) = 1 Hz
   // wzór: datasheet 20.12.3 str. 164
-  ICR1 = 500;
+  ICR1 = 1023;
   TCCR1A = _BV(COM1A1) | _BV(WGM11);
-  TCCR1B = _BV(WGM12) | _BV(WGM13) /*| _BV(CS10)*/ | _BV(CS11); //255
+  TCCR1B = _BV(WGM12) | _BV(WGM13) | _BV(CS10);
   // ustaw pin OC1A (PB1) jako wyjście
   DDRB |= _BV(PB1);
 }
+
 
 int main()
 {
@@ -89,27 +87,21 @@ int main()
   
 
   float v;
-  uint32_t u;
-  uint32_t imp;
-  float val;
+  uint16_t val;
   
   // mierz napięcie
   while(1) {
     LED_PORT = ~_BV(LED);
     ADCSRA |= _BV(ADSC);           // wykonaj konwersję
     while (!(ADCSRA & _BV(ADIF))); // czekaj na wynik
-    ADCSRA |= _BV(ADIF); 	   // wyczyść bit ADIF (pisząc 1!)
+    ADCSRA |= _BV(ADIF); 	         // wyczyść bit ADIF (pisząc 1!)
     
-    v = ADC; 	       	           // weź zmierzoną wartość (0..1023)     
-    LED_PORT = _BV(LED);
+    v = ADC; 	       	            // weź zmierzoną wartość (0..1023)     
+
+    val = 1023 - ((sqrt(v)*40) > 1023? 1023 :(40*sqrt(v)));
     
-    u = (v * 5.0) / 1023.0;
-		imp = (u * 10000.0) / (5.0 - u);
-    
-    val = (v / 1024.0) * 500.0;
-		ICR1 = (val < 1)? 1 : val;
-    //ICR1 = 500 - 20 * sqrt(v);
-    printf("Odczytano: %"PRIu32" %"PRIu32" %"PRIu32"\r\n", (int32_t)v, ICR1, imp);
+    OCR1A = val;
+    printf("Odczytano: %"PRIu32" %"PRIu16" %"PRIu32"\r\n", (uint32_t)v, val, OCR1A);
   }
 }
 
