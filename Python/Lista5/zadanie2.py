@@ -13,8 +13,8 @@ class Formula:
     def __add__(self, other):
         return Or(self, other)
 
-    def __mul__(self, f1, f2):
-        return And(f1, f2)
+    def __mul__(self, other):
+        return And(self, other)
 
     def tautology(self, variables):
         permutations = itertools.product([False, True], repeat=len(variables))
@@ -26,26 +26,9 @@ class Formula:
 
 
     def simplify(self):
-        if isinstance(self, Not):
-            return Not(self.f.simplify())
+       pass
     
-        if isinstance(self, Or):
-            if self.left == Constant(True) or self.right == Constant(True):
-                return Constant(True)
-            if self.left == Constant(False):
-                return self.right.simplify()
-            if self.right == Constant(False):
-                return self.left.simplify()
-    
-        if isinstance(self, And):
-            if self.left == Constant(False) or self.right == Constant(False):
-                return Constant(False)
-            if self.left == Constant(True):
-                return self.right.simplify()
-            if self.right == Constant(True):
-                return self.left.simplify()
-    
-        return self
+
 
 class Variable(Formula):
     def __init__(self, name):
@@ -62,6 +45,9 @@ class Variable(Formula):
     def tautology(self):
         return False
     
+    def simplify(self):
+        return self 
+    
 
 class Constant(Formula):
     def __init__(self, value):
@@ -75,16 +61,31 @@ class Constant(Formula):
     def eval(self, variables):
         return self.value
     
+    def simplify(self):
+        return self
+         
 
 class Not(Formula):
-    def __init__(self, f):
-        self.f = f
+    def __init__(self, expression):
+        self.expression = expression
 
     def __str__(self):
-        return '¬' + str(self.f)
+        return '¬' + str(self.expression)
     
     def eval(self, variables):
-        return not self.f.eval(variables)
+        return not self.expression.eval(variables)
+    
+    def simplify(self):
+        var = self.expression.simplify()
+        if isinstance(var, Variable):
+            return Not(var)
+        if isinstance(var, Constant):
+            return Constant(not var.value)
+        if isinstance(var, Not):
+            return var
+        return Not(var)
+      
+         
 
 
 class And(Formula):
@@ -95,8 +96,21 @@ class And(Formula):
     def __str__(self):
         return f"( {str(self.left)}  ∧  {str(self.right)} )"
     
-    def eval(self, zmienne):
-        return self.left.eval(zmienne) and self.right.eval(zmienne)
+    def eval(self, variables):
+        return self.left.eval(variables) and self.right.eval(variables)
+    
+    def simplify(self):
+        if isinstance(self.left, Constant):
+            if self.left.value == False:
+                return self.left
+            return self.right.simplify()
+        elif isinstance(self.right, Constant):
+            if self.right.value == False:
+                return self.right
+            return self.left.simplify()
+        else:
+            return self.right.simplify().__mul__(self.left.simplify())
+              
     
 
 class Or(Formula):
@@ -107,8 +121,21 @@ class Or(Formula):
     def __str__(self):
         return f"( {str(self.left)}  v  {str(self.right)} )"
     
-    def eval(self, zmienne):
-        return self.left.eval(zmienne) or self.right.eval(zmienne)
+    def eval(self, variables):
+        return self.left.eval(variables) or self.right.eval(variables)
+    
+    def simplify(self):
+        if isinstance(self.left, Constant):
+            if self.left.value == True:
+                return self.left
+            return self.right.simplify()
+        elif isinstance(self.right, Constant):
+            if self.left.value == True:
+                return self.right
+            return self.left.simplify()
+        else:
+            return self.left.simplify().__add__ (self.right.simplify())
+         
     
 
 class typeException(Exception):
@@ -128,8 +155,9 @@ class noValException(Exception):
 
 
 
-
-f = Or(Constant(False), And(Constant(True), Not(Variable('x'))))
+y = And(Constant(True), And(Constant(True),  Not(Constant(False))))
+x = And(Constant(True), And(Constant(True),  Not(Variable('x'))))
+f = Or(Constant(True), And(Constant(True), Not(Variable('x'))))
 val = f.eval({'x' : True})
 print(str(f))
 print(f"for: {str({'x' : True})}, in: {str(f)}, val: {str(val)}")
@@ -140,4 +168,6 @@ if taut.tautology(['p']):
 else:
     print(f"Formula: {str(taut)} is not tautology.")
 
+print(f"for: {str(x)}, simplify():  {str(x.simplify())}")
+print(f"for: {str(y)}, simplify():  {str(y.simplify())}")
 print(f"for: {str(f)}, simplify():  {str(f.simplify())}")
