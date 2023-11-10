@@ -21,7 +21,7 @@ type proof =
   | Incompleted   of goal * context
 
 let proof g f =
-  Incompleted(Goal(g, f), Root)
+  Incompleted((g, f), Root)
 
 let qed pf =
   match pf with
@@ -30,55 +30,84 @@ let qed pf =
 
 let goal pf =
   match pf with
-  | Incompleted(g,_) -> g
+  | Incompleted(g,_) -> Some g
   | _ (*completed*)  -> None;;
 
 
-let go_up (pf,ctx) =
+let rec go_up (pf,ctx) =
   match pf with
   | Goal(g)                      -> Some(Incompleted(g,ctx))
   | Compl(t)                     -> None
-  | BottomE(part_pf,g)           -> go_up part_pf, BottomE_ctx(g, ctx)
-  | ImpI(part_pf,g)              -> go_up part_pf, ImpI_ctx(g, ctx)
+  | BottomE(part_pf,g)           -> go_up (part_pf, BottomE_ctx(g, ctx))
+  | ImpI(part_pf,g)              -> go_up (part_pf, ImpI_ctx(g, ctx))
   | ImpE(part_pf1, part_pf2, g)  -> 
-    let left = go_up part_pf1, ImpE_left_ctx(g,ctx)
-    and right = go_up (part_pf2, ImpE_right_ctx(g,ctx))
+    let left = go_up (part_pf1, ImpE_left_ctx(g, part_pf2, ctx))
+    and right = go_up (part_pf2, ImpE_right_ctx(part_pf1, g, ctx))
     in 
-    if (left = None) 
+    if left = None
       then right
       else left  
 
-let go_down (pf,ctx) =
+let rec go_down (pf,ctx) =
   match ctx with
   | Root                                -> None
-  | BottomE_ctx(g, parent_ctx)          -> go_down BottomE(pf,g), parent_ctx
-  | ImpI_ctx(g, parent_ctx)             -> go_down ImpI(pf,g), parent_ctx  
+  | BottomE_ctx(g, parent_ctx)          -> go_down (BottomE(pf,g), parent_ctx)
+  | ImpI_ctx(g, parent_ctx)             -> go_down (ImpI(pf,g), parent_ctx)  
   | ImpE_left_ctx(g, pf_r, parent_ctx)  -> 
-      let up = go_up (pf_r, ImpE_right_ctx(g, pf, parent_ctx))
+      let up = go_up (pf_r, ImpE_right_ctx(pf, g, parent_ctx))
       and down = go_down (ImpE(pf, pf_r, g), parent_ctx)
       in
       if up = None
-        then Some down
-        else Some up 
+        then down
+        else up 
   | ImpE_right_ctx(pf_l, g, parent_ctx) -> 
       let up = go_up (pf_l, ImpE_left_ctx(g, pf, parent_ctx))
       and down = go_down (ImpE(pf, pf_l, g), parent_ctx)
       in
       if up = None
-        then Some down
-        else Some up 
+        then down
+        else up 
  
 let next pf =
   match pf with
   | Completed(_)        -> failwith "Proof is completed"
   | Incompleted(g, ctx) ->
-    match go_down (Goal g), ctx with
+    match (go_down (Goal(g), ctx)) with
     | None    -> failwith "Failed to find new goal"
     | Some(g) -> g
 
+
+(** Wywołanie intro name pf odpowiada regule wprowadzania implikacji.
+  To znaczy aktywna dziura wypełniana jest regułą:
+
+  (nowy aktywny cel)
+   (name,ψ) :: Γ ⊢ φ
+   -----------------(→I)
+       Γ ⊢ ψ → φ
+
+  Jeśli aktywny cel nie jest implikacją, wywołanie kończy się błędem *)
 let intro name pf =
-  (* TODO: zaimplementuj *)
-  failwith "not implemented"
+  match pf with
+  | Completed(_) 	          -> failwith "Proof is completed"
+  | Incompleted((l_assum,f), ctx) -> 
+    match f with
+    | Implication(f1,f2) -> 
+      let new_assumptions = (name,f1) :: l_assum
+      and new_ctx = ImpI_ctx((l_assum,f),ctx)
+      in Incompleted((new_assumptions, f2), new_ctx)
+    | _ -> failwith "There is no implication"
+
+
+    (** Wywołanie apply ψ₀ pf odpowiada jednocześnie eliminacji implikacji
+  i eliminacji fałszu. Tzn. jeśli do udowodnienia jest φ, a ψ₀ jest
+  postaci ψ₁ → ... → ψₙ → φ to aktywna dziura wypełniana jest regułami
+  
+  (nowy aktywny cel) (nowy cel)
+        Γ ⊢ ψ₀          Γ ⊢ ψ₁
+        ----------------------(→E)  (nowy cel)
+                ...                   Γ ⊢ ψₙ
+                ----------------------------(→E)
+                            Γ ⊢ φ*)
 
 let apply f pf =
   (* TODO: zaimplementuj *)
