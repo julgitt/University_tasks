@@ -1,0 +1,22 @@
+A. Competitive Programmer
+time limit per test: 1 second
+memory limit per test: 256 megabytes
+input: standard input
+output: standard output
+
+Input:
+The first line contains a single integer n
+(1 ≤ n ≤ 418) — the number of integers.
+
+Then n lines follow,
+the i-th of which contains a single integer yi.
+
+Each of these numbers has between 2 and 100 digits '0' through '9'. 
+They can contain leading zeroes.
+
+Output:
+Output n lines.
+For each i, output the following.
+If it is possible to rearrange the digits of yi such that the resulting number is divisible by 60, 
+output "red" (quotes for clarity). 
+Otherwise, output "cyan".
