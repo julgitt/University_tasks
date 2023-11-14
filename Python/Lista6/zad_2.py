@@ -21,18 +21,21 @@ class WebsiteMonitor:
     def check_for_changes(self, url):
         current_html = self.get_page_content(url)
         if current_html is None:
+            print(f"There in no content on {url}")
             return
 
         if url in self.previous_content:
             previous_html = self.previous_content[url]
             if previous_html != current_html:
                 self.report_changes(url, previous_html, current_html)
+            else:
+                print(f"Changes on {url} has not occured")
 
         self.previous_content[url] = current_html
 
 
     def report_changes(self, url, previous_html, current_html):
-        print(f"Changes on {url} occured")
+        print(f"Changes on {url} has occured")
 
         output = '\n'.join(difflib.unified_diff(previous_html.splitlines(),
                                             current_html.splitlines()))
@@ -53,7 +56,7 @@ if __name__ == "__main__":
     monitor = WebsiteMonitor()
 
     while True:
-        urls_to_monitor = ["https://zapisy.ii.uni.wroc.pl/", "https://skos.ii.uni.wroc.pl/my/"]
+        urls_to_monitor = ["https://zapisy.ii.uni.wroc.pl/", "https://skos.ii.uni.wroc.pl/my/", "https://www.wikipedia.org/"]
 
         for url in urls_to_monitor:
             monitor.check_for_changes(url)
