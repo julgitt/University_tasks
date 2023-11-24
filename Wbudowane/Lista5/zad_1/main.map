@@ -371,9 +371,9 @@ END GROUP
  *(.stab)
  .stab          0x0000000000000000      0x684 main.o
 
-.stabstr        0x0000000000000000      0xcd3
+.stabstr        0x0000000000000000      0xcd9
  *(.stabstr)
- .stabstr       0x0000000000000000      0xcd3 main.o
+ .stabstr       0x0000000000000000      0xcd9 main.o
 
 .stab.excl
  *(.stab.excl)
