@@ -36,4 +36,5 @@
 - [Advanced Python Programming](https://github.com/julgitt/University_tasks/tree/master/Python)
 - [Embedded Systems](https://github.com/julgitt/University_tasks/tree/master/Wbudowane)
 - [Functional Programming](https://github.com/julgitt/University_tasks/tree/master/Funkcyjne)
+- Software Engineering
   
