@@ -45,6 +45,8 @@ class TheGameOfLife:
 
 
     def set_plot_properties(self):
+        plt.xlim(0, self.width)
+        plt.ylim(0, self.height)
         plt.xticks(range(0, self.width, 1))
         plt.yticks(range(0, self.height, 1))
         plt.tick_params(
@@ -52,7 +54,7 @@ class TheGameOfLife:
             left=False, right=False, labelbottom=False, labelleft=False
         )
         plt.title('The game has started' if self.game_is_running else 'Press space to start the game')
-        plt.xlabel('Change interval to:\n    1ms: 1\n    100ms: 2\n    500ms: 3\nSave state: F5\nLoad state F8', loc='left')
+        plt.xlabel('Change interval to:\n    1ms: 1\n    100ms: 2\n    500ms: 3\nSave state: F5\nLoad state: F8', loc='left')
   
     #endregion
 
@@ -135,7 +137,8 @@ class TheGameOfLife:
         for (x,y) in self.living_cells:
             self.handle_living_cell(x,y)
         for (x,y) in all_neighbours.difference(self.living_cells):
-            self.handle_dead_cell(x,y)
+            if ( 0 < x < width and 0 < y < height):
+                self.handle_dead_cell(x,y)
 
 
     def handle_living_cell(self, x, y):
@@ -214,7 +217,7 @@ class TheGameOfLife:
 
 
 class Modes():
-    game_of_life = ([2,3,4,5], [4,5,6,7,8])
+    game_of_life = ([2,3], [3])
     cities = ([2,3,4,5], [4,5,6,7,8])
     labirynth = ([1,2,3,4,5], [3])
     coral = ([4,5,6,7,8], [3])
@@ -227,5 +230,5 @@ if __name__ == '__main__':
     height = 100
     modes = Modes
 
-    game = TheGameOfLife(width, height, modes.cities)
+    game = TheGameOfLife(width, height, modes.game_of_life)
     game.start_game()

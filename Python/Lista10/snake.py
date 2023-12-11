@@ -16,25 +16,28 @@ class SnakeGame:
         self.blocks = [self.generate_point() for _ in range(num_blocks)]
         self.points = [self.generate_point() for _ in range(num_points)]
         self.game_over = False
+        self.game_started = False
 
 
     def generate_point(self):
         return (random.randint(1, width-2),random.randint(1, height-2))
     
-
+    #region gameLogic
     def update(self, frame):
         if self.game_over:
             plt.title("Game Over")
             return
 
-        head_x, head_y = self.snake[-1]
-        new_head = (head_x + self.direction[0], head_y + self.direction[1])
+        if self.game_started == True:
+            head_x, head_y = self.snake[-1]
+            new_head = (head_x + self.direction[0], head_y + self.direction[1])
     
-        if self.check_for_collision(new_head):
-            self.game_over = True
-            return
+            if self.check_for_collision(new_head):
+                self.game_over = True
+                return
         
-        self.move(new_head)
+            self.move(new_head)
+            
         self.update_plot()
 
 
@@ -53,18 +56,34 @@ class SnakeGame:
             self.points.append(self.generate_point())
         else:
             self.snake.pop(0)
-
-
+    #endregion
+    
+    #region plot
+    
     def update_plot(self):
         plt.clf()
+        self.plot_points()
+        self.set_plot_properties()
+       
+    
+    def plot_points(self):
         plt.scatter([x for x, y in self.blocks], [y for x, y in self.blocks], color='red', marker='s', s=100)
         plt.scatter([x for x, y in self.snake], [y for x, y in self.snake], color='blue', marker='s', s=100)
         plt.scatter([x for x, y in self.points], [y for x, y in self.points], color='green', marker='s', s=100)
+    
+    
+    def set_plot_properties(self):
         plt.xlim(0, self.width)
         plt.ylim(0, self.height)
-        plt.title("Points: " + str(len(self.snake) - 1))
+        plt.tick_params(
+            axis='both', which='both', bottom=False, top=False,
+            left=False, right=False, labelbottom=False, labelleft=False
+        )
+        plt.title(f"Points: {len(self.snake) - 1}")
+    #endregion
+        
+    #region userInterface
     
-
     def change_direction_on_key(self, event):
         new_direction = self.direction
         if event.key == 'up':
@@ -76,8 +95,10 @@ class SnakeGame:
         elif event.key == 'left':
             new_direction = (-1, 0)
         if (self.direction[0] + new_direction[0] != 0) or (self.direction[1] + new_direction[1] != 0):    
+            self.game_started = True
             self.direction = new_direction
-    
+           
+    #endregion
     
     def start_game(self):
         fig = plt.figure(num="Snake", figsize=(8, 8))
@@ -93,7 +114,7 @@ class SnakeGame:
 
 width = 25
 height = 25
-num_blocks = 2
+num_blocks = 0
 num_points = 1
 snake_interval = 50
 

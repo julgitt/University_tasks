@@ -15,31 +15,9 @@ class LangtonAnt:
         self.dead_points = []
 
 
-    def turn_left(self):
-        dx, dy = self.direction
-        self.direction = (-dy, dx)
-    
-    def turn_right(self):
-        dx, dy = self.direction
-        self.direction = (dy, -dx)
-
-    def handle_dead_point(self):
-        self.dead_points.remove(self.ant_pos)
-        self.turn_left()
-    
-    def handle_living_point(self):
-        self.dead_points.append(self.ant_pos)
-        self.turn_right()
-    
-    def move(self):
-        new_x = self.ant_pos[0] + self.direction[0]
-        new_y = self.ant_pos[1] + self.direction[1]
-        self.ant_pos = (new_x,new_y)
-
-
     def update(self, frame):
         if self.steps == self.max_steps:
-            plt.title("Simulation Completed\nSteps: " + str(self.steps))
+            plt.title("Simulation Completed\nSteps: {self.steps}")
             return
 
         if self.ant_pos in self.dead_points:
@@ -50,15 +28,44 @@ class LangtonAnt:
         self.move()
         self.steps += 1
         self.update_plot()
+    
+    
+    def handle_dead_point(self):
+        self.dead_points.remove(self.ant_pos)
+        self.turn_left()
+    
+    
+    def handle_living_point(self):
+        self.dead_points.append(self.ant_pos)
+        self.turn_right()
+        
+        
+    def turn_left(self):
+        dx, dy = self.direction
+        self.direction = (-dy, dx)
+    
+    def turn_right(self):
+        dx, dy = self.direction
+        self.direction = (dy, -dx)
+
+   
+    def move(self):
+        new_x = self.ant_pos[0] + self.direction[0]
+        new_y = self.ant_pos[1] + self.direction[1]
+        self.ant_pos = (new_x,new_y)
 
 
     def update_plot(self):
         plt.clf()
         plt.scatter([x for x, y in self.dead_points], [y for x, y in self.dead_points], color=self.color, marker='s', s=5)
         plt.scatter(self.ant_pos[0], self.ant_pos[1], color='red', marker='s', s=5)
+        plt.tick_params(
+            axis='both', which='both', bottom=False, top=False,
+            left=False, right=False, labelbottom=False, labelleft=False
+        )
         plt.xlim(0, self.width)
         plt.ylim(0, self.height)
-        plt.title("Steps: " + str(self.steps))
+        plt.title(f"Steps: {self.steps}")
     
     
     def start_simulation(self):
