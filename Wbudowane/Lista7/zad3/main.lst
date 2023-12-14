@@ -510,6 +510,7 @@ static inline int read(int8_t addr)
      2f2:	cd b7       	in	r28, 0x3d	; 61
      2f4:	de b7       	in	r29, 0x3e	; 62
      2f6:	8d 83       	std	Y+5, r24	; 0x05
+  // dummy write
   i2cStart();
      2f8:	0e 94 7e 00 	call	0xfc	; 0xfc <i2cStart>
 
@@ -520,6 +521,7 @@ static inline int read(int8_t addr)
      302:	8d 81       	ldd	r24, Y+5	; 0x05
      304:	0e 94 cb 00 	call	0x196	; 0x196 <i2cSend>
 
+  // read
   i2cStart();
      308:	0e 94 7e 00 	call	0xfc	; 0xfc <i2cStart>
   i2cSend(clock_addr | 0x1);
@@ -579,7 +581,7 @@ static inline void date()
      35e:	df 93       	push	r29
      360:	cd b7       	in	r28, 0x3d	; 61
      362:	de b7       	in	r29, 0x3e	; 62
-  printf("%d:%d:%d\r\n", read(4),read(5), read(6));
+  printf("%d-%d-%d\r\n", read(4), read(5), read(6));
      364:	86 e0       	ldi	r24, 0x06	; 6
      366:	0e 94 74 01 	call	0x2e8	; 0x2e8 <read>
      36a:	7c 01       	movw	r14, r24
@@ -637,7 +639,7 @@ static inline void time()
      3cc:	df 93       	push	r29
      3ce:	cd b7       	in	r28, 0x3d	; 61
      3d0:	de b7       	in	r29, 0x3e	; 62
-  printf("%d-%d-%d\r\n", read(2),read(1), read(0));
+  printf("%d:%d:%d\r\n", read(2), read(1), read(0));
      3d2:	80 e0       	ldi	r24, 0x00	; 0
      3d4:	0e 94 74 01 	call	0x2e8	; 0x2e8 <read>
      3d8:	7c 01       	movw	r14, r24
@@ -744,17 +746,17 @@ static inline void set_time(int hour, int minute, int second)
      490:	6b 83       	std	Y+3, r22	; 0x03
      492:	5e 83       	std	Y+6, r21	; 0x06
      494:	4d 83       	std	Y+5, r20	; 0x05
-  write(0,second);
+  write(0, second);
      496:	8d 81       	ldd	r24, Y+5	; 0x05
      498:	68 2f       	mov	r22, r24
      49a:	80 e0       	ldi	r24, 0x00	; 0
      49c:	0e 94 39 01 	call	0x272	; 0x272 <write>
-  write(1,minute);
+  write(1, minute);
      4a0:	8b 81       	ldd	r24, Y+3	; 0x03
      4a2:	68 2f       	mov	r22, r24
      4a4:	81 e0       	ldi	r24, 0x01	; 1
      4a6:	0e 94 39 01 	call	0x272	; 0x272 <write>
-  write(2,hour);
+  write(2, hour);
      4aa:	89 81       	ldd	r24, Y+1	; 0x01
      4ac:	68 2f       	mov	r22, r24
      4ae:	82 e0       	ldi	r24, 0x02	; 2
@@ -818,13 +820,15 @@ int main()
   // zainicjalizuj I2C
   i2cInit();
      532:	0e 94 59 00 	call	0xb2	; 0xb2 <i2cInit>
-  // program testowy
+
   uint8_t val1 = 0, val2 = 0, val3 = 0;
      536:	19 82       	std	Y+1, r1	; 0x01
      538:	1a 82       	std	Y+2, r1	; 0x02
      53a:	1b 82       	std	Y+3, r1	; 0x03
   char command[10];
-  while(1) {
+  
+  while (1)
+  {
     scanf("%s", command);
      53c:	ce 01       	movw	r24, r28
      53e:	04 96       	adiw	r24, 0x04	; 4
@@ -865,7 +869,7 @@ int main()
       date();
      586:	0e 94 aa 01 	call	0x354	; 0x354 <date>
      58a:	d8 cf       	rjmp	.-80     	; 0x53c <main+0x74>
-    else if (strcmp(command, "set") == 0) {
+    else if (strcmp(command, "set") == 0)
      58c:	ce 01       	movw	r24, r28
      58e:	04 96       	adiw	r24, 0x04	; 4
      590:	64 e2       	ldi	r22, 0x24	; 36
@@ -874,6 +878,7 @@ int main()
      598:	89 2b       	or	r24, r25
      59a:	09 f0       	breq	.+2      	; 0x59e <main+0xd6>
      59c:	c7 c0       	rjmp	.+398    	; 0x72c <main+0x264>
+    {
       scanf("%s", command);
      59e:	ce 01       	movw	r24, r28
      5a0:	04 96       	adiw	r24, 0x04	; 4
@@ -892,8 +897,8 @@ int main()
      5bc:	0f 90       	pop	r0
      5be:	0f 90       	pop	r0
      5c0:	0f 90       	pop	r0
-     
-      if (strcmp(command, "time") == 0) {
+
+      if (strcmp(command, "time") == 0)
      5c2:	ce 01       	movw	r24, r28
      5c4:	04 96       	adiw	r24, 0x04	; 4
      5c6:	6a e1       	ldi	r22, 0x1A	; 26
@@ -902,6 +907,7 @@ int main()
      5ce:	89 2b       	or	r24, r25
      5d0:	09 f0       	breq	.+2      	; 0x5d4 <main+0x10c>
      5d2:	4f c0       	rjmp	.+158    	; 0x672 <main+0x1aa>
+      {
         scanf("%d:%d:%d", &val1, &val2, &val3);
      5d4:	ce 01       	movw	r24, r28
      5d6:	03 96       	adiw	r24, 0x03	; 3
@@ -982,7 +988,7 @@ int main()
      66e:	cd bf       	out	0x3d, r28	; 61
      670:	65 cf       	rjmp	.-310    	; 0x53c <main+0x74>
       }
-      else if (strcmp(command, "date") == 0) {
+      else if (strcmp(command, "date") == 0)
      672:	ce 01       	movw	r24, r28
      674:	04 96       	adiw	r24, 0x04	; 4
      676:	6f e1       	ldi	r22, 0x1F	; 31
@@ -991,6 +997,7 @@ int main()
      67e:	89 2b       	or	r24, r25
      680:	09 f0       	breq	.+2      	; 0x684 <main+0x1bc>
      682:	4f c0       	rjmp	.+158    	; 0x722 <main+0x25a>
+      {
         scanf("%d-%d-%d", &val1, &val2, &val3);
      684:	ce 01       	movw	r24, r28
      686:	03 96       	adiw	r24, 0x03	; 3
@@ -1071,15 +1078,14 @@ int main()
      71e:	cd bf       	out	0x3d, r28	; 61
      720:	0d cf       	rjmp	.-486    	; 0x53c <main+0x74>
       }
-      else {
+      else
         printf("Invalid command. Use set time/set date instead\r\n");
      722:	8e e5       	ldi	r24, 0x5E	; 94
      724:	91 e0       	ldi	r25, 0x01	; 1
      726:	0e 94 ba 03 	call	0x774	; 0x774 <puts>
      72a:	08 cf       	rjmp	.-496    	; 0x53c <main+0x74>
-      }
     }
-    else 
+    else
       printf("Invalid command. Use time/date/set time/set date instead\r\n");
      72c:	8e e8       	ldi	r24, 0x8E	; 142
      72e:	91 e0       	ldi	r25, 0x01	; 1
