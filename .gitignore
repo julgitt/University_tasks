@@ -396,3 +396,18 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Idea folders
+**.idea/
+
+# Embedded Systems
+**FreeRTOS/
+*.o
+*.lst
+*.d
+*.eep
+*.lss
+*.map
+*.sym
+*.elf
+*.hex
