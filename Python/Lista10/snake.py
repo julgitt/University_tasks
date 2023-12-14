@@ -1,7 +1,7 @@
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
 import random
 
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 class SnakeGame:
     def __init__(self, width, height, num_blocks, num_points, snake_interval):
@@ -29,7 +29,7 @@ class SnakeGame:
             return
 
         if self.game_started == True:
-            head_x, head_y = self.snake[-1]
+            head_x, head_y = self.snake[self.snake_head_idx()]
             new_head = (head_x + self.direction[0], head_y + self.direction[1])
     
             if self.check_for_collision(new_head):
@@ -41,8 +41,16 @@ class SnakeGame:
         self.update_plot()
 
 
-    def check_for_collision(self, new_head):
-        with_snake = new_head in self.snake[:-1]
+    def snake_tail_idx(self):
+        return 0
+    
+
+    def snake_head_idx(self):
+        return -1
+    
+
+    def check_for_collision(self, new_head) -> bool:
+        with_snake = new_head in self.snake[:self.snake_head_idx()]
         with_map_border = not (0 <= new_head[0] <= self.width) or not (0 <= new_head[1] <= self.height)
         with_blocks = new_head in self.blocks
         return with_snake or with_map_border or with_blocks
@@ -52,10 +60,14 @@ class SnakeGame:
         self.snake.append(new_head)
 
         if new_head in self.points:
-            self.points.remove(new_head)
-            self.points.append(self.generate_point())
+            self.remove_point_and_generate_new_one(new_head)
         else:
-            self.snake.pop(0)
+            self.snake.pop(self.snake_tail_idx())
+    
+    
+    def remove_point_and_generate_new_one(self, point_coords):
+        self.points.remove(point_coords)
+        self.points.append(self.generate_point())
     #endregion
     
     #region plot
@@ -94,6 +106,7 @@ class SnakeGame:
             new_direction = (1, 0)
         elif event.key == 'left':
             new_direction = (-1, 0)
+            
         if (self.direction[0] + new_direction[0] != 0) or (self.direction[1] + new_direction[1] != 0):    
             self.game_started = True
             self.direction = new_direction
@@ -114,7 +127,7 @@ class SnakeGame:
 
 width = 25
 height = 25
-num_blocks = 0
+num_blocks = 1
 num_points = 1
 snake_interval = 50
 

@@ -1,15 +1,26 @@
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import pickle
-from enum import Enum
 from datetime import datetime
+from itertools import cycle
+import pickle
+from os import path
 import tkinter as tk
 from tkinter import filedialog
-import os
+from typing import Set, Tuple
+from enum import Enum
+
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+
+class Modes(Enum):
+    game_of_life = ([2,3], [3])
+    cities = ([2,3,4,5], [4,5,6,7,8])
+    labirynth = ([1,2,3,4,5], [3])
+    coral = ([4,5,6,7,8], [3])
+    seed = ([], [2])
 
 
 class TheGameOfLife:
-    def __init__(self, width, height, mode):
+    def __init__(self, width, height):
         self.width = width
         self.height = height
         self.interval = 100
@@ -19,14 +30,26 @@ class TheGameOfLife:
         self.game_is_running = False
         self.anim = None
         self.fig = None
-        self.rule_of_death = mode[0]
-        self.rule_of_life = mode[1]
+        self.modes_cycle = cycle(Modes)
+        self.current_mode = next(self.modes_cycle)
+        self.update_rules()
     
+
+    def update_rules(self):
+        self.rule_of_death, self.rule_of_life = self.current_mode.value
+
+
+    def change_mode(self):
+        self.current_mode = next(self.modes_cycle)
+        self.update_rules()
+        print(f"Mode changed to {self.current_mode.name}")
+
 
     def update(self, frame):
         if self.game_is_running:
             self.time_tick()
         self.update_plot()
+
 
     #region plot
     def update_plot(self):
@@ -53,8 +76,10 @@ class TheGameOfLife:
             axis='both', which='both', bottom=False, top=False,
             left=False, right=False, labelbottom=False, labelleft=False
         )
-        plt.title('The game has started' if self.game_is_running else 'Press space to start the game')
-        plt.xlabel('Change interval to:\n    1ms: 1\n    100ms: 2\n    500ms: 3\nSave state: F5\nLoad state: F8', loc='left')
+        plt.title(f'Current mode: {self.current_mode.name}\n' 
+                  + ('The game has started' if self.game_is_running 
+                                          else 'Press space to start the game'))
+        plt.xlabel('Change interval to:\n    500ms: 1\n    100ms: 2\n    1ms:     3\nSave state: F5\nLoad state: F8', loc='left')
   
     #endregion
 
@@ -76,6 +101,11 @@ class TheGameOfLife:
     def start_game_on_space(self, event):
         if event.key == ' ':
             self.game_is_running = not self.game_is_running
+
+    
+    def change_mode_on_key(self, event):
+        if event.key == 'f1':
+            self.change_mode()
         
 
     def change_interval_on_key(self, event):
@@ -133,12 +163,13 @@ class TheGameOfLife:
 
 
     def handle_cells_states(self):
-        all_neighbours = self.get_all_neighbours()
-        for (x,y) in self.living_cells:
+        all_neighbours = self.get_all_cells_neighbours()
+        for (x, y) in self.living_cells:
             self.handle_living_cell(x,y)
-        for (x,y) in all_neighbours.difference(self.living_cells):
-            if ( 0 < x < width and 0 < y < height):
-                self.handle_dead_cell(x,y)
+        for (x, y) in all_neighbours.difference(self.living_cells):
+            is_inside_borders = (0 < x < width and 0 < y < height)
+            if is_inside_borders:
+                self.handle_dead_cell(x, y)
 
 
     def handle_living_cell(self, x, y):
@@ -151,23 +182,23 @@ class TheGameOfLife:
             self.newborn_cells.add((x,y))
 
 
-    def living_neighbours_count(self, x,y):
-        neighbours = self.get_neighbours(x, y)
+    def living_neighbours_count(self, x,y) -> int:
+        neighbours = self.get_cell_neighbours(x, y)
         living_neighbours = neighbours.intersection(self.living_cells)
         return len(living_neighbours)
 
 
-    def get_all_neighbours(self):
-        all_neighbours = set()
-        for (x, y) in self.living_cells:
-            all_neighbours |= self.get_neighbours(x, y)
-        return all_neighbours
-
-
-    def get_neighbours(self, x, y):
+    def get_cell_neighbours(self, x, y) -> Set[Tuple[int, int]]:
         deltas = [(1, 0), (0, 1), (0, -1), (-1, 0), (-1, 1), (1, -1), (1, 1), (-1, -1)]
         neighbours = {(x + dx, y + dy) for dx, dy in deltas}
         return neighbours
+
+
+    def get_all_cells_neighbours(self) -> Set[Tuple[int, int]]:
+        all_neighbours = set()
+        for (x, y) in self.living_cells:
+            all_neighbours |= self.get_cell_neighbours(x, y)
+        return all_neighbours
 
     #endregion    
     
@@ -179,21 +210,23 @@ class TheGameOfLife:
             'game_is_running': self.game_is_running,
             'interval': self.interval
         }
+
         current_datetime = datetime.now()
         formatted_date = current_datetime.strftime("%Y-%m-%d_%H-%M-%S")
         with open(f"game_save_{formatted_date}.pkl", "wb") as file:
-            pickle.dump(state,file)
+            pickle.dump(state, file)
         print(f'state saved in file: game_save{formatted_date}.plk')
     
     
     def load_state(self):
-        initial_dir = os.path.dirname(os.path.abspath(__file__))
+        initial_dir = path.dirname(path.abspath(__file__))
         root = tk.Tk()
         root.withdraw()
         filename = filedialog.askopenfilename(initialdir=initial_dir, title="Select file",
                                                   filetypes=(("Pickle files", "*.pkl"), ("All files", "*.*")))
         if not filename:
             return
+        
         with open(filename, "rb") as file:
             state = pickle.load(file)
             self.living_cells = state['living_cells']
@@ -209,26 +242,16 @@ class TheGameOfLife:
         self.fig.canvas.mpl_connect('key_press_event', self.start_game_on_space)
         self.fig.canvas.mpl_connect('key_press_event', self.change_interval_on_key)
         self.fig.canvas.mpl_connect('key_press_event', self.save_or_load_state_on_key)
+        self.fig.canvas.mpl_connect('key_press_event', self.change_mode_on_key)
 
         self.anim = animation.FuncAnimation(self.fig, self.update, frames=1000, interval=self.interval)
 
         plt.show()
 
 
-
-class Modes():
-    game_of_life = ([2,3], [3])
-    cities = ([2,3,4,5], [4,5,6,7,8])
-    labirynth = ([1,2,3,4,5], [3])
-    coral = ([4,5,6,7,8], [3])
-    seed = ([], [2])
-
-
-
 if __name__ == '__main__':
     width = 100
     height = 100
-    modes = Modes
 
-    game = TheGameOfLife(width, height, modes.game_of_life)
+    game = TheGameOfLife(width, height)
     game.start_game()

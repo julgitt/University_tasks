@@ -10,14 +10,14 @@ class LangtonAnt:
         self.color = color
         self.direction = direction
         self.max_steps = max_steps
-        self.steps = 0
+        self.steps_count = 0
         self.ant_pos = (width // 2, height // 2)
         self.dead_points = []
 
 
     def update(self, frame):
-        if self.steps == self.max_steps:
-            plt.title("Simulation Completed\nSteps: {self.steps}")
+        if self.steps_count == self.max_steps:
+            plt.title(f"Simulation Completed\nSteps: {self.steps_count}")
             return
 
         if self.ant_pos in self.dead_points:
@@ -26,7 +26,7 @@ class LangtonAnt:
             self.handle_living_point()
 
         self.move()
-        self.steps += 1
+        self.steps_count += 1
         self.update_plot()
     
     
@@ -65,7 +65,7 @@ class LangtonAnt:
         )
         plt.xlim(0, self.width)
         plt.ylim(0, self.height)
-        plt.title(f"Steps: {self.steps}")
+        plt.title(f"Steps: {self.steps_count}")
     
     
     def start_simulation(self):
