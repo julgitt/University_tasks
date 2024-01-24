@@ -1,0 +1,22 @@
+type token =
+    VAR of string
+  | SYM of string
+  | RULE
+  | PARENTH_OPN
+  | PARENTH_CLS
+  | FILEPATH of string
+  | EOF
+  | DOT
+  | COMMA
+  | BR_OPN
+  | BR_CLS
+val menhir_begin_marker : int
+val xv_term_list : Ast.term list
+val xv_term : Ast.term
+val xv_symbol : string
+val xv_query : Ast.query
+val xv_program : Ast.program
+val xv_clause_list_rev : Ast.clause_data list
+val xv_clause_list : Ast.program
+val xv_clause : Ast.clause_data
+val menhir_end_marker : int

@@ -1,0 +1,144 @@
+# dune exec prolog
+# OCAMLPARAM: unset
+# Shared cache: disabled
+# Workspace root:
+# /home/julia/Studia/University_tasks/Funkcyjne/prolog_parser/prolog_parser/prolog
+# Auto-detected concurrency: 8
+$ /home/julia/.opam/default/bin/ocamlc.opt -config > /tmp/dune_8a6793_output
+# Dune context:
+#  { name = "default"
+#  ; kind = "default"
+#  ; profile = Dev
+#  ; merlin = true
+#  ; for_host = None
+#  ; fdo_target_exe = None
+#  ; build_dir = In_build_dir "default"
+#  ; ocaml_bin = External "/home/julia/.opam/default/bin"
+#  ; ocaml = Ok External "/home/julia/.opam/default/bin/ocaml"
+#  ; ocamlc = External "/home/julia/.opam/default/bin/ocamlc.opt"
+#  ; ocamlopt = Ok External "/home/julia/.opam/default/bin/ocamlopt.opt"
+#  ; ocamldep = Ok External "/home/julia/.opam/default/bin/ocamldep.opt"
+#  ; ocamlmklib = Ok External "/home/julia/.opam/default/bin/ocamlmklib"
+#  ; env =
+#      map
+#        { "DUNE_OCAML_HARDCODED" :
+#            "/home/julia/.opam/default/lib/ocaml:/home/julia/.opam/default/lib"
+#        ; "DUNE_OCAML_STDLIB" : "/home/julia/.opam/default/lib/ocaml"
+#        ; "DUNE_SOURCEROOT" :
+#            "/home/julia/Studia/University_tasks/Funkcyjne/prolog_parser/prolog_parser/prolog"
+#        ; "INSIDE_DUNE" :
+#            "/home/julia/Studia/University_tasks/Funkcyjne/prolog_parser/prolog_parser/prolog/_build/default"
+#        ; "OCAMLFIND_IGNORE_DUPS_IN" :
+#            "/home/julia/Studia/University_tasks/Funkcyjne/prolog_parser/prolog_parser/prolog/_build/install/default/lib"
+#        ; "OCAMLPATH" :
+#            "/home/julia/Studia/University_tasks/Funkcyjne/prolog_parser/prolog_parser/prolog/_build/install/default/lib"
+#        ; "OCAMLTOP_INCLUDE_PATH" :
+#            "/home/julia/Studia/University_tasks/Funkcyjne/prolog_parser/prolog_parser/prolog/_build/install/default/lib/toplevel"
+#        ; "OCAML_COLOR" : "always"
+#        ; "OPAMCOLOR" : "always"
+#        }
+#  ; findlib_paths =
+#      [ External "/home/julia/.opam/default/lib/ocaml"
+#      ; External "/home/julia/.opam/default/lib"
+#      ]
+#  ; natdynlink_supported = true
+#  ; supports_shared_libraries = true
+#  ; ocaml_config =
+#      { version = "5.1.0"
+#      ; standard_library_default = "/home/julia/.opam/default/lib/ocaml"
+#      ; standard_library = "/home/julia/.opam/default/lib/ocaml"
+#      ; standard_runtime = "the_standard_runtime_variable_was_deleted"
+#      ; ccomp_type = "cc"
+#      ; c_compiler = "gcc"
+#      ; ocamlc_cflags =
+#          [ "-O2"; "-fno-strict-aliasing"; "-fwrapv"; "-pthread"; "-fPIC" ]
+#      ; ocamlc_cppflags = [ "-D_FILE_OFFSET_BITS=64" ]
+#      ; ocamlopt_cflags =
+#          [ "-O2"; "-fno-strict-aliasing"; "-fwrapv"; "-pthread"; "-fPIC" ]
+#      ; ocamlopt_cppflags = [ "-D_FILE_OFFSET_BITS=64" ]
+#      ; bytecomp_c_compiler =
+#          [ "gcc"
+#          ; "-O2"
+#          ; "-fno-strict-aliasing"
+#          ; "-fwrapv"
+#          ; "-pthread"
+#          ; "-fPIC"
+#          ; "-D_FILE_OFFSET_BITS=64"
+#          ]
+#      ; bytecomp_c_libraries = [ "-lm"; "-lpthread" ]
+#      ; native_c_compiler =
+#          [ "gcc"
+#          ; "-O2"
+#          ; "-fno-strict-aliasing"
+#          ; "-fwrapv"
+#          ; "-pthread"
+#          ; "-fPIC"
+#          ; "-D_FILE_OFFSET_BITS=64"
+#          ]
+#      ; native_c_libraries = [ "-lm"; "-lpthread" ]
+#      ; native_pack_linker = [ "ld"; "-r"; "-o" ]
+#      ; cc_profile = []
+#      ; architecture = "amd64"
+#      ; model = "default"
+#      ; int_size = 63
+#      ; word_size = 64
+#      ; system = "linux"
+#      ; asm = [ "as" ]
+#      ; asm_cfi_supported = true
+#      ; with_frame_pointers = false
+#      ; ext_exe = ""
+#      ; ext_obj = ".o"
+#      ; ext_asm = ".s"
+#      ; ext_lib = ".a"
+#      ; ext_dll = ".so"
+#      ; os_type = "Unix"
+#      ; default_executable_name = "a.out"
+#      ; systhread_supported = true
+#      ; host = "x86_64-pc-linux-gnu"
+#      ; target = "x86_64-pc-linux-gnu"
+#      ; profiling = false
+#      ; flambda = false
+#      ; spacetime = false
+#      ; safe_string = true
+#      ; exec_magic_number = "Caml1999X033"
+#      ; cmi_magic_number = "Caml1999I033"
+#      ; cmo_magic_number = "Caml1999O033"
+#      ; cma_magic_number = "Caml1999A033"
+#      ; cmx_magic_number = "Caml1999Y033"
+#      ; cmxa_magic_number = "Caml1999Z033"
+#      ; ast_impl_magic_number = "Caml1999M033"
+#      ; ast_intf_magic_number = "Caml1999N033"
+#      ; cmxs_magic_number = "Caml1999D033"
+#      ; cmt_magic_number = "Caml1999T033"
+#      ; natdynlink_supported = true
+#      ; supports_shared_libraries = true
+#      ; windows_unicode = false
+#      }
+#  }
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -bin-annot -I src/Stack/.stack.objs/byte -I src/Ast/.ast.objs/byte -I src/ErrorHandling/.errorHandling.objs/byte -I src/Helper/.helper.objs/byte -no-alias-deps -opaque -o src/Stack/.stack.objs/byte/stack.cmo -c -impl src/Stack/stack.ml)
+> File "src/Stack/stack.ml", line 70, characters 17-18:
+> 70 |         | Var (n,x) -> 
+>                       ^
+> Warning 27 [unused-var-strict]: unused variable x.
+>
+> File "src/Stack/stack.ml", line 111, characters 12-23:
+> 111 |     let rec print_stack map_acc map =
+>                   ^^^^^^^^^^^
+> Warning 32 [unused-value-declaration]: unused value print_stack.
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -bin-annot -I src/Interpreter/.interpreter.objs/byte -I src/Ast/.ast.objs/byte -I src/ErrorHandling/.errorHandling.objs/byte -I src/Helper/.helper.objs/byte -I src/Stack/.stack.objs/byte -no-alias-deps -opaque -o src/Interpreter/.interpreter.objs/byte/interpreter.cmo -c -impl src/Interpreter/interpreter.ml)
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -bin-annot -I src/.prolog.eobjs/byte -I /home/julia/.opam/default/lib/linenoise -I /home/julia/.opam/default/lib/menhirLib -I /home/julia/.opam/default/lib/result -I src/Ast/.ast.objs/byte -I src/ErrorHandling/.errorHandling.objs/byte -I src/Helper/.helper.objs/byte -I src/Interpreter/.interpreter.objs/byte -I src/MyLexer/.lexer.objs/byte -I src/Parser/.parser.objs/byte -I src/Parser/MenhirParser/.menhirParser.objs/byte -I src/Stack/.stack.objs/byte -no-alias-deps -opaque -o src/.prolog.eobjs/byte/dune__exe__Prolog.cmi -c -intf src/prolog.mli)
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -I src/Stack/.stack.objs/byte -I src/Stack/.stack.objs/native -I src/Ast/.ast.objs/byte -I src/Ast/.ast.objs/native -I src/ErrorHandling/.errorHandling.objs/byte -I src/ErrorHandling/.errorHandling.objs/native -I src/Helper/.helper.objs/byte -I src/Helper/.helper.objs/native -intf-suffix .ml -no-alias-deps -opaque -o src/Stack/.stack.objs/native/stack.cmx -c -impl src/Stack/stack.ml)
+> File "src/Stack/stack.ml", line 70, characters 17-18:
+> 70 |         | Var (n,x) -> 
+>                       ^
+> Warning 27 [unused-var-strict]: unused variable x.
+>
+> File "src/Stack/stack.ml", line 111, characters 12-23:
+> 111 |     let rec print_stack map_acc map =
+>                   ^^^^^^^^^^^
+> Warning 32 [unused-value-declaration]: unused value print_stack.
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -a -o src/Stack/stack.cmxa src/Stack/.stack.objs/native/stack.cmx)
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -I src/Interpreter/.interpreter.objs/byte -I src/Interpreter/.interpreter.objs/native -I src/Ast/.ast.objs/byte -I src/Ast/.ast.objs/native -I src/ErrorHandling/.errorHandling.objs/byte -I src/ErrorHandling/.errorHandling.objs/native -I src/Helper/.helper.objs/byte -I src/Helper/.helper.objs/native -I src/Stack/.stack.objs/byte -I src/Stack/.stack.objs/native -intf-suffix .ml -no-alias-deps -opaque -o src/Interpreter/.interpreter.objs/native/interpreter.cmx -c -impl src/Interpreter/interpreter.ml)
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -a -o src/Interpreter/interpreter.cmxa src/Interpreter/.interpreter.objs/native/interpreter.cmx)
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -I src/.prolog.eobjs/byte -I src/.prolog.eobjs/native -I /home/julia/.opam/default/lib/linenoise -I /home/julia/.opam/default/lib/menhirLib -I /home/julia/.opam/default/lib/result -I src/Ast/.ast.objs/byte -I src/Ast/.ast.objs/native -I src/ErrorHandling/.errorHandling.objs/byte -I src/ErrorHandling/.errorHandling.objs/native -I src/Helper/.helper.objs/byte -I src/Helper/.helper.objs/native -I src/Interpreter/.interpreter.objs/byte -I src/Interpreter/.interpreter.objs/native -I src/MyLexer/.lexer.objs/byte -I src/MyLexer/.lexer.objs/native -I src/Parser/.parser.objs/byte -I src/Parser/.parser.objs/native -I src/Parser/MenhirParser/.menhirParser.objs/byte -I src/Parser/MenhirParser/.menhirParser.objs/native -I src/Stack/.stack.objs/byte -I src/Stack/.stack.objs/native -intf-suffix .ml -no-alias-deps -opaque -o src/.prolog.eobjs/native/dune__exe__Prolog.cmx -c -impl src/prolog.ml)
+$ (cd _build/default && /home/julia/.opam/default/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62@67@69-40 -strict-sequence -strict-formats -short-paths -keep-locs -warn-error -A -g -o src/prolog.exe src/Ast/ast.cmxa src/ErrorHandling/errorHandling.cmxa /home/julia/.opam/default/lib/menhirLib/menhirLib.cmxa src/Parser/MenhirParser/menhirParser.cmxa src/MyLexer/lexer.cmxa src/Parser/parser.cmxa src/Helper/helper.cmxa src/Stack/stack.cmxa src/Interpreter/interpreter.cmxa /home/julia/.opam/default/lib/result/result.cmxa /home/julia/.opam/default/lib/linenoise/linenoise.cmxa -I /home/julia/.opam/default/lib/linenoise src/.prolog.eobjs/native/dune__exe__Prolog.cmx)

@@ -1,0 +1,8 @@
+(library 
+ (name menhirParser)
+ (libraries ast errorHandling menhirLib))
+
+(menhir
+ (modules menhirParser)
+ (flags --table -la 2))
+
