@@ -1,6 +1,6 @@
 (library 
  (name menhirParser)
- (libraries ast errorHandling menhirLib))
+ (libraries ast errors menhirLib))
 
 (menhir
  (modules menhirParser)

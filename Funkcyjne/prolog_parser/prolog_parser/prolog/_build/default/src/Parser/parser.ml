@@ -2,12 +2,9 @@ type fname = string
 
 let run_parser parse (lexbuf : Lexing.lexbuf) =
   try parse Lexer.token lexbuf with
-  | Parsing.Parse_error ->
-    (*let pos =
-      { Ast.start  = lexbuf.lex_start_p
-      ; Ast.length = lexbuf.lex_curr_p.pos_cnum - lexbuf.lex_start_p.pos_cnum
-      } in*)
-    raise (ErrorHandling.Parse_error(UnexpectedToken (Lexing.lexeme lexbuf)))
+  | _ ->
+    raise (Errors.Parse_error(Lexing.lexeme_start_p lexbuf,
+                            UnexpectedToken (Lexing.lexeme lexbuf)))
 
 let parse_file fname =
   match open_in fname with
@@ -27,8 +24,8 @@ let parse_file fname =
       close_in_noerr chan;
       raise exn
     end
-  | exception Sys_error message ->
-    raise (ErrorHandling.Cannot_open_file { fname; message })
+  | exception Sys_error msg ->
+    raise (Errors.Cannot_open_file { fname; msg })
 
 let parse_query chan =
   let lexbuf = Lexing.from_channel chan in
