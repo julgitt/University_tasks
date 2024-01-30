@@ -43,13 +43,16 @@ let rec print_clauses p =
     
 let rec print_results solutions = 
   match solutions with
-  | [] -> ()
-  | [(name, t)] -> 
-    printf "\x1b[38;5;173m%s\x1b[0m = " name;
-    print_terms [t]
-  | (name, t) :: ts -> 
-    printf "\x1b[38;5;173m%s\x1b[0m = " name;
-    print_terms [t];
+  | [] -> printf "puste";
+  | [(name, v)] -> 
+    (match v with
+    | Some t ->
+      printf "\x1b[38;5;173m%s\x1b[0m = " name;
+      print_terms [t]
+    | None -> printf "\x1b[38;5;173m%s\x1b[0m = None" name;
+    )
+  | t :: ts -> 
+    print_results [t];
     printf "\n";
     print_results ts
 

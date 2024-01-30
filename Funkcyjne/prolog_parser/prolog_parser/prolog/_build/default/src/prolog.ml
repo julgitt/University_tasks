@@ -1,7 +1,7 @@
 open Parser;;
 open Ast;;
 open Interpreter;;
-open Stack.BacktrackRefMonad;;
+open BacktrackStateMonad.BacktrackStateMonad;;
 open Printer;;
 
 let rec user_input prompt action =
@@ -28,32 +28,30 @@ let add_input_to_history input =
   
 type clauses = clause list ref
 let program : clauses = ref []
-let origin_variables : (variable list ref) = ref []
+let origin_variables : ((variable * term option) list ref) = ref []
 
 let rec add_origin_variables terms = 
+  let is_variable_present name =
+    List.exists (fun (n, _) -> n = name) !origin_variables
+  in
+  let add_variable name =
+    if not (is_variable_present name) then
+      origin_variables := (name, None) :: !origin_variables
+  in
   match terms with
   | [] -> ()
-  | Var(name, _) :: ts -> 
-    origin_variables := name :: !origin_variables;
+  | Var(name, _) :: ts ->
+    add_variable name;
     add_origin_variables ts
-  | Sym(name, ts) :: ts2 -> 
+  | Sym(_, ts) :: ts2 ->
     add_origin_variables ts;
     add_origin_variables ts2
 
-let initialize cs =
-  let* _ = init_state cs in
-  let* v = get () in
-  let x = set v in
-  x
   
 let evaluate ts =
   let* is_solved = solve ts in
   let* solution = get_substitutions () in
   return (is_solved, solution)
-  
-let get_origin_vars solutions  =
-  let is_origin_var name = List.exists (fun s -> s = name) !origin_variables in
-  return (List.filter (fun (name, _) -> is_origin_var name) solutions)
 
 let main_loop () =     
   user_input "?- " (fun input ->
@@ -69,9 +67,8 @@ let main_loop () =
         origin_variables := [];
         add_origin_variables ts;
         run () (
-          let* _ = initialize (!program) in
+          let* _ = initialize (!program) (!origin_variables) in
           let* (is_solved, solutions) = evaluate ts in
-          let* solutions = get_origin_vars solutions in
           print_endline "";
           (match solutions with
           | [] -> 
@@ -91,7 +88,6 @@ let main_loop () =
             | ";" ->  
               let* ts2 = backtrack_goals () in
               let* (_, res2) = evaluate ts2 in
-              let* res2 = get_origin_vars res2 in
               (match res2 with
               | []  -> 
                 print_endline "\n\x1b[38;5;196mfalse\x1b[0m.\n";

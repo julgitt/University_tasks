@@ -1,3 +1,4 @@
 (library
-  (name stack)
+  (name backtrackStateMonad)
+  (modules backtrackStateMonad state backtrackStateMonadSig stack)
   (libraries errors printer ast))

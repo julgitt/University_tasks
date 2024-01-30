@@ -1,5 +1,5 @@
 open Ast
-open Stack.BacktrackRefMonad
+open BacktrackStateMonad.BacktrackStateMonad
 open Printer
 
 (*          UNIFIKACJA               *)
@@ -7,8 +7,8 @@ open Printer
 let rec unify t1 t2 =
   let rec contains_var x t =
     match view t with
-    | Var (_, y) -> x = y
-    | Sym(_, ts) -> List.exists (contains_var x) ts
+    | Var (_, y)  -> x = y
+    | Sym (_, ts) -> List.exists (contains_var x) ts
   in
 
   let rec unify_lists ts1 ts2 =
@@ -23,35 +23,37 @@ let rec unify t1 t2 =
   in
 
   match view t1, view t2 with
-  | Var (_, x), Var (_, y) when x = y -> return true
-  | Var (name, x), t |  t, Var (name, x)->
+  | Var (n1, x), Var (n2, y) when x = y -> 
+    push_substitution (n1, Some (Var(n2,y)));
+  | Var (n, x), t |  t, Var (n, x)->
     if contains_var x t then return false
-    else push_substitution (name, t)
-  | Sym(f1, ts1), Sym(f2, ts2) when f1 = f2 && List.length ts1 = List.length ts2 ->
+    else push_substitution (n, Some t)
+  | Sym(h1, ts1), Sym(h2, ts2) when h1 = h2 && List.length ts1 = List.length ts2 ->
     unify_lists ts1 ts2
   | _ -> return false
 
 
 (*          SEMANTYKA               *)
 
-let rec changeVarNames t = 
+let rec renameVariables t = 
   match t with
   | Var(name, x) ->  
     (match !x with
     | None     -> Var(name ^ "`", ref None)
-    | Some y   -> Var(name, ref (Some (changeVarNames y)))
+    | Some y   -> Var(name, ref (Some (renameVariables y)))
     )
-  | Sym(f, ts) -> Sym(f, (List.map changeVarNames ts))
+  | Sym(f, ts) -> Sym(f, (List.map renameVariables ts))
+
 
 let refresh_clause c = 
   match c with
   | Fact t ->
-    let h = changeVarNames t in
+    let h = renameVariables t in
     let b = [] in 
     (h, b) 
   | Rule (t, ts) ->
-    let h = changeVarNames t in
-    let b = List.map changeVarNames ts in 
+    let h = renameVariables t in
+    let b = List.map renameVariables ts in 
     (h, b)
           
 
@@ -69,18 +71,18 @@ let rec solve goals =
   match goals with
   | []      -> return true
   | g :: gs ->
-    let* cl = select_clause () in
-    match cl with
+    let* clause = select_clause () in
+    match clause with
     | Some c -> 
       let (h, b) = refresh_clause c in
-      let* t = unify h g in
-      if t then (
+      let* is_unified = unify h g in
+      if is_unified then
           let* () = set_substitutions () in
           let* () = restore_clauses () in
           solve (b @ gs)
-      ) else (
+        else
           let* _ = restore_substitutions () in 
-          solve goals )
+          solve goals
     | None ->
       let* new_goals = backtrack_goals () in
       match new_goals with

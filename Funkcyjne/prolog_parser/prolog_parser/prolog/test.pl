@@ -1,12 +1,12 @@
 animal(X) :- cat(X).
-parent(jurek, julia).
-parent(jola, jola).
+parent(malgosia, stasia).
+parent(kasia, kasia).
 
 children(X,Y) :- parent(Y, X).
-human(julia).
-human(jola).
-cat(jola).
-cat(julia).
+human(stasia).
+human(kasia).
+cat(kasia).
+cat(stasia).
 human(tom).
 cat(tom).
 dog(jerry).
