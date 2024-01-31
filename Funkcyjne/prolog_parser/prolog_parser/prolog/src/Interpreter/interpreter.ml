@@ -81,10 +81,15 @@ let rec solve goals =
           let* () = restore_clauses () in
           solve (b @ gs)
         else
-          let* _ = restore_substitutions () in 
           solve goals
     | None ->
       let* new_goals = backtrack_goals () in
       match new_goals with
       | [] -> return false
       | _  ->  solve new_goals
+
+
+let evaluate queries =
+  let* is_solved = solve queries in
+  let* solution = get_substitutions () in
+  return (is_solved, solution)
