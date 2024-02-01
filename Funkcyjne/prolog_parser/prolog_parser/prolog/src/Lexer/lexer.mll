@@ -7,12 +7,23 @@ let sym_map =
   [ ",",  COMMA
   ; ".",  DOT
   ; ":-", RULE
+  ; "*",  ASTERISK
+  ; "-",  MINUS
+  ; "+",  PLUS
+  ; "/",  SLASH
+  ; "is", IS
   ] |> List.to_seq |> Hashtbl.of_seq
 
 let tokenize_sym str =
   match Hashtbl.find_opt sym_map str with
   | None     -> MenhirParser.SYM str
   | Some tok -> tok
+
+
+let tokenize_num lexbuf str =
+  try MenhirParser.NUM (int_of_string str) with
+  | Failure _ ->
+    raise_error lexbuf (InvalidNumber str)
 }
 
 let whitespace = ['\011'-'\r' '\t' ' ']
@@ -37,7 +48,7 @@ rule token = parse
   | sym_char+           as x { tokenize_sym x      }
   | var_start var_char* as x { MenhirParser.VAR x  }
   | lower     var_char* as x { tokenize_sym x      }
-  | digit     var_char* as x { tokenize_sym x      }
+  | digit     var_char* as x { tokenize_num lexbuf x      }
   | filepath            as x { MenhirParser.FILEPATH x}
   | eof                      { MenhirParser.EOF       }
   | _ as x {

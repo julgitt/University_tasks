@@ -29,6 +29,8 @@ let rec add_origin_variables terms =
   | Sym (_, ts) :: ts2 ->
     add_origin_variables ts;
     add_origin_variables ts2
+  | Num _ :: ts -> 
+    add_origin_variables ts
 
 
 (*    Query Execution   *)
@@ -56,7 +58,7 @@ and wait_for_user_input () =
   | "." ->
     return (print_endline "")
   | _ ->
-    return ()
+    raise (Errors.Runtime_error "Invalid expression - '.' or ';' expected")
 
 
 let run_query ts =
@@ -78,15 +80,15 @@ let run_query ts =
 
 (*  Console initialization   *)
 let print_welcome_message () =
-  ["\n\x1b[38;5;199m" ^ "Welcome to Prolog!" ^ "\x1b[0m\n";
-   "Type \"<filepath>\" to load a program";
-   "or type a query";
-   "or press ctrl+d to exit.\n"]
+  ["\n\x1b[38;5;199m" ^ "PROLOG" ^ "\x1b[0m\n";
+   "Type <filepath> to load a program from a file";
+   "or type a query.";
+   "Press ctrl+d to exit.\n"]
   |> List.iter print_endline
 
 
 let init_console () =
-  LNoise.history_load ~filename:".prolog_history" |> ignore;
+  LNoise.history_load ~filename:".commands_history" |> ignore;
   LNoise.history_set ~max_length:100 |> ignore;
   print_welcome_message ()
 
@@ -94,7 +96,7 @@ let init_console () =
 (*    User input handling   *)
 let add_input_to_history input =
   LNoise.history_add input |> ignore;
-  LNoise.history_save ~filename:".prolog_history" |> ignore
+  LNoise.history_save ~filename:".commands_history" |> ignore
 
 
 let handle_single_input input =

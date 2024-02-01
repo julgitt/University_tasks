@@ -4,15 +4,21 @@
 type token = 
   | VAR of (string)
   | SYM of (string)
+  | SLASH
   | RULE
+  | PLUS
   | PARENTH_OPN
   | PARENTH_CLS
+  | NUM of (int)
+  | MINUS
+  | IS
   | FILEPATH of (string)
   | EOF
   | DOT
   | COMMA
   | BR_OPN
   | BR_CLS
+  | ASTERISK
 
 (* This exception is raised by the monolithic API functions. *)
 

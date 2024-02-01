@@ -1,22 +1,35 @@
 type token =
     VAR of string
   | SYM of string
+  | SLASH
   | RULE
+  | PLUS
   | PARENTH_OPN
   | PARENTH_CLS
+  | NUM of int
+  | MINUS
+  | IS
   | FILEPATH of string
   | EOF
   | DOT
   | COMMA
   | BR_OPN
   | BR_CLS
+  | ASTERISK
 val menhir_begin_marker : int
+val xv_term_simple : Ast.term
+val xv_term_neg : Ast.term
+val xv_term_mult : Ast.term
 val xv_term_list : Ast.term list
+val xv_term_add : Ast.term
 val xv_term : Ast.term
 val xv_symbol : string
 val xv_query : Ast.query
 val xv_program : Ast.program
+val xv_mult_sym : string
+val xv_is_sym : string
 val xv_clause_list_rev : Ast.clause_data list
 val xv_clause_list : Ast.program
 val xv_clause : Ast.clause_data
+val xv_add_sym : string
 val menhir_end_marker : int

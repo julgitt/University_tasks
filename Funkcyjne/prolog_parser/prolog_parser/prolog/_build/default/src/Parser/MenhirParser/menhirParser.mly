@@ -1,7 +1,9 @@
 %token<string> VAR SYM
 %token <string> FILEPATH
+%token<int> NUM
 %token BR_OPN BR_CLS PARENTH_OPN PARENTH_CLS
 %token COMMA DOT RULE
+%token PLUS MINUS ASTERISK SLASH IS
 %token EOF
 
 %type<Ast.program> program
@@ -14,18 +16,6 @@
 
 open Ast
 
-(*let current_pos () =
-  let start_p = symbol_start_pos () in
-  let end_p   = symbol_end_pos () in
-  { start  = start_p
-  ; length = end_p.pos_cnum - start_p.pos_cnum
-  }
-
-let make data =
-  { pos  = current_pos ()
-  ; data = data
-  }*)
-
 %}
 
 %%
@@ -34,12 +24,52 @@ symbol
 : SYM { $1 }
 ;
 
+
+is_sym
+: IS { "is" }
+;
+
+add_sym
+: PLUS  { "+" }
+| MINUS { "-" }
+;
+
+mult_sym
+: ASTERISK { "*" }
+| SLASH    { "/" }
+;
+
+
 /* ========================================================================= */
 
 term
+: term_add is_sym term_add { Sym($2, [ $1; $3 ]) }
+| term_add { $1 }
+;
+
+term_add
+: term_mult add_sym term_add { Sym($2, [ $1; $3 ]) }
+| term_mult { $1 }
+;
+
+term_mult
+: term_neg mult_sym term_mult { Sym($2, [ $1; $3 ]) }
+| term_neg { $1 }
+;
+
+term_neg
+: add_sym term_neg { Sym($1, [ $2 ]) }
+| term_simple { $1 }
+;
+
+
+/* ========================================================================= */
+
+term_simple
 : PARENTH_OPN term PARENTH_CLS { ($2) }
 | VAR                { Var ($1, ref None) }
 | symbol             { Sym ($1, []) }
+| NUM                { (Num  $1) }
 | symbol PARENTH_OPN term_list PARENTH_CLS { Sym($1, $3) }
 ;
 

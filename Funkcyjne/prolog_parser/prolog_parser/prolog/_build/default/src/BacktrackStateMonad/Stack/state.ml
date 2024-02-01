@@ -18,6 +18,7 @@ module State = struct
       clauses       = c;
       goals         = g;
     }
+  
 
   let _print_state s =
     print_endline "Klauzule:";
@@ -28,7 +29,18 @@ module State = struct
     print_results (s.variables);
     print_endline "\n";
     ()
-      
+  
+    
+  let rec _print_stack map_acc map =
+    let empty = Stack.IntMap.is_empty map_acc in
+    if (empty)
+      then 
+        ()
+      else
+        let (s,map_acc) = Stack.pop () map_acc in
+        _print_state s;
+        _print_stack map_acc map
+
   let _temp_substitutions : ((variable * term option) list ref) = ref []
 
   (*        State getters       *)
@@ -63,12 +75,12 @@ module State = struct
   let _find_substitution variable substitutions =
    List.assoc_opt variable substitutions
 
-  let _has_substitution_pair pair substitutions =
+  let _has_substitution pair substitutions =
     List.exists (fun (name, term) -> 
       name = (fst pair) && not (term = (snd pair))
       ) substitutions
 
-  let _has_substitution_name name subs =
+  let _has_variable name subs =
    List.exists (fun (n,_) -> n = name) subs
 
 
@@ -92,11 +104,11 @@ module State = struct
   
 
   let push_substitution pair map =
-    if _has_substitution_pair pair (_all_substitutions map) then (
+    if _has_substitution pair (_all_substitutions map) then (
       _temp_substitutions := [];
       (false, map) 
       )
-    else if _has_substitution_name (fst pair) (_all_substitutions map) then 
+    else if _has_variable (fst pair) (_all_substitutions map) then 
       (true, map)
     else begin
       _temp_substitutions := pair :: !_temp_substitutions;
@@ -120,13 +132,13 @@ module State = struct
 
 
   let set_goals goals map = 
-    _update_goals_variables goals map;    
+    _update_goals_variables goals map; 
     _temp_substitutions := [];
     let new_state = _make_state (_get_program map)
                                 (_get_variables map)
                                 (fst (get_clauses () map))
-                                goals
-    in                       
+                                goals                          
+    in
     Stack._update new_state map
 
 

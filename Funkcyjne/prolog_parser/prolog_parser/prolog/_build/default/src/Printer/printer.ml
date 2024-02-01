@@ -20,7 +20,8 @@ let rec print_terms q =
     | Sym(name, xs) -> 
       printf "\x1b[38;5;105m%s\x1b[0m(" name;
       print_terms xs;
-      printf ")")
+      printf ")"
+    | Num x -> printf "%d" x;)
   | t :: ts  -> 
     print_terms [t];
     printf ", ";

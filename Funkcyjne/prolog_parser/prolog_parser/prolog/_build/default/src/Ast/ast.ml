@@ -5,6 +5,7 @@ type var = term option ref
 and term =
   | Var of variable * var
   | Sym of symbol * term list
+  | Num of int 
 
 type clause = clause_data
 and clause_data =

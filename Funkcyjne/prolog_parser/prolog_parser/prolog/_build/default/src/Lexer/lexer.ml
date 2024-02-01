@@ -8,6 +8,11 @@ let sym_map =
   [ ",",  COMMA
   ; ".",  DOT
   ; ":-", RULE
+  ; "*",  ASTERISK
+  ; "-",  MINUS
+  ; "+",  PLUS
+  ; "/",  SLASH
+  ; "is", IS
   ] |> List.to_seq |> Hashtbl.of_seq
 
 let tokenize_sym str =
@@ -15,7 +20,13 @@ let tokenize_sym str =
   | None     -> MenhirParser.SYM str
   | Some tok -> tok
 
-# 19 "src/Lexer/lexer.ml"
+
+let tokenize_num lexbuf str =
+  try MenhirParser.NUM (int_of_string str) with
+  | Failure _ ->
+    raise_error lexbuf (InvalidNumber str)
+
+# 30 "src/Lexer/lexer.ml"
 let __ocaml_lex_tables = {
   Lexing.lex_base =
    "\000\000\241\255\242\255\082\000\160\000\238\000\072\001\157\001\
@@ -369,111 +380,111 @@ let rec token lexbuf =
 and __ocaml_lex_token_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 29 "src/Lexer/lexer.mll"
+# 40 "src/Lexer/lexer.mll"
                              ( token lexbuf      )
-# 375 "src/Lexer/lexer.ml"
+# 386 "src/Lexer/lexer.ml"
 
   | 1 ->
-# 30 "src/Lexer/lexer.mll"
+# 41 "src/Lexer/lexer.mll"
           ( Lexing.new_line lexbuf; token lexbuf )
-# 380 "src/Lexer/lexer.ml"
+# 391 "src/Lexer/lexer.ml"
 
   | 2 ->
-# 31 "src/Lexer/lexer.mll"
+# 42 "src/Lexer/lexer.mll"
           ( block_comment lexbuf;   token lexbuf )
-# 385 "src/Lexer/lexer.ml"
+# 396 "src/Lexer/lexer.ml"
 
   | 3 ->
-# 32 "src/Lexer/lexer.mll"
+# 43 "src/Lexer/lexer.mll"
           ( skip_line lexbuf;       token lexbuf )
-# 390 "src/Lexer/lexer.ml"
+# 401 "src/Lexer/lexer.ml"
 
   | 4 ->
-# 33 "src/Lexer/lexer.mll"
+# 44 "src/Lexer/lexer.mll"
                              ( MenhirParser.PARENTH_OPN )
-# 395 "src/Lexer/lexer.ml"
+# 406 "src/Lexer/lexer.ml"
 
   | 5 ->
-# 34 "src/Lexer/lexer.mll"
+# 45 "src/Lexer/lexer.mll"
                              ( MenhirParser.PARENTH_CLS )
-# 400 "src/Lexer/lexer.ml"
+# 411 "src/Lexer/lexer.ml"
 
   | 6 ->
-# 35 "src/Lexer/lexer.mll"
+# 46 "src/Lexer/lexer.mll"
                              ( MenhirParser.BR_OPN )
-# 405 "src/Lexer/lexer.ml"
+# 416 "src/Lexer/lexer.ml"
 
   | 7 ->
-# 36 "src/Lexer/lexer.mll"
+# 47 "src/Lexer/lexer.mll"
                              ( MenhirParser.BR_CLS )
-# 410 "src/Lexer/lexer.ml"
+# 421 "src/Lexer/lexer.ml"
 
   | 8 ->
 let
-# 37 "src/Lexer/lexer.mll"
+# 48 "src/Lexer/lexer.mll"
                            x
-# 416 "src/Lexer/lexer.ml"
+# 427 "src/Lexer/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 37 "src/Lexer/lexer.mll"
+# 48 "src/Lexer/lexer.mll"
                              ( tokenize_sym x      )
-# 420 "src/Lexer/lexer.ml"
+# 431 "src/Lexer/lexer.ml"
 
   | 9 ->
 let
-# 38 "src/Lexer/lexer.mll"
+# 49 "src/Lexer/lexer.mll"
                            x
-# 426 "src/Lexer/lexer.ml"
+# 437 "src/Lexer/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 38 "src/Lexer/lexer.mll"
+# 49 "src/Lexer/lexer.mll"
                              ( MenhirParser.VAR x  )
-# 430 "src/Lexer/lexer.ml"
+# 441 "src/Lexer/lexer.ml"
 
   | 10 ->
 let
-# 39 "src/Lexer/lexer.mll"
+# 50 "src/Lexer/lexer.mll"
                            x
-# 436 "src/Lexer/lexer.ml"
+# 447 "src/Lexer/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 39 "src/Lexer/lexer.mll"
+# 50 "src/Lexer/lexer.mll"
                              ( tokenize_sym x      )
-# 440 "src/Lexer/lexer.ml"
+# 451 "src/Lexer/lexer.ml"
 
   | 11 ->
 let
-# 40 "src/Lexer/lexer.mll"
+# 51 "src/Lexer/lexer.mll"
                            x
-# 446 "src/Lexer/lexer.ml"
+# 457 "src/Lexer/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 40 "src/Lexer/lexer.mll"
-                             ( tokenize_sym x      )
-# 450 "src/Lexer/lexer.ml"
+# 51 "src/Lexer/lexer.mll"
+                             ( tokenize_num lexbuf x      )
+# 461 "src/Lexer/lexer.ml"
 
   | 12 ->
 let
-# 41 "src/Lexer/lexer.mll"
+# 52 "src/Lexer/lexer.mll"
                            x
-# 456 "src/Lexer/lexer.ml"
+# 467 "src/Lexer/lexer.ml"
 = Lexing.sub_lexeme lexbuf lexbuf.Lexing.lex_start_pos lexbuf.Lexing.lex_curr_pos in
-# 41 "src/Lexer/lexer.mll"
+# 52 "src/Lexer/lexer.mll"
                              ( MenhirParser.FILEPATH x)
-# 460 "src/Lexer/lexer.ml"
+# 471 "src/Lexer/lexer.ml"
 
   | 13 ->
-# 42 "src/Lexer/lexer.mll"
+# 53 "src/Lexer/lexer.mll"
                              ( MenhirParser.EOF       )
-# 465 "src/Lexer/lexer.ml"
+# 476 "src/Lexer/lexer.ml"
 
   | 14 ->
 let
-# 43 "src/Lexer/lexer.mll"
+# 54 "src/Lexer/lexer.mll"
          x
-# 471 "src/Lexer/lexer.ml"
+# 482 "src/Lexer/lexer.ml"
 = Lexing.sub_lexeme_char lexbuf lexbuf.Lexing.lex_start_pos in
-# 43 "src/Lexer/lexer.mll"
+# 54 "src/Lexer/lexer.mll"
            (
       raise_error lexbuf (InvalidChar x)
     )
-# 477 "src/Lexer/lexer.ml"
+# 488 "src/Lexer/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_token_rec lexbuf __ocaml_lex_state
@@ -483,31 +494,31 @@ and block_comment lexbuf =
 and __ocaml_lex_block_comment_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 48 "src/Lexer/lexer.mll"
+# 59 "src/Lexer/lexer.mll"
          ( Lexing.new_line lexbuf; block_comment lexbuf )
-# 489 "src/Lexer/lexer.ml"
+# 500 "src/Lexer/lexer.ml"
 
   | 1 ->
-# 49 "src/Lexer/lexer.mll"
+# 60 "src/Lexer/lexer.mll"
          ( () )
-# 494 "src/Lexer/lexer.ml"
+# 505 "src/Lexer/lexer.ml"
 
   | 2 ->
-# 50 "src/Lexer/lexer.mll"
+# 61 "src/Lexer/lexer.mll"
          (
       raise_error lexbuf EofInComment
     )
-# 501 "src/Lexer/lexer.ml"
+# 512 "src/Lexer/lexer.ml"
 
   | 3 ->
-# 53 "src/Lexer/lexer.mll"
+# 64 "src/Lexer/lexer.mll"
                  ( block_comment lexbuf )
-# 506 "src/Lexer/lexer.ml"
+# 517 "src/Lexer/lexer.ml"
 
   | 4 ->
-# 54 "src/Lexer/lexer.mll"
+# 65 "src/Lexer/lexer.mll"
                  ( block_comment lexbuf )
-# 511 "src/Lexer/lexer.ml"
+# 522 "src/Lexer/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_block_comment_rec lexbuf __ocaml_lex_state
@@ -517,19 +528,19 @@ and skip_line lexbuf =
 and __ocaml_lex_skip_line_rec lexbuf __ocaml_lex_state =
   match Lexing.engine __ocaml_lex_tables __ocaml_lex_state lexbuf with
       | 0 ->
-# 57 "src/Lexer/lexer.mll"
+# 68 "src/Lexer/lexer.mll"
              ( Lexing.new_line lexbuf )
-# 523 "src/Lexer/lexer.ml"
+# 534 "src/Lexer/lexer.ml"
 
   | 1 ->
-# 58 "src/Lexer/lexer.mll"
+# 69 "src/Lexer/lexer.mll"
              ( () )
-# 528 "src/Lexer/lexer.ml"
+# 539 "src/Lexer/lexer.ml"
 
   | 2 ->
-# 59 "src/Lexer/lexer.mll"
+# 70 "src/Lexer/lexer.mll"
              ( skip_line lexbuf )
-# 533 "src/Lexer/lexer.ml"
+# 544 "src/Lexer/lexer.ml"
 
   | __ocaml_lex_state -> lexbuf.Lexing.refill_buff lexbuf;
       __ocaml_lex_skip_line_rec lexbuf __ocaml_lex_state

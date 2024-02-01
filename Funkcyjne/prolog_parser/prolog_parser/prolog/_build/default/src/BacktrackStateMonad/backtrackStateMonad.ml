@@ -9,6 +9,7 @@ module BacktrackStateMonad : BacktrackStateMonadSig = struct
 
   type 'a t = State.state Stack.IntMap.t -> 'a * State.state Stack.IntMap.t
 
+
 (*        Backtracking      *)
   let backtrack_goals () map =
     let (_, map)    = Stack.pop () map in
@@ -25,16 +26,6 @@ module BacktrackStateMonad : BacktrackStateMonadSig = struct
     let new_state = State._make_state program variables program [] in
     Stack._initialize_stack new_state
 
-  
-  let rec _print_stack map_acc map =
-    let empty = Stack.IntMap.is_empty map_acc in
-    if (empty)
-      then 
-        ((), map)
-      else
-        let (s,map_acc) = Stack.pop () map_acc in
-        State._print_state s;
-        _print_stack map_acc map
 
     
   (*      Monads operators      *)
