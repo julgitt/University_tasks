@@ -33,8 +33,8 @@
 ## THIRD YEAR
 ### V TERM
 - [Methods of Implementing Algorithms](https://github.com/julgitt/University_tasks/tree/master/MIA)
-- [Advanced Python Programming](https://github.com/julgitt/University_tasks/tree/master/Python)
-- [Embedded Systems](https://github.com/julgitt/University_tasks/tree/master/Wbudowane)
-- [Functional Programming](https://github.com/julgitt/University_tasks/tree/master/Funkcyjne)
+- [Advanced Python Programming](https://github.com/julgitt/University_tasks/tree/master/python)
+- [Embedded Systems](https://github.com/julgitt/University_tasks/tree/master/systemy_wbudowane)
+- [Functional Programming](https://github.com/julgitt/University_tasks/tree/master/programowanie_funkcyjne)
 - Software Engineering
   
