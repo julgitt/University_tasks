@@ -6,15 +6,19 @@ class Board:
         self.white_king = white_king
         self.white_rook = white_rook
         self.black_king = black_king
+        
+    def swap_turn(self):
+        if self.player_turn == "white":
+            self.player_turn = "black"
+        else: self.player_turn = "white"
+        return self
     
     def is_checkmate(self) -> bool:
         if self.player_turn == "white":
-            if self._if_rook_checks(self.white_rook, self.black_king) or \
-               self._if_king_checks(self.white_king, self.black_king):
+            if self._if_rook_checks(self.white_rook, self.black_king) or self._if_king_checks(self.white_king, self.black_king):
                 return True
         else:
-            if self._if_king_checks(self.black_king, self.white_king) or \
-               self._if_king_checks(self.black_king, self.white_rook):
+            if self._if_king_checks(self.black_king, self.white_king) or self._if_king_checks(self.black_king, self.white_rook):
                 return True
         return False
                
@@ -23,7 +27,7 @@ class Board:
     
     def _if_king_checks(self, king : King, piece : Piece) -> bool:
         for [col, row] in king.all_moves():
-            if [col, row] == [piece.col, piece.row]:
+            if [col, int(row)] == [piece.col, piece.row]:
                 return True
         return False
         

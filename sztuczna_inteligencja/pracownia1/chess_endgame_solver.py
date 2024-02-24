@@ -17,8 +17,8 @@ def read_input_from_file(filename : str) -> List[Board]:
 
 
 def main():
-    chess_endgames = read_input_from_file("input.txt")
-    with open("output.txt", "w") as output_file:
+    chess_endgames = read_input_from_file("zad1_input.txt")
+    with open("zad1_output.txt", "w") as output_file:
         for endgame in chess_endgames:
             result = SolveEndgame().solve(endgame)
             output_file.write(result + "\n")

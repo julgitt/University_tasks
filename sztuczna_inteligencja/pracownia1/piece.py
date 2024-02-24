@@ -30,14 +30,14 @@ class King(Piece):
         inc_col = Letter.increment_letter(self.col)
         inc_row = int(self.row) + 1
         moves = [
-            (self.col, dec_row), # n
-            (inc_col, dec_row),  # ne
-            (inc_col, self.row), # e
-            (inc_col, inc_row),  # ew
-            (self.col, inc_row), # w
-            (dec_col, inc_row),  # ws
-            (dec_col, self.row), # s
-            (dec_col, dec_row)   # sn
+            self.col + str(dec_row), # n
+            inc_col + str(dec_row),  # ne
+            inc_col + str(self.row), # e
+            inc_col + str(inc_row),  # ew
+            self.col + str(inc_row), # w
+            dec_col + str(inc_row),  # ws
+            dec_col + str(self.row), # s
+            dec_col + str(dec_row)   # sn
         ]
         moves = self._filter_blocked_moves(moves, other_piece_pos)
         return list(filter(self._is_within_board_bounds, moves))
@@ -55,8 +55,8 @@ class King(Piece):
 
 class Rook(Piece):
     def all_moves(self, king_pos : Tuple[str, int]):
-        all_moves = [(col, self.row) for col in "abcdefgh" if col != self.col] \
-                  + [(self.col, row) for row in range(1, 9) if row != self.row]
+        all_moves = [col + str(self.row) for col in "abcdefgh" if col != self.col] \
+                  + [self.col + str(row) for row in range(1, 9) if row != self.row]
         valid_moves =  [move for move in all_moves if self._is_path_clear(move, king_pos)]
         return list(filter(self._is_within_board_bounds, valid_moves))
     
@@ -65,8 +65,8 @@ class Rook(Piece):
         king_col, king_row = king_pos
 
         if target_col == self.col == king_col:  # Ruch w pionie
-            min_row = min(target_row, self.row)
-            max_row = max(target_row, self.row)
+            min_row = min(int(target_row), int(self.row))
+            max_row = max(int(target_row), int(self.row))
             if min_row <= int(king_row) <= max_row:
                 return False
         elif target_row == self.row == king_row:  # Ruch w poziomie
