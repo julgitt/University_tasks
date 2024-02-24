@@ -1,6 +1,6 @@
 from piece import King, Rook 
 from board import Board 
-from solve import SolveEndgame
+from solver import Solver
 from typing import List       
 
 
@@ -20,7 +20,8 @@ def main():
     chess_endgames = read_input_from_file("zad1_input.txt")
     with open("zad1_output.txt", "w") as output_file:
         for endgame in chess_endgames:
-            result = SolveEndgame().solve(endgame)
+            solver = Solver(endgame)
+            result = solver.solve()
             output_file.write(result + "\n")
 
 

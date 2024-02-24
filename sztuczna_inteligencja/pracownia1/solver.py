@@ -3,25 +3,26 @@ from piece import Rook,King
 from board import Board
 from typing import List
 
-class SolveEndgame:
-    def __init__(self):
+class Solver:
+    def __init__(self, board: Board):
+        self.board = board
         self.visited = set()
         self.queue = queue.Queue()
              
-    def solve(self, board : Board) -> float:
-        self.queue.put((board, 0, [str(board)]))
+    def solve(self) -> float:
+        self.queue.put((self.board, 0, [str(self.board)]))
          
         while not self.queue.empty():
-            board, move_count, prev_boards = self.queue.get()
+            self.board, move_count, prev_boards = self.queue.get()
             
-            if board.player_turn == "black":
-                pat = self._solve_black_turn(board, move_count, prev_boards)
-                if (pat == True and board.swap_turn().is_checkmate()):
+            if self.board.player_turn == "black":
+                pat = self._solve_black_turn(self.board, move_count, prev_boards)
+                if (pat == True and self.board.swap_turn().is_checkmate()):
                     return [str(move_count), ''.join(prev_boards)]
-            elif board.is_checkmate():
+            elif self.board.is_checkmate():
                     return [str(move_count), ''.join(prev_boards)]
             else:  
-                self._solve_white_turn(board, move_count, prev_boards)
+                self._solve_white_turn(self.board, move_count, prev_boards)
                             
         return "inf" 
     
