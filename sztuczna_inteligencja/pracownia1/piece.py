@@ -1,18 +1,19 @@
 from abc import ABC, abstractmethod
-from letters import Letter
 from typing import List, Tuple
 
+from letters import Letter
+
 class Piece(ABC):
-    def __init__(self, pos : Tuple[str, int]):
+    def __init__(self, pos: Tuple[str, int]):
         self.position = pos
         self.col = pos[0]
         self.row = int(pos[1])
         
     @abstractmethod
-    def all_moves(self, other_piece) -> List[Tuple[str, int]]:
+    def all_moves(self, obstructed_cell_pos: Tuple[str, int] = None) -> List[Tuple[str, int]]:
         pass
     
-    def _is_within_board_bounds(self, move : Tuple[str, int]) -> bool:
+    def _is_within_board_bounds(self, move: Tuple[str, int]) -> bool:
         col, row = move
         return "a" <= col <= "h" and 1 <= int(row) <= 8
     
@@ -25,26 +26,28 @@ class Piece(ABC):
 
 class King(Piece):
     def all_moves(self, obstructed_cell_pos: Tuple[str, int] = None):
-        dec_col = Letter.decrement_letter(self.col)
-        dec_row = int(self.row) - 1
-        inc_col = Letter.increment_letter(self.col)
-        inc_row = int(self.row) + 1
+        prev_col = Letter.previous_letter(self.col)
+        prev_row = int(self.row) - 1
+        next_col = Letter.next_letter(self.col)
+        next_row = int(self.row) + 1
         moves = [
-            self.col + str(dec_row), # n
-            inc_col + str(dec_row),  # ne
-            inc_col + str(self.row), # e
-            inc_col + str(inc_row),  # ew
-            self.col + str(inc_row), # w
-            dec_col + str(inc_row),  # ws
-            dec_col + str(self.row), # s
-            dec_col + str(dec_row)   # sn
+            self.col + str(prev_row), # n
+            next_col + str(prev_row), # ne
+            next_col + str(self.row), # e
+            next_col + str(next_row), # ew
+            self.col + str(next_row), # w
+            prev_col + str(next_row), # ws
+            prev_col + str(self.row), # s
+            prev_col + str(prev_row)  # sn
         ]
         moves = self._filter_blocked_moves(moves, obstructed_cell_pos)
+        
         return list(filter(self._is_within_board_bounds, moves))
     
     def _filter_blocked_moves(self, moves, obstructed_cell_pos: Tuple[str, int] = None) -> List[Tuple[str, int]]:
         if obstructed_cell_pos is not None:
             moves = [move for move in moves if move != obstructed_cell_pos]
+        
         return moves
         
     def __eq__(self, other):
@@ -58,6 +61,7 @@ class Rook(Piece):
         all_moves = [col + str(self.row) for col in "abcdefgh" if col != self.col] \
                   + [self.col + str(row) for row in range(1, 9) if row != self.row]
         valid_moves =  [move for move in all_moves if self._is_path_clear(move, obstructed_cell_pos)]
+        
         return list(filter(self._is_within_board_bounds, valid_moves))
     
     def _is_path_clear(self, move: Tuple[str, int], obstructed_cell_pos: Tuple[str, int]) -> bool:
@@ -74,6 +78,7 @@ class Rook(Piece):
             max_col = max(target_col, self.col)
             if min_col <= cell_col <= max_col:
                 return False
+        
         return True
 
     def __eq__(self, other):
