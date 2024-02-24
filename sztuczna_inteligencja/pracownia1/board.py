@@ -11,7 +11,6 @@ class Board:
         if self.player_turn == "white":
             self.player_turn = "black"
         else: self.player_turn = "white"
-        return self
     
     def is_checkmate(self) -> bool:
         if self.player_turn == "white":

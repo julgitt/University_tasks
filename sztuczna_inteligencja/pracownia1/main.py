@@ -1,10 +1,11 @@
-from piece import King, Rook 
-from board import Board 
-from solver import Solver
 from typing import List       
 
+from board import Board 
+from piece import King, Rook 
+from solver import Solver
 
-def read_input_from_file(filename : str) -> List[Board]:
+
+def read_input_from_file(filename: str) -> List[Board]:
     with open(filename, 'r') as file:
         lines = file.readlines()
         boards = []
