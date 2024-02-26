@@ -9,9 +9,7 @@ class Board:
         self.black_king = black_king
         
     def swap_turn(self):
-        if self.player_turn == "white":
-            self.player_turn = "black"
-        else: self.player_turn = "white"
+        self.player_turn = "black" if self.player_turn == "white" else "white"
     
     def is_checkmate(self) -> bool:
         if self.player_turn == "white":
@@ -28,8 +26,8 @@ class Board:
         return rook.col == piece.col or rook.row == piece.row
     
     def if_king_captures(self, king: King, piece: Piece) -> bool:
-        for [col, row] in king.all_moves():
-            if [col, int(row)] == [piece.col, piece.row]:
+        for move in king.all_moves():
+            if move[0] == piece.col and move[1] == piece.row:
                 return True
         return False
         
@@ -39,7 +37,7 @@ class Board:
     
     def __eq__(self, other):
         return (isinstance(other, Board) and
-                self.player_color == other.player_color and
+                self.player_turn == other.player_turn and
                 self.white_king == other.white_king and
                 self.white_rook == other.white_rook and
                 self.black_king == other.black_king)
