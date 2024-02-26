@@ -53,10 +53,6 @@ def find_words(text):
         return best_peak
     
     return dp(0)
-    
-    
-def sum_of_squared_word_lengths(text):
-    return sum(len(word) ** 2 for word in text.split())
 
 
 def word_exists(word):
@@ -69,6 +65,10 @@ def word_exists(word):
     
     word_not_exist_cache[word] = True
     return False
+
+
+def sum_of_squared_word_lengths(text):
+    return sum(len(word) ** 2 for word in text.split())
 #endregion
 
 #region main
@@ -80,6 +80,7 @@ def main():
         for text in INPUT:
             final_text = find_words(text)
             output_file.write(final_text + '\n')
+
 
 if __name__ == "__main__":
     main()

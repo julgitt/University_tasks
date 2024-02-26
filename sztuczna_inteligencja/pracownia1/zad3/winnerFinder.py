@@ -1,38 +1,21 @@
+from typing import List, Tuple
+
 from pokerRules import PokerRules
 
+
 class WinnerFinder:
-    def __init__(self, figurant, bluffer):
-        self.figurant = figurant
-        self.bluffer = bluffer
+    def __init__(self, figurant_deck: List[Tuple], blotkarz_deck: List[Tuple]):
+        self.figurant_deck = figurant_deck
+        self.blotkarz_deck = blotkarz_deck
+        self.rules = [PokerRules.is_straight_flush, PokerRules.is_four_of_a_kind,
+                      PokerRules.is_full_house, PokerRules.is_flush,
+                      PokerRules.is_straight, PokerRules.is_three_of_a_kind,
+                      PokerRules.is_two_pairs]
         
-    def find_a_winner(self):
-        winner = self._find_rule_winner(PokerRules.is_straight_flush)
-        if winner != None:
-            return winner
-        winner = self._find_rule_winner(PokerRules.is_four_of_a_kind)
-        if winner != None:
-            return winner
-        winner = self._find_rule_winner(PokerRules.is_ful_house)
-        if winner != None:
-            return winner
-        winner = self._find_rule_winner(PokerRules.is_flush)
-        if winner != None:
-            return winner
-        winner = self._find_rule_winner(PokerRules.is_straight)
-        if winner != None:
-            return winner
-        winner = self._find_rule_winner(PokerRules.is_three_of_a_kind)
-        if winner != None:
-            return winner
-        winner = self._find_rule_winner(PokerRules.is_two_pairs)
-        if winner != None:
-            return winner
+    def find_a_winner(self) -> str:
+        for rule in self.rules:
+            if rule(self.figurant_deck):
+                return "figurant"
+            elif rule(self.blotkarz_deck):
+                return "blotkarz"
         return "figurant"
-            
-    
-    def _find_rule_winner(self, rule):
-        if rule(self.figurant):
-            return "figurant"
-        if rule(self.bluffer):
-            return "bluffer"
-        return None
