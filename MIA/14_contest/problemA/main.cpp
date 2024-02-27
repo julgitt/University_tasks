@@ -1,3 +1,5 @@
+// task description: https://codeforces.com/group/yGSr3ZYUig/contest/496939/problem/A
+
 #include <iostream>
 #include <string>
 using namespace std;

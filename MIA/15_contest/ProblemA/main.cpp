@@ -1,3 +1,4 @@
+// task decription: https://codeforces.com/group/yGSr3ZYUig/contest/499392/problem/A
 #include <iostream>
 #include <cmath>
 using namespace std;
