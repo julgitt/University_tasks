@@ -1,31 +1,30 @@
 from typing import List
-
 from imageSolver import ImageSolver
 
+class Puzzle:
+    def __init__(self, width: int, height: int, rows: List[int], columns: List[int]):
+        self.width = width
+        self.height = height
+        self.rows = rows
+        self.columns = columns
 
-WIDTH: int
-HEIGHT: int
-ROWS: List[int]
-COLUMNS: List[int]
+    @classmethod
+    def from_file(cls, file_path: str) -> 'Puzzle':
+        with open(file_path, 'r') as file:
+            width, height = map(int, file.readline().split())
+            rows = [int(file.readline()) for _ in range(height)]
+            columns = [int(file.readline()) for _ in range(width)]
+        return cls(width, height, rows, columns)
 
-#region Input
-def load_input_from_file() -> None:
-    global WIDTH, HEIGHT, ROWS, COLUMNS
-    with open("zad5_input.txt", 'r') as file:
-        WIDTH, HEIGHT = map(int, file.readline().split())
-        ROWS = [int(file.readline()) for _ in range(HEIGHT)]
-        COLUMNS = [int(file.readline()) for _ in range(WIDTH)]
-#endregion
+    def solve_puzzle(self, output_file: str, iterations: int = 500) -> None:
+        solver = ImageSolver(self.height, self.width, self.columns, self.rows)
+        with open(output_file, "w", encoding='utf-8') as output_file:
+            for line in solver.solve(iterations):
+                output_file.write(line + '\n')
 
-#region Main
 def main():
-    load_input_from_file()
-    solver = ImageSolver(HEIGHT, WIDTH, COLUMNS, ROWS)
-    with open("zad5_output.txt", "w", encoding='utf-8') as output_file:
-        for line in solver.solve(500):
-            output_file.write(line + '\n')
-
+    puzzle = Puzzle.from_file("zad5_input.txt")
+    puzzle.solve_puzzle("zad5_output.txt")
 
 if __name__ == "__main__":
     main()
-#endregion

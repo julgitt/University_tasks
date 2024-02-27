@@ -9,10 +9,10 @@ def load_input_from_file():
 #endregion            
 
 #region solution
-def opt_dist(bits, D):
+def opt_dist(bits, block_size):
     min_operations = float('inf')
-    for i in range(len(bits) - D + 1):
-        operations = bits.count('1', 0, i) + bits.count('0', i, i + D) + bits.count('1', D + i, len(bits))
+    for i in range(len(bits) - block_size + 1):
+        operations = bits.count('1', 0, i) + bits.count('0', i, i + block_size) + bits.count('1', block_size + i, len(bits))
         min_operations = min(min_operations, operations)
     
     return min_operations

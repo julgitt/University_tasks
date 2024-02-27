@@ -1,10 +1,10 @@
-import random
 import copy
-
+import random
+from typing import List
 
 class Image:
     
-    def __init__(self, height, width, columns_blocks, rows_blocks):
+    def __init__(self, height: int, width: int, columns_blocks: List[int], rows_blocks: List[int]):
         self.height = height
         self.width = width
         self.columns_blocks = columns_blocks
@@ -13,22 +13,21 @@ class Image:
         self.rotated_image = []
     
     #region getters    
-    def get_row(self, index):
+    def get_row(self, index: int) -> List[str]:
         return self.image[index]
 
-    def get_column(self, index):
+    def get_column(self, index: int) -> List[str]:
         return self.rotated_image[index]
     #endregion
     
     #region setters
-    def set_row(self, index, new_row):
+    def set_row(self, index: int, new_row: str):
         self.image[index] = new_row
         self.update_rotated_image()
     
     def set_column(self, index, new_column):
         self.rotated_image[index] = new_column  
         self.update_image()
-        
     #endregion
     
     #region updating_image    
@@ -58,29 +57,20 @@ class Image:
     
     #region incorrect_lines_getters     
     def get_random_incorrect_row_id(self):
-        incorrect_rows = []
-        for i in range(self.height):
-            operations = self.opt_dist(self.get_row(i), self.rows_blocks[i])
-            if operations > 0:
-                incorrect_rows.append(i)
-        
-        return random.choice(incorrect_rows) if len(incorrect_rows) != 0 else -1
+        incorrect_rows = [i for i in range(self.height) if self.opt_dist(self.get_row(i), self.rows_blocks[i]) > 0]
+        return random.choice(incorrect_rows) if incorrect_rows else -1
 
     def get_random_incorrect_column_id(self):
-        incorrect_columns = []
-        for i in range(self.width):
-            operations = self.opt_dist(self.get_column(i), self.columns_blocks[i])
-            if operations > 0:
-                incorrect_columns.append(i)
-        return random.choice(incorrect_columns) if len(incorrect_columns) != 0 else -1
+        incorrect_columns = [i for i in range(self.width) if self.opt_dist(self.get_column(i), self.columns_blocks[i]) > 0]
+        return random.choice(incorrect_columns) if incorrect_columns else -1
     #endregion
     
     #region algorithm_functions
-    def opt_dist(self, line, D):
+    def opt_dist(self, line, block_size):
         min_operations = float('inf')
         
-        for i in range(len(line) - D + 1):
-            operations = line.count('#', 0, i) + line.count('.', i, i + D) + line.count('#', D + i, len(line))
+        for i in range(len(line) - block_size + 1):
+            operations = line.count('#', 0, i) + line.count('.', i, i + block_size) + line.count('#', block_size + i, len(line))
             if min_operations > operations: 
                 min_operations = operations
                 
