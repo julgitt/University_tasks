@@ -1,6 +1,7 @@
 from typing import List
 from imageSolver import ImageSolver
 
+
 class Puzzle:
     def __init__(self, width: int, height: int, rows: List[int], columns: List[int]):
         self.width = width
@@ -22,9 +23,11 @@ class Puzzle:
             for line in solver.solve(iterations):
                 output_file.write(line + '\n')
 
+
 def main():
     puzzle = Puzzle.from_file("zad5_input.txt")
     puzzle.solve_puzzle("zad5_output.txt")
+
 
 if __name__ == "__main__":
     main()

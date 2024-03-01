@@ -5,12 +5,12 @@ from winnerFinder import WinnerFinder
 
 
 #region variables
-SUITS = ['Red', 'Black']
+SUITS = ['Red', 'Black', 'Red1', 'Black1']
 FACE_CARDS = ['Ace', 'King', 'Queen', 'Jack']
-# NUMBER_CARDS = ['2', '3', '4', '5', '6', '7', '8', '9', '10']
-NUMBER_CARDS = [ '8', '9', '10']
-FIGURANT_DECK = [(rank, suit) for suit in SUITS for rank in FACE_CARDS for _ in range(2)]
-BLOTKARZ_DECK = [(rank, suit) for suit in SUITS for rank in NUMBER_CARDS for _ in range(2)]
+NUMBER_CARDS = ['2', '3', '4', '5', '6', '7', '8', '9', '10']
+# NUMBER_CARDS = [ '8', '9', '10']
+FIGURANT_DECK = [(rank, suit) for suit in SUITS for rank in FACE_CARDS]
+BLOTKARZ_DECK = [(rank, suit) for suit in SUITS for rank in NUMBER_CARDS]
 random.shuffle(FIGURANT_DECK)
 random.shuffle(BLOTKARZ_DECK)
 #endregion
