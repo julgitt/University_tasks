@@ -16,27 +16,21 @@ class ImageSolver:
     def solve(self, max_iterations: int) -> List[str]:
         while True:
             self.image.regenerate()
+            cols_solved = False
+            rows_solved = False
             for _ in range(max_iterations):
-                if choice([True, False]):
+                if not rows_solved and choice([True, False]):
                     random_row_id = self.image.get_random_incorrect_row_id()
-                    if random_row_id != -1:
+                    rows_solved = random_row_id == -1
+                    if not rows_solved:
                         self._handle_row(random_row_id)
-                        continue
+                elif not cols_solved:
                     random_column_id = self.image.get_random_incorrect_column_id()
-                    if random_column_id != -1:
+                    cols_solved = random_column_id == -1
+                    if not cols_solved:
                         self._handle_column(random_column_id)
-                        continue
                 else:
-                    random_column_id = self.image.get_random_incorrect_column_id()
-                    if random_column_id != -1:
-                        self._handle_column(random_column_id)
-                        continue
-                    random_row_id = self.image.get_random_incorrect_row_id()
-                    if random_row_id != -1:
-                        self._handle_row(random_row_id)
-                        continue
-
-                return self.image.image
+                    return self.image.image
 
     def _handle_row(self, row_id: int) -> None:
         column_id = self.image.find_best_cell_in_row(row_id)
