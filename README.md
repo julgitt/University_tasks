@@ -41,6 +41,6 @@
 ### VI TERM
 - [Artifictial Intelligence](https://github.com/julgitt/University_tasks/tree/master/sztuczna_inteligencja)
 - Object-Oriented Software Design
-- Linux Administration Course
+- [Linux Administration Course](https://github.com/julgitt/University_tasks/tree/master/administrowanie_linuxem)
 - Computer Networks
 - Project: "System Zapisów"
