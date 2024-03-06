@@ -37,4 +37,10 @@
 - [Embedded Systems](https://github.com/julgitt/University_tasks/tree/master/systemy_wbudowane)
 - [Functional Programming](https://github.com/julgitt/University_tasks/tree/master/programowanie_funkcyjne)
 - Software Engineering
-  
+
+### VI TERM
+- [Artifictial Intelligence](https://github.com/julgitt/University_tasks/tree/master/sztuczna_inteligencja)
+- Object-Oriented Software Design
+- Linux Administration Course
+- Computer Networks
+- Project: "System Zapisów"
