@@ -1,0 +1,30 @@
+
+class Student
+	getCourses():
+		# get from DB
+
+class UsosWebPage;
+	GradeController controller
+	Student student
+
+	show():
+		controller.getStudentGradeInfo(student)
+
+class GradeController:
+	marks = []
+
+	getStudentGradeInfo(student)
+		curses = student.getCourses()
+		
+		for i in range courses.len():
+			mark[i] = courses[i].getMark(student)
+
+		pageLayout = ...
+		
+		return pageLayout 
+
+
+class Course():
+
+	getMark(student):
+		# getValue from DB and return
