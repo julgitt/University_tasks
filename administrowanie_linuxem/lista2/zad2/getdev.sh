@@ -8,7 +8,6 @@ else
 fi
 
 while IFS= read -r line; do
-
     if [[ -z "$line" || "${line:0:1}" = "#" ]]; then
         continue
     fi
@@ -31,7 +30,7 @@ while IFS= read -r line; do
     fi
 done < /etc/fstab
 
-if [ "$args" != true ]; then
+if [ "$args" = false ]; then
 	exit 0
 fi
 

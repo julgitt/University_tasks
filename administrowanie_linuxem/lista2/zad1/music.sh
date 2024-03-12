@@ -8,11 +8,11 @@ for file in "${mp3_files[@]}"; do
 done
 
 PS3="Choose a number to play> "
-IFS=$'\n'   # Ustawienie separatora na znak nowej linii
+IFS=$'\n'
 select song in "${entries[@]}"; do
 	if [ -n "$song" ]; then
 		mplayer "${mp3_files[$REPLY - 1]}"
 	else
-		echo "Invalid selection. Please choose a valid number."
+		echo "Invalid selection. Choose a valid number."
 	fi
 done

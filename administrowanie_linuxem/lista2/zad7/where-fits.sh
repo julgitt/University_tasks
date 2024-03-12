@@ -10,11 +10,12 @@ for file in "${files[@]}"; do
     fi
 
     (( total_size += $(du -s "$file" | awk '{print $1}') ))
-
 done
 
-echo "total size: $total_size"
+echo "Total files size: $total_size"
 echo ""
+
+echo "Filesystems: "
 
 mounts=$(df -P | tail -n +2)
 
