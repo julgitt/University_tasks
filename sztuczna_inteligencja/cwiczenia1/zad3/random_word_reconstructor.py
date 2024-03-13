@@ -28,7 +28,10 @@ class RandomReconstructor:
                 word = choice(tuple(correct_words))
                 rest = dp(start + len(word))
                 if rest is not None:
-                    peak = word + " " + rest
+                    if rest == "":
+                        peak = word + rest
+                    else:
+                        peak = word + " " + rest
                     memo[start] = (True, peak)
                     return peak
                 correct_words.remove(word)

@@ -26,6 +26,8 @@ class Reconstructor:
                         if squared_sum > max_sum:
                             max_sum = squared_sum
                             best_peak = word + " " + rest
+                            if rest == "":
+                                best_peak = word
             if best_peak == "":
                 memo[start] = None
                 return None
