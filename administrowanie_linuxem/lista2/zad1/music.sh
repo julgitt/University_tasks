@@ -9,10 +9,13 @@ done
 
 PS3="Choose a number to play> "
 IFS=$'\n'
-select song in "${entries[@]}"; do
-	if [ -n "$song" ]; then
-		mplayer "${mp3_files[$REPLY - 1]}"
-	else
-		echo "Invalid selection. Choose a valid number."
-	fi
+while true; do
+	select song in "${entries[@]}"; do
+		if [ -n "$song" ]; then
+			mplayer "${mp3_files[$REPLY - 1]}"
+			break
+		else
+			echo "Invalid selection. Choose a valid number."
+		fi
+	done
 done

@@ -1,5 +1,6 @@
 #!/bin/bash
 
+total_size=0
 
 if [[ $# -ne 2 ]]; then
     echo "Wrong number of arguments: expected 2 arguments."

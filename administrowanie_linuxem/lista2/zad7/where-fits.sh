@@ -17,14 +17,12 @@ echo ""
 
 echo "Filesystems: "
 
-mounts=$(df -P | tail -n +2)
-
 while IFS= read -r mount; do
 	name=$(echo "$mount" | awk '{print $1}')
 	available_space=$(echo "$mount" | awk '{print $4}')
     if [ "$available_space" -gt "$total_size" ]; then
         echo "$name"
     fi
-done <<< "$mounts"
+done <<< $(df -P | tail -n +2)
 
 

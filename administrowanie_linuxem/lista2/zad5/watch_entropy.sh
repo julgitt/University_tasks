@@ -11,4 +11,3 @@ while true; do
 done 
 
 echo ""
-exit 0

@@ -1,0 +1,3 @@
+/home/julia/Studia/University_tasks/sieci_komputerowe/traceroute/cmake-build-debug/CMakeFiles/traceroute.dir
+/home/julia/Studia/University_tasks/sieci_komputerowe/traceroute/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/julia/Studia/University_tasks/sieci_komputerowe/traceroute/cmake-build-debug/CMakeFiles/rebuild_cache.dir
