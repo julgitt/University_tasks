@@ -2,12 +2,6 @@
 
 #define TIMEOUT 1000
 
-void print_as_bytes (unsigned char* buff, ssize_t length)
-{
-	for (ssize_t i = 0; i < length; i++, buff++)
-		printf ("%.2x ", *buff);
-}
-
 int receive_icmp_response(int sock_fd, struct in_addr *sender_ip, int ttl, int id) {
     struct pollfd ps;
     ps.fd = sock_fd;
@@ -58,6 +52,7 @@ int receive_icmp_response(int sock_fd, struct in_addr *sender_ip, int ttl, int i
         }
 
     }
+    return 0;
 }
 
 int receive_packets(int sock_fd, struct timeval *receive_times, int requests_number, struct in_addr *senders, int ttl, int id) {

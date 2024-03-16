@@ -19,9 +19,6 @@ void send_icmp_request(int sock_fd, const struct sockaddr_in recipient, int seq,
     if (bytes_sent < 0) {
         fprintf(stderr, "Error sending ICMP request: %s\n", strerror(errno));
         exit(EXIT_FAILURE);
-    } else if (bytes_sent != sizeof(header)) {
-        fprintf(stderr, "Error sending ICMP request: Incomplete packet sent\n");
-        exit(EXIT_FAILURE);
     }
 }
 
