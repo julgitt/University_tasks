@@ -16,15 +16,12 @@ void send_icmp_request(int sock_fd, const struct sockaddr_in recipient, int seq,
     struct icmp header = create_header(seq, id);
 
     ssize_t bytes_sent = sendto(sock_fd, &header, sizeof(header), 0, (struct sockaddr *) &recipient, sizeof(recipient));
-    if (bytes_sent < 0) {
-        fprintf(stderr, "Error sending ICMP request: %s\n", strerror(errno));
-        exit(EXIT_FAILURE);
-    }
+    if (bytes_sent < 0) handle_sending_error();
 }
 
-void send_packets(int sock_fd, struct sockaddr_in recipient, struct timeval *send_times, int id, int requests_number, int ttl) {
+void send_packets(int sock_fd, struct sockaddr_in recipient, int ttl, int id, struct timeval *sending_times, int requests_number) {
     for (int i = 0; i < requests_number; i++) {
         send_icmp_request(sock_fd, recipient, ttl, id);
-        gettimeofday(&send_times[i], NULL);
+        gettimeofday(&sending_times[i], NULL);
     }
 }

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <arpa/inet.h>
-#include <errno.h>
 
 #include "traceroute.h"
 
@@ -31,10 +30,7 @@ int main(int argc, char *argv[]) {
 
     int sock_fd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
 
-    if (sock_fd < 0) {
-        fprintf(stderr, "socket error: %s\n", strerror(errno));
-        return EXIT_FAILURE;
-    }
+    if (sock_fd < 0) handle_socket_error();
 
     traceroute(sock_fd, recipient, argv[1]);
 
