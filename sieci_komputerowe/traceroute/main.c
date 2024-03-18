@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <arpa/inet.h>
+// Julia Noczyńska 331013
 
 #include "traceroute.h"
+#include "utilities.h"
 
 struct sockaddr_in convert_ip_address(char* ip_addr) {
     struct sockaddr_in sock_addr;
