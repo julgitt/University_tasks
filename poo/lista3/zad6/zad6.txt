@@ -1,0 +1,10 @@
+Single Responsibility Principle (SRP):
+- każda klasa powinna mieć tylko jeden powód do modyfikacji. Innymi słowy, klasa powinna mieć tylko jedną odpowiedzialność.
+        Im mniej odpowiedzialności ma dana klasa, tym łatwiej jest ją utrzymywać, rozumieć i modyfikować.
+        Liczy się spójność kodu i skupienie klasy na jednej funkcjonalności, komponenty powinny być jak najmniejsze.
+        Zmniejsza ryzyko wprowadzenia błędów, ponieważ zmiana w jednej części systemu nie wpływa na inne części, które nie są z nimi powiązane.
+
+Interface Segregation Principle (ISP):
+       Klient nie powinien być zmuszany do implementacji metod, których nie używa. Innymi słowy, interfejsy powinny być rozdrobnione, aby klienci mogli implementować tylko te metody, które są dla nich istotne. Interfejsy powinny być minimalne i skupione na jednej funkcjonalności
+       
+       SRP skupia się na perspektywie projektanta kodu, ISP na perspektywie klienta.
