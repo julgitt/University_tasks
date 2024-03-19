@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Before {
+namespace Old {
     public class TaxCalculator {
         public Decimal CalculateTax(Decimal price) { 
             return price * 0.22m;
@@ -18,23 +18,18 @@ namespace Before {
         public TaxCalculator taxCalc = new TaxCalculator();
 
         public Decimal CalculatePrice(Item[] items) {
-            Decimal price = 0;
+            Decimal _price = 0;
             foreach (var item in items) {
-                price += item.Price + taxCalc.CalculateTax(item.Price);
+                _price += item.Price + taxCalc.CalculateTax(item.Price);
             }
-            return price;
+            return _price;
         }
 
-        public string PrintBill(Item[] items) {
-            string result = "";
-            foreach (var item in items) {
-                var tax = taxCalc.CalculateTax(item.Price);
-                result += String.Format(
-                    "towar {0} : cena {1} + podatek {2}\n", 
-                    item.Name, item.Price, tax
-                );
+        public void PrintBill(Item[] items) {
+           foreach (var item in items) {
+                Console.WriteLine("towar {0} : cena {1} + podatek {2}\n",
+                    item.Name, item.Price, taxCalc.CalculateTax(item.Price));
             }
-            return result;
         }
     }
 }

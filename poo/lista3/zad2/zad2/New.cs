@@ -1,13 +1,13 @@
 using System;
 
-namespace After {
+namespace New {
     class ReportPrinter {
         public void PrintReport() {
             var dataGetter = new DataGetter();
             var docFormatter = new DocumentFormatter();
-            dataGetter.GetData();
+            string data = dataGetter.GetData();
             docFormatter.FormatDocument();
-            Console.WriteLine("Printing report...");
+            Console.WriteLine("Printing report: " + data);
         }
     }
 

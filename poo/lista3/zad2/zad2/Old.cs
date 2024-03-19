@@ -1,6 +1,6 @@
 using System;
 
-namespace Before {
+namespace Old {
     public class ReportPrinter {
         public string GetData() {
             Console.WriteLine("Getting data...");
@@ -12,9 +12,9 @@ namespace Before {
         }
 
         public void PrintReport() {
-            GetData();
+            string data = GetData();
             FormatDocument();
-            Console.WriteLine("Printing report...");
+            Console.WriteLine("Printing report: " + data);
         }
     }
 

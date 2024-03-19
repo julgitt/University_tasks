@@ -1,8 +1,7 @@
-using System;
-public class Test {
-    public static void Main() {
-        var oldPrinter = new Before.ReportPrinter();
-        var newPrinter = new After.ReportPrinter();
+public class Program {
+    private static void Main() {
+        var oldPrinter = new Old.ReportPrinter();
+        var newPrinter = new New.ReportPrinter();
 
         Console.WriteLine("== Test kodu przed zmianami ==");
         oldPrinter.PrintReport();
