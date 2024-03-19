@@ -3,7 +3,7 @@ using System;
 namespace Old {
     public class ReportPrinter {
         public string GetData() {
-            Console.WriteLine("Getting data...");
+            Console.WriteLine("Retrieving data...");
             return "some data";
         }
 

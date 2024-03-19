@@ -1,14 +1,14 @@
-public class Program {
+﻿public class Program {
     private static void Main() {
         var oldPrinter = new Old.ReportPrinter();
         var newPrinter = new New.ReportPrinter();
 
-        Console.WriteLine("== Test kodu przed zmianami ==");
+        Console.WriteLine("Przed:");
         oldPrinter.PrintReport();
 
         Console.WriteLine();
 
-        Console.WriteLine("== Test kodu po zmianach ==");
+        Console.WriteLine("Po:");
         newPrinter.PrintReport();
     }
 }

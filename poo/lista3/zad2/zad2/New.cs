@@ -2,19 +2,24 @@ using System;
 
 namespace New {
     class ReportPrinter {
+    	private DataRetriever dataRetriever;
+    	private DocumentFormatter documentFormatter;
+    	
+    	public ReportPrinter() {
+        this.dataRetriever = new DataRetriever();
+        this.documentFormatter = new DocumentFormatter();
+    }
         public void PrintReport() {
-            var dataGetter = new DataGetter();
-            var docFormatter = new DocumentFormatter();
-            string data = dataGetter.GetData();
-            docFormatter.FormatDocument();
+            string data = dataRetriever.GetData();
+            documentFormatter.FormatDocument();
             Console.WriteLine("Printing report: " + data);
         }
     }
 
-    class DataGetter {
+    class DataRetriever {
         public string GetData() {
-            Console.WriteLine("Getting data...");
-            return "some data";
+            Console.WriteLine("Retrieving data...");
+            return "example data";
         }
     }
 
