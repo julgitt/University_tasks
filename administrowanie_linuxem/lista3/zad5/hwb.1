@@ -1,0 +1,61 @@
+.TH HWB 1 "March 2024" "Version 1.0" "User Commands"
+
+.SH NAME
+\fBhwb\fR \- writes greetings for specified names or the world
+
+.SH SYNOPSIS
+\fBhwb\fR [\fIOPTION\fR]... [\fINAMES\fR]...
+    
+.SH DESCRIPTION
+\fBhwb\fR is used to display the greeting message for all names given as parameters, with customizable options.
+
+.SH OPTIONS
+.TP
+\fB\-c\fR, \fB\-\-capitalize\fR
+Capitalize the name or word "world"
+.TP
+\fB\-\-color\fR[=\fIWHEN\fR]
+Colorize the output. WHEN can be 'always', 'auto' (default if omitted), or 'never'
+.TP
+\fB\-g\fR \fItext\fR, \fB\-\-greeting\fR=\fITEXT\fR
+Replace the default greeting word "Hello" with specified text.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display help message.
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Display program name, version and copyright
+.TP
+\fB\-w\fR, \fB\-\-world\fR
+Print also "Hello, world!".
+
+.SH EXIT STATUS
+0      if successful execution.
+1      if an error occurred during execution.
+    
+.SH EXAMPLES
+Greet specific names:
+.BR hwb " Ala Ola"
+.PP
+Colorize the greeting:
+.BR hwb " \-c \-\-color=always Ala"
+.PP
+Greet the world with capitalized "world":
+.BR hwb " \-c \-w"
+.PP
+Replace the greeting with "Hi":
+.BR hwb " \-g Hi Kasia"
+.PP
+Display help message:
+.BR hwb " \-\-help"
+.PP
+Display version information:
+.BR hwb " \-\-version"
+      
+.SH AUTHORS
+Julia Noczyńska
+
+.SH SEE ALSO
+The full documentation for \fBhwb\fR can be found at:
+.BR <link do pełnej dokumentacji>
+

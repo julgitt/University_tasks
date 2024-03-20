@@ -26,6 +26,7 @@ function print_version {
 
 
 ARGS=$(getopt -o c,g:,h,v,w --long capitalize,color:,greeting:,help,version,world -n "$0" -- "$@")
+echo "$ARGS"
 eval set -- "$ARGS"
 while true; do
     case "$1" in
@@ -50,11 +51,13 @@ while true; do
         --)
             shift
             break ;;
+        *) 
+        	exit 1;;
     esac
 done
 
 function print_greeting {
-    local name="$1"
+    name="$1"
     if $capitalize; then
         name=$(echo "${name^}")
     fi
@@ -75,3 +78,4 @@ if $world; then
     print_greeting "world"
 fi
 
+exit 0
