@@ -7,7 +7,7 @@ from random import choice
 class ImageSolver:
 
     def __init__(self, height: int, width: int,
-                 columns_blocks: List[int], rows_blocks: List[int]):
+                 columns_blocks: List[List[int]], rows_blocks: List[List[int]]):
         self.columns_blocks = columns_blocks
         self.rows_blocks = rows_blocks
         self.image = Image(height, width, columns_blocks, rows_blocks)
