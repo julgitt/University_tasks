@@ -1,4 +1,6 @@
 from typing import List, Tuple
+from random import randint
+from itertools import product
 import queue
 
 
@@ -30,21 +32,53 @@ class Maze:
 
     # region Main Logic
     def search_winning_plan(self):
-        self.greedy_moves()
+        # self.greedy_moves()
+        i = 0
+        commanders = self.state.commanders_positions
+        history = self.state.commanders_moves_history
+        origin_state = State(history, commanders)
+
+        while len(self.state.commanders_positions) > 2 and i < 4:
+            self.preprocessed_moves()
+            i += 1
+            if i == 4:
+                self.state = origin_state
+                self.search_winning_plan()
+
+        print(self.state.commanders_moves_history)
+        #self.random_moves()
+        print(len(self.state.commanders_positions))
         if self.bfs():
             return True, self.state.commanders_moves_history
         return False, []
 
-    # region Greedy Tactic
-    def greedy_moves(self):
-        for _ in range(1):
-            for direction in ['U', 'L', 'D', 'R']:
+    # region Commanders Preprocessing Tactic
+    def preprocessed_moves(self):
+        perms = list(product(['L', 'D', 'U', 'R'], repeat=4))
+
+        commanders = self.state.commanders_positions
+        history = self.state.commanders_moves_history
+        min_state = self.state
+        min_commanders = len(self.state.commanders_positions)
+        origin_state = State(history, commanders)
+        for perm in perms:
+            for direction in perm:
                 # self.print_maze()
                 no_moves = False
                 while not no_moves:
+                    if randint(0, 100) >= 85:
+                        break
                     no_moves, new_positions = self.move_all(direction)
-                    self.state.update(new_positions, direction)
-            # self.print_maze()
+                    if not no_moves:
+                        self.state.update(new_positions, direction)
+
+            new_commanders = len(self.state.commanders_positions)
+            if new_commanders < min_commanders:
+                if len(self.state.commanders_moves_history) < 100:
+                    min_state = State(self.state.commanders_moves_history, self.state.commanders_positions)
+                    min_commanders = new_commanders
+            self.state = origin_state
+        self.state = min_state
     # endregion
 
     # region BFS
@@ -145,17 +179,16 @@ class Maze:
 
 def load_maze(filename):
     with open(filename, 'r') as file:
-        return [line.strip() for line in file]
+        return [line.strip().replace('\'', "") for line in file]
 
 
 def main():
-    maze = Maze(load_maze('input.txt'))
+    maze = Maze(load_maze('zad_input.txt'))
     is_solution_found, history = maze.search_winning_plan()
-    with open("output.txt", 'r') as file:
+    with open("zad_output.txt", 'w') as file:
         if is_solution_found:
-            # print(history)
+            print(history)
             file.write(history)
-
 
 
 if __name__ == "__main__":
