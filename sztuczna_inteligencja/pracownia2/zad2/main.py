@@ -26,42 +26,38 @@ class Maze:
         starts = []
         for y in range(self.height):
             for x in range(self.width):
-                if self.map[y][x] == 'S' or self.map[y][x] == 'B':
+                if self.map[y][x] in ('S', 'B'):
                     starts.append((x, y))
         return starts
 
     # region Main Logic
     def search_winning_plan(self):
-        i = 0
-        commanders = self.state.commanders_positions
-        history = self.state.commanders_moves_history
-        origin_state = State(history, commanders)
+        origin_state = State(self.state.commanders_moves_history, self.state.commanders_positions)
 
+        i = 0
         while len(self.state.commanders_positions) > 2 and i < 4:
             self.preprocessed_moves()
             i += 1
-            if i == 4:
-                self.state = origin_state
-                self.search_winning_plan()
 
-        print(self.state.commanders_moves_history)
-        print(len(self.state.commanders_positions))
+        if i == 4:
+            self.state = origin_state
+            self.search_winning_plan()
+
+        # print(self.state.commanders_moves_history)
+        # print(len(self.state.commanders_positions))
         if self.bfs():
             return True, self.state.commanders_moves_history
-        return False, []
+        return False, ''
 
     # region Commanders Preprocessing Tactic
     def preprocessed_moves(self):
         perms = list(product(['L', 'D', 'U', 'R'], repeat=4))
 
-        commanders = self.state.commanders_positions
-        history = self.state.commanders_moves_history
         min_state = self.state
         min_commanders = len(self.state.commanders_positions)
-        origin_state = State(history, commanders)
+        origin_state = State(self.state.commanders_moves_history, self.state.commanders_positions)
         for perm in perms:
             for direction in perm:
-                # self.print_maze()
                 no_moves = False
                 while not no_moves:
                     if randint(0, 100) >= 85:
@@ -87,7 +83,6 @@ class Maze:
         visited[tuple(self.state.commanders_positions)] = True
         while not q.empty():
             self.state = q.get()
-            # self.print_maze()
             if self.is_end_state():
                 return True
             for new_state in self.get_next_states():
@@ -110,7 +105,7 @@ class Maze:
 
     def is_end_state(self):
         for x, y in self.state.commanders_positions:
-            if self.map[y][x] != 'G' and self.map[y][x] != 'B':
+            if self.map[y][x] not in ('G', 'B'):
                 return False
         return True
     # endregion
