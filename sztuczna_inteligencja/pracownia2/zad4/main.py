@@ -1,14 +1,52 @@
+import time
+from itertools import product
+from random import randint
 from typing import List, Tuple
 import queue
 
 
-def update_state(commanders_moves_history: str,
-                 new_positions: List[Tuple[int, int]], direction: str) -> Tuple[List[Tuple[int, int]], str]:
-    commanders_moves_history += direction
-    commanders_positions = new_positions
-    return commanders_positions, commanders_moves_history
+# preprocessing
+def preprocessing(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str]):
+    i = 0
+    new_state = (state[0], state[1])
+    while len(new_state[0]) > 2 and i < 4:
+        new_state = preprocessed_moves(maze_map, new_state)
+        i += 1
+
+    if i == 4:
+        preprocessing(maze_map, state)
+
+    return new_state
 
 
+def preprocessed_moves(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str]):
+    perms = list(product(['L', 'D', 'U', 'R'], repeat=4))
+
+    min_state = (state[0], state[1])
+    min_commanders = len(state[0])
+    origin_state = (state[0], state[1])
+    for perm in perms:
+        for direction in perm:
+            no_moves = False
+            while not no_moves:
+                if randint(0, 100) >= 85:
+                    break
+                no_moves, new_positions = move_all(maze_map, state[0], direction)
+                if not no_moves:
+                    state = update_state(state[1], new_positions, direction)
+
+        new_commanders = len(state[0])
+        moves = state[1]
+        if (new_commanders == min_commanders and len(moves) < len(min_state[1])) or new_commanders < min_commanders:
+            if len(moves) < 50:
+                min_state = (state[0], moves)
+                min_commanders = new_commanders
+        state = origin_state
+    return min_state
+# endregion
+
+
+# region heuristic
 def calculate_distances(maze_map: List[str], width: int, height: int, goals_positions: List[Tuple[int, int]]) -> dict:
     distances = {(y, x): float('inf') for x in range(width) for y in range(height) if maze_map[y][x] != '#'}
     for goal_position in goals_positions:
@@ -29,9 +67,11 @@ def calculate_distances(maze_map: List[str], width: int, height: int, goals_posi
 
 
 def heuristic(state: Tuple[List[Tuple[int, int]], str], distances: dict) -> int:
-    return max(distances[commander] for commander in state[0]) + len(state[1])
+    return 1.3 * max(distances[commander] for commander in state[0]) + len(state[1])
+# endregion
 
 
+# region A*
 def a_star(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str],
            goals_positions: List[Tuple[int, int]], distances: dict) -> Tuple[bool, str]:
     visited = set()
@@ -49,6 +89,14 @@ def a_star(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str],
                 q.put((heuristic(new_state, distances), new_state))
                 visited.add(pos)
     return False, ""
+# endregion
+
+
+def update_state(commanders_moves_history: str,
+                 new_positions: List[Tuple[int, int]], direction: str) -> Tuple[List[Tuple[int, int]], str]:
+    commanders_moves_history += direction
+    commanders_positions = new_positions
+    return commanders_positions, commanders_moves_history
 
 
 def get_next_states(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str]):
@@ -111,13 +159,21 @@ def main():
     height = len(maze_map)
     width = len(maze_map[0])
     goals_positions = get_positions(maze_map, 'G')
+
+    start_time = time.time()
+
     distances = calculate_distances(maze_map, width, height, goals_positions)
     state = (get_positions(maze_map, 'S'), "")
+    state = preprocessing(maze_map, state)
     is_solution_found, result = a_star(maze_map, state, goals_positions, distances)
+    end_time = time.time()
     with open("zad_output.txt", 'w') as file:
         if is_solution_found:
             print(result)
             print(result, file=file)
+
+    execution_time = end_time - start_time
+    print(f"Execution time: {execution_time} seconds. Path length: {len(result)}")
 
 
 if __name__ == "__main__":

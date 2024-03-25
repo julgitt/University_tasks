@@ -2,6 +2,7 @@ from typing import List, Tuple
 from random import randint
 from itertools import product
 import queue
+import time
 
 
 class State:
@@ -176,13 +177,18 @@ def load_maze(filename):
 
 
 def main():
+
     maze = Maze(load_maze('zad_input.txt'))
+    start_time = time.time()
     is_solution_found, history = maze.search_winning_plan()
+    end_time = time.time()
     with open("zad_output.txt", 'w') as file:
         if is_solution_found:
             print(history)
             file.write(history)
 
+    execution_time = end_time - start_time
+    print(f"Execution time: {execution_time} seconds. Path length: {len(history)}")
 
 if __name__ == "__main__":
     main()
