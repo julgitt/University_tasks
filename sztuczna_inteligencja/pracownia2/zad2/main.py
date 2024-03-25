@@ -32,7 +32,6 @@ class Maze:
 
     # region Main Logic
     def search_winning_plan(self):
-        # self.greedy_moves()
         i = 0
         commanders = self.state.commanders_positions
         history = self.state.commanders_moves_history
@@ -46,7 +45,6 @@ class Maze:
                 self.search_winning_plan()
 
         print(self.state.commanders_moves_history)
-        #self.random_moves()
         print(len(self.state.commanders_positions))
         if self.bfs():
             return True, self.state.commanders_moves_history
