@@ -190,5 +190,6 @@ def main():
     execution_time = end_time - start_time
     print(f"Execution time: {execution_time} seconds. Path length: {len(history)}")
 
+
 if __name__ == "__main__":
     main()

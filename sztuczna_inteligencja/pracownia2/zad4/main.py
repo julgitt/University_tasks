@@ -1,52 +1,16 @@
+import heapq
 import time
-from itertools import product
-from random import randint
 from typing import List, Tuple
 import queue
 
 
-# preprocessing
-def preprocessing(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str]):
-    i = 0
-    new_state = (state[0], state[1])
-    while len(new_state[0]) > 2 and i < 4:
-        new_state = preprocessed_moves(maze_map, new_state)
-        i += 1
-
-    if i == 4:
-        preprocessing(maze_map, state)
-
-    return new_state
+def update_state(commanders_moves_history: str,
+                 new_positions: List[Tuple[int, int]], direction: str) -> Tuple[List[Tuple[int, int]], str]:
+    commanders_moves_history += direction
+    commanders_positions = new_positions
+    return commanders_positions, commanders_moves_history
 
 
-def preprocessed_moves(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str]):
-    perms = list(product(['L', 'D', 'U', 'R'], repeat=4))
-
-    min_state = (state[0], state[1])
-    min_commanders = len(state[0])
-    origin_state = (state[0], state[1])
-    for perm in perms:
-        for direction in perm:
-            no_moves = False
-            while not no_moves:
-                if randint(0, 100) >= 85:
-                    break
-                no_moves, new_positions = move_all(maze_map, state[0], direction)
-                if not no_moves:
-                    state = update_state(state[1], new_positions, direction)
-
-        new_commanders = len(state[0])
-        moves = state[1]
-        if (new_commanders == min_commanders and len(moves) < len(min_state[1])) or new_commanders < min_commanders:
-            if len(moves) < 50:
-                min_state = (state[0], moves)
-                min_commanders = new_commanders
-        state = origin_state
-    return min_state
-# endregion
-
-
-# region heuristic
 def calculate_distances(maze_map: List[str], width: int, height: int, goals_positions: List[Tuple[int, int]]) -> dict:
     distances = {(y, x): float('inf') for x in range(width) for y in range(height) if maze_map[y][x] != '#'}
     for goal_position in goals_positions:
@@ -67,36 +31,26 @@ def calculate_distances(maze_map: List[str], width: int, height: int, goals_posi
 
 
 def heuristic(state: Tuple[List[Tuple[int, int]], str], distances: dict) -> int:
-    return 1.3 * max(distances[commander] for commander in state[0]) + len(state[1])
-# endregion
+    return 4 * max(distances[commander] for commander in state[0]) + len(state[1])
 
 
-# region A*
 def a_star(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str],
            goals_positions: List[Tuple[int, int]], distances: dict) -> Tuple[bool, str]:
     visited = set()
-    q = queue.PriorityQueue()
-    q.put((heuristic(state, distances), state))
+    q = []
+    heapq.heappush(q, (heuristic(state, distances), state))
     visited.add(tuple(state[0]))
 
-    while not q.empty():
-        _, current_state = q.get()
+    while len(q) > 0:
+        _, current_state = heapq.heappop(q)
         if is_end_state(current_state, goals_positions):
             return True, current_state[1]
         for new_state in get_next_states(maze_map, current_state):
             pos = tuple(new_state[0])
             if pos not in visited:
-                q.put((heuristic(new_state, distances), new_state))
+                heapq.heappush(q, (heuristic(new_state, distances), new_state))
                 visited.add(pos)
     return False, ""
-# endregion
-
-
-def update_state(commanders_moves_history: str,
-                 new_positions: List[Tuple[int, int]], direction: str) -> Tuple[List[Tuple[int, int]], str]:
-    commanders_moves_history += direction
-    commanders_positions = new_positions
-    return commanders_positions, commanders_moves_history
 
 
 def get_next_states(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str]):
@@ -154,26 +108,42 @@ def get_positions(maze_map: List[str], symbol: str) -> List[Tuple[int, int]]:
     return positions
 
 
+def solve():
+    maze_map = load_maze('zad_input.txt')
+    height = len(maze_map)
+    width = len(maze_map[0])
+    start = time.time()
+    goals_positions = get_positions(maze_map, 'G')
+    distances = calculate_distances(maze_map, width, height, goals_positions)
+    state = (get_positions(maze_map, 'S'), "")
+    is_solution_found, result = a_star(maze_map, state, goals_positions, distances)
+    end = time.time()
+    return end - start
+
 def main():
     maze_map = load_maze('zad_input.txt')
     height = len(maze_map)
     width = len(maze_map[0])
+    start = time.time()
     goals_positions = get_positions(maze_map, 'G')
-
-    start_time = time.time()
-
     distances = calculate_distances(maze_map, width, height, goals_positions)
     state = (get_positions(maze_map, 'S'), "")
-    state = preprocessing(maze_map, state)
     is_solution_found, result = a_star(maze_map, state, goals_positions, distances)
-    end_time = time.time()
+    end = time.time()
     with open("zad_output.txt", 'w') as file:
         if is_solution_found:
-            print(result)
+            print(f"{end - start} \n{result}")
             print(result, file=file)
 
-    execution_time = end_time - start_time
-    print(f"Execution time: {execution_time} seconds. Path length: {len(result)}")
+    f_in = open("zad_input.txt", 'r', encoding="utf8")
+    f_in_temp = open("zad4_output.txt", 'r', encoding="utf8")
+    data = f_in_temp.readlines()
+    if data == []:
+        data = [0, 0]
+    f_in_temp.close()
+    f_out = open("zad4_output.txt", 'w', encoding="utf8")
+    for line, d in zip(solve(f_in.readlines()), data):
+        f_out.write(str(float(line) + float(d)) + '\n')
 
 
 if __name__ == "__main__":
