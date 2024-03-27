@@ -1,11 +1,11 @@
-import time
+from time import time
 from itertools import product
 from random import randint
 from typing import List, Tuple
 import queue
 
 
-# region preprocessing
+# region Preprocessing
 def preprocessing(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str]):
     i = 0
     new_state = (state[0], state[1])
@@ -46,9 +46,9 @@ def preprocessed_moves(maze_map: List[str], state: Tuple[List[Tuple[int, int]], 
 # endregion
 
 
-# region heuristic
-def calculate_distances(maze_map: List[str], width: int, height: int, goals_positions: List[Tuple[int, int]]) -> dict:
-    distances = {(y, x): float('inf') for x in range(width) for y in range(height) if maze_map[y][x] != '#'}
+# region Heuristic
+def calculate_distances(maze_map: List[str], goals_positions: List[Tuple[int, int]]) -> dict:
+    distances = {(y, x): float('inf') for x in range(len(maze_map[0])) for y in range(len(maze_map)) if maze_map[y][x] != '#'}
     for goal_position in goals_positions:
         q = queue.Queue()
         q.put((goal_position, 0))
@@ -92,6 +92,7 @@ def a_star(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str],
 # endregion
 
 
+# region States and Movement
 def update_state(commanders_moves_history: str,
                  new_positions: List[Tuple[int, int]], direction: str) -> Tuple[List[Tuple[int, int]], str]:
     commanders_moves_history += direction
@@ -129,7 +130,7 @@ def move_all(maze_map: List[str], commanders_positions: List[Tuple[int, int]],
     return no_moves, sorted(list(set(new_positions)))
 
 
-def move(x, y, direction):
+def move(x: int, y: int, direction: str) -> Tuple[int, int]:
     if direction == 'U':
         return x, y - 1
     elif direction == 'D':
@@ -140,7 +141,7 @@ def move(x, y, direction):
         return x + 1, y
 
 
-def load_maze(filename):
+def load_maze(filename: str) -> List[str]:
     with open(filename, 'r') as file:
         return [line.strip().replace('\'', "") for line in file]
 
@@ -154,25 +155,39 @@ def get_positions(maze_map: List[str], symbol: str) -> List[Tuple[int, int]]:
     return positions
 
 
-def main():
+def solve():
     maze_map = load_maze('zad_input.txt')
-    height = len(maze_map)
-    width = len(maze_map[0])
+
+    start_time = time()
+
     goals_positions = get_positions(maze_map, 'G')
+    init_state = get_positions(maze_map, 'S'), ""
+    preprocessed_state = preprocessing(maze_map, init_state)
+    distances = calculate_distances(maze_map, goals_positions)
+    is_solution_found, result = a_star(maze_map, preprocessed_state, goals_positions, distances)
 
-    start_time = time.time()
+    end_time = time()
+    execution_time = end_time - start_time
 
-    distances = calculate_distances(maze_map, width, height, goals_positions)
-    state = (get_positions(maze_map, 'S'), "")
-    state = preprocessing(maze_map, state)
-    is_solution_found, result = a_star(maze_map, state, goals_positions, distances)
-    end_time = time.time()
+    return is_solution_found, result, execution_time
+
+
+def main():
+    is_solution_found, result, execution_time = solve()
     with open("zad_output.txt", 'w') as file:
         if is_solution_found:
             print(result)
             print(result, file=file)
 
-    execution_time = end_time - start_time
+    with open("zad_time_output.txt", 'r') as time_file:
+        data = time_file.readlines()
+
+    if not data:
+        data = [0.0, 0]
+
+    with open("zad_time_output.txt", 'w') as time_file:
+        time_file.write(f"{float(execution_time) + float(data[0])}\n{len(result) + int(data[1])}")
+
     print(f"Execution time: {execution_time} seconds. Path length: {len(result)}")
 
 
