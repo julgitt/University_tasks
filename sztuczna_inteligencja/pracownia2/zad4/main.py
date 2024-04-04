@@ -56,6 +56,7 @@ def a_star(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str],
     return False, ""
 # endregion
 
+
 # region States and Movement
 def get_next_states(maze_map: List[str], state: Tuple[List[Tuple[int, int]], str]):
     new_states = []
@@ -104,6 +105,7 @@ def move(x: int, y: int, direction: str) -> Tuple[int, int]:
     elif direction == 'R':
         return x + 1, y
 # endregion
+
 
 # region Data Loading
 def load_maze(filename: str) -> List[str]:
