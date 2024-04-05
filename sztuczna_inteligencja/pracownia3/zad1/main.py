@@ -19,6 +19,7 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
                 return False
             for k in revised_indexes:
                 queue.append((not is_col, k))
+            queue.append((is_col, index))
 
     for domain in domains[0]:
         print(len(domain))
@@ -27,29 +28,56 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
 
 def revise(is_col, idx, domains) -> Tuple[bool, Set[int]]:
     revised = False
-    line_cells_on, line_cells_off, all_uncertain_idx = get_cells_info(domains, is_col, idx)
-    revised_lines = set()
+    all_not_certain_cells_after = get_all_line_uncertain_indexes(domains, is_col, idx)
+    # all_definite_on_cells_after, all_definite_off_cells_after = get_all_line_definite_cells(domains, is_col, idx)
 
     for line_from_domain in list(domains[is_col][idx]):  # bierzemy przykładową linijkę z dziedziny, np wiersz
         for idx2 in range(len(list(domains[not is_col]))):  # iterujemy się po kolejnych np kolumnach
-            if idx2 not in all_uncertain_idx:
-                satisfies = True
-                for line_from_domain2 in list(domains[not is_col][idx2]):  # bierzemy jakies rozwiazanie np kolumny
-                    if line_from_domain[idx2] != line_from_domain2[idx]:  # sprawdzamy czy pasi
-                        satisfies = False
-                        domains[not is_col][idx2].remove(line_from_domain2)
-                if not satisfies:
-                    revised_lines.add(idx2)
+            satisfies = False
+            for line_from_domain2 in list(domains[not is_col][idx2]):  # bierzemy jakies rozwiazanie np kolumny
+                if line_from_domain[idx2] == line_from_domain2[idx]:  # sprawdzamy czy pasi
+                    satisfies = True
+                    break
+            if not satisfies:
+                domains[is_col][idx].remove(line_from_domain)
+                revised = True
+                break
 
-    return revised, revised_lines
+    all_not_certain_cells_after = get_all_line_uncertain_indexes(domains, is_col, idx)
+    # all_definite_on_cells_after, all_definite_off_cells_after = get_all_line_definite_cells(domains, is_col, idx)
+
+    return revised, all_not_certain_cells_after
 
 
 # region AC3 Helper
-def get_cells_info(domains, is_col, index):
+def get_all_line_definite_cells(domains, is_col, index):
+    line_cells_on = set()
+    line_cells_off = set()
+    for i, bit in enumerate(domains[is_col][index][0]):
+        if bit == 1:
+            line_cells_on.add(i)
+        elif bit == 0:
+            line_cells_off.add(i)
+
+    for example_solution in domains[is_col][index][1:]:
+        for i, bit in enumerate(example_solution):
+            if bit == 1:
+                try:
+                    line_cells_off.remove(i)
+                except KeyError:
+                    pass
+            elif bit == 0:
+                try:
+                    line_cells_on.remove(i)
+                except KeyError:
+                    pass
+    return line_cells_on, line_cells_off
+
+
+def get_all_line_uncertain_indexes(domains, is_col, index):
     uncertain_line_cells = set()
     line_cells_on = set()
     line_cells_off = set()
-
     for i, bit in enumerate(domains[is_col][index][0]):
         uncertain_line_cells.add(i)
         if bit == 1:
@@ -72,8 +100,7 @@ def get_cells_info(domains, is_col, index):
 
     uncertain_line_cells.difference_update(line_cells_on)
     uncertain_line_cells.difference_update(line_cells_off)
-
-    return line_cells_on, line_cells_off, uncertain_line_cells
+    return uncertain_line_cells
 # endregion
 
 
