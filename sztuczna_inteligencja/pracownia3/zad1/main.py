@@ -5,11 +5,11 @@ import itertools
 
 def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
     queue = deque()
-    for i in range(len(domains[0])):
-        queue.append((0, i))
-
     for i in range(len(domains[1])):
         queue.append((1, i))
+
+    for i in range(len(domains[0])):
+        queue.append((0, i))
 
     while queue:
         is_col, index = queue.popleft()
@@ -21,15 +21,12 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
                 queue.append((not is_col, k))
             queue.append((is_col, index))
 
-    for domain in domains[0]:
-        print(len(domain))
     return True
 
 
-def revise(is_col, idx, domains) -> Tuple[bool, Set[int]]:
+def revise(is_col: bool, idx: int, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
+        -> Tuple[bool, Set[int]]:
     revised = False
-    all_not_certain_cells_after = get_all_line_uncertain_indexes(domains, is_col, idx)
-    # all_definite_on_cells_after, all_definite_off_cells_after = get_all_line_definite_cells(domains, is_col, idx)
 
     for line_from_domain in list(domains[is_col][idx]):  # bierzemy przykładową linijkę z dziedziny, np wiersz
         for idx2 in range(len(list(domains[not is_col]))):  # iterujemy się po kolejnych np kolumnach
@@ -43,49 +40,23 @@ def revise(is_col, idx, domains) -> Tuple[bool, Set[int]]:
                 revised = True
                 break
 
-    all_not_certain_cells_after = get_all_line_uncertain_indexes(domains, is_col, idx)
-    # all_definite_on_cells_after, all_definite_off_cells_after = get_all_line_definite_cells(domains, is_col, idx)
-
-    return revised, all_not_certain_cells_after
+    return revised, get_all_line_uncertain_indexes(is_col, idx, domains)
 
 
 # region AC3 Helper
-def get_all_line_definite_cells(domains, is_col, index):
-    line_cells_on = set()
-    line_cells_off = set()
-    for i, bit in enumerate(domains[is_col][index][0]):
-        if bit == 1:
-            line_cells_on.add(i)
-        elif bit == 0:
-            line_cells_off.add(i)
-
-    for example_solution in domains[is_col][index][1:]:
-        for i, bit in enumerate(example_solution):
-            if bit == 1:
-                try:
-                    line_cells_off.remove(i)
-                except KeyError:
-                    pass
-            elif bit == 0:
-                try:
-                    line_cells_on.remove(i)
-                except KeyError:
-                    pass
-    return line_cells_on, line_cells_off
-
-
-def get_all_line_uncertain_indexes(domains, is_col, index):
+def get_all_line_uncertain_indexes(is_col: bool, idx: int,
+                                   domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> Set[int]:
     uncertain_line_cells = set()
     line_cells_on = set()
     line_cells_off = set()
-    for i, bit in enumerate(domains[is_col][index][0]):
+    for i, bit in enumerate(domains[is_col][idx][0]):
         uncertain_line_cells.add(i)
         if bit == 1:
             line_cells_on.add(i)
         elif bit == 0:
             line_cells_off.add(i)
 
-    for example_solution in domains[is_col][index][1:]:
+    for example_solution in domains[is_col][idx][1:]:
         for i, bit in enumerate(example_solution):
             if bit == 1:
                 try:
