@@ -2,7 +2,6 @@
 #SSSSSS#SSS#
 #SS#####SSS#
 #SSSS#SSSBS#
-#BBSSSS#SSS#
-#SS##SSSSSS#
+#SSSSSS#SSS#
 #SS##SSSSSS#
 ############

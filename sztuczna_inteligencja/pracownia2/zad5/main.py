@@ -67,7 +67,7 @@ def calculate_distances(maze_map: List[str], goals_positions: List[Tuple[int, in
 
 
 def heuristic(state: Tuple[List[Tuple[int, int]], str], distances: dict) -> int:
-    return 1.3 * max(distances[commander] for commander in state[0]) + len(state[1])
+    return 4 * max(distances[commander] for commander in state[0]) + len(state[1])
 # endregion
 
 
