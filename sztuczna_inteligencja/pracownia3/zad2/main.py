@@ -1,6 +1,7 @@
 from collections import deque
 from typing import List, Tuple, Set
 import itertools
+from copy import deepcopy
 
 
 def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
@@ -49,12 +50,18 @@ def get_all_line_uncertain_indexes(is_col: bool, idx: int,
     uncertain_line_cells = set()
     line_cells_on = set()
     line_cells_off = set()
+    if len(domains[is_col][idx]) == 0:
+        return uncertain_line_cells
+
     for i, bit in enumerate(domains[is_col][idx][0]):
         uncertain_line_cells.add(i)
         if bit == 1:
             line_cells_on.add(i)
         elif bit == 0:
             line_cells_off.add(i)
+
+    if len(domains[is_col][idx]) == 1:
+        return uncertain_line_cells
 
     for example_solution in domains[is_col][idx][1:]:
         for i, bit in enumerate(example_solution):
@@ -75,6 +82,46 @@ def get_all_line_uncertain_indexes(is_col: bool, idx: int,
 # endregion
 
 
+# region Backtracking
+def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]):
+    domains_to_backtrack = deepcopy(domains)
+    stack = deque(domains_to_backtrack)
+    while stack:
+        is_col, idx, domain = search_for_no_singleton_domain(domains)
+        if is_col == -1:  # all domains are singletons
+            return True
+
+        found_solution = False
+        domains_to_backtrack = deepcopy(domains)
+        for element in list(domain):
+            domains_to_backtrack[is_col][idx].remove(element)
+            domains[is_col][idx] = [element]
+            result = ac3(domains)
+            if result:
+                found_solution = True
+                stack.append(domains_to_backtrack)
+                break
+            domains = deepcopy(domains_to_backtrack)
+
+        if not found_solution:
+            domains = stack.pop()
+    return False
+
+
+def search_for_no_singleton_domain(domains):
+    for idx, domain in enumerate(domains[0]):
+        if len(domain) > 1:
+            return 0, idx, domain
+
+    for idx, domain in enumerate(domains[1]):
+        if len(domain) > 1:
+            return 1, idx, domain
+
+    return -1, 0, []
+
+# endregion
+
+
 # region Solve
 def solve(rows_descriptions: List[List[int]], cols_descriptions: List[List[int]], height: int, width: int) \
         -> List[List[int]]:
@@ -82,6 +129,8 @@ def solve(rows_descriptions: List[List[int]], cols_descriptions: List[List[int]]
 
     if not ac3(domains):
         exit(1)
+    if not backtrack(domains):
+        exit(2)
     nonogram = generate_nonogram(domains)
     return nonogram
 
