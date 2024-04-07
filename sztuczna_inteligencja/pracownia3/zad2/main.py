@@ -83,40 +83,41 @@ def get_all_line_uncertain_indexes(is_col: bool, idx: int,
 
 
 # region Backtracking
-def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]):
-    domains_to_backtrack = deepcopy(domains)
-    stack = deque(domains_to_backtrack)
+def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
+            -> Tuple[bool, Tuple[List[List[List[int]]], List[List[List[int]]]]]:
+    stack = deque([domains])
     while stack:
-        is_col, idx, domain = search_for_no_singleton_domain(domains)
+        domains = stack.pop()
+        is_col, idx, domain = get_no_singleton_domain(domains)
         if is_col == -1:  # all domains are singletons
-            return True
+            return True, domains
 
-        found_solution = False
-        domains_to_backtrack = deepcopy(domains)
-        for element in list(domain):
-            domains_to_backtrack[is_col][idx].remove(element)
-            domains[is_col][idx] = [element]
-            result = ac3(domains)
+        for element in domain:
+            domains_to_backtrack = deepcopy(domains)
+            domains_to_backtrack[is_col][idx] = [element]
+            result = ac3(domains_to_backtrack)
             if result:
-                found_solution = True
                 stack.append(domains_to_backtrack)
-                break
-            domains = deepcopy(domains_to_backtrack)
 
-        if not found_solution:
-            domains = stack.pop()
-    return False
+    return False, domains
 
 
-def search_for_no_singleton_domain(domains):
-    for idx, domain in enumerate(domains[0]):
-        if len(domain) > 1:
-            return 0, idx, domain
+def get_no_singleton_domain(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]):
+    min_val = float('inf')
+    min_idx = -1
+    min_domain = []
+    min_is_col = -1
 
-    for idx, domain in enumerate(domains[1]):
-        if len(domain) > 1:
-            return 1, idx, domain
+    for is_col, domain_list in enumerate(domains):
+        for idx, domain in enumerate(domain_list):
+            if 1 < len(domain) < min_val:
+                min_domain = domain
+                min_val = len(domain)
+                min_idx = idx
+                min_is_col = is_col
 
+    if min_idx != -1:
+        return min_is_col, min_idx, min_domain
     return -1, 0, []
 
 # endregion
@@ -129,13 +130,14 @@ def solve(rows_descriptions: List[List[int]], cols_descriptions: List[List[int]]
 
     if not ac3(domains):
         exit(1)
-    if not backtrack(domains):
+
+    solution_found, domains = backtrack(domains)
+    if not solution_found:
         exit(2)
     nonogram = generate_nonogram(domains)
     return nonogram
-
-
 # endregion
+
 
 # region Nonogram Operations
 def generate_nonogram(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> List[List[int]]:
@@ -146,7 +148,7 @@ def generate_nonogram(domains: Tuple[List[List[List[int]]], List[List[List[int]]
 # endregion
 
 
-# region Domain
+# region Generating Initial Domain
 def generate_initial_domains(row_len: int, col_len: int, row_descriptions: List[List[int]], column_descriptions) \
         -> Tuple[List[List[List[int]]], List[List[List[int]]]]:
     row_domains = []
@@ -181,8 +183,6 @@ def get_all_possible_lines(line_len: int, blocks_number: int, blocks_lengths: Li
     possible_combinations = filter(is_correct_block_combination, all_combinations)
     generated_lines = list(map(generate_line, possible_combinations))
     return generated_lines
-
-
 # endregion
 
 
