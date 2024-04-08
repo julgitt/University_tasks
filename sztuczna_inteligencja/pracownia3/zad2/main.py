@@ -1,3 +1,4 @@
+import time
 from collections import deque
 from typing import List, Tuple, Set
 from itertools import combinations
@@ -75,21 +76,51 @@ def get_constrained_indexes_for_line(is_column: bool, line_idx: int,
 # region Backtracking
 def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
         -> Tuple[bool, Tuple[List[List[List[int]]], List[List[List[int]]]]]:
+    start1 = time.time()
+    time2 = 0
+    how_many = 0
     stack = deque([domains])
     while stack:
         domains = stack.pop()
         is_col, idx, domain = get_no_singleton_domain(domains)
         if is_col == -1:  # all domains are singletons
+            print("dupa")
+            end1 = time.time()
+            print(end1 - start1)
+            print(time2)
+            print(how_many)
+            print(time2 / how_many)
             return True, domains
 
+        # next_peaks = []
         for element in domain:
-            domains_to_backtrack = deepcopy(domains)
+            domains_to_backtrack = (
+                [row[:] for row in domains[0]],
+                [col[:] for col in domains[1]]
+            )
             domains_to_backtrack[is_col][idx] = [element]
-            result = ac3(domains_to_backtrack)
-            if result:
+            start2 = time.time()
+            if ac3(domains_to_backtrack):
                 stack.append(domains_to_backtrack)
+                end2 = time.time()
+                time2 += end2-start2
+                how_many += 1
+                break
+
+        #sorted_next_peaks = sorted(next_peaks, key=get_domain_size, reverse=True)
+        #for domain in sorted_next_peaks:
+        #    stack.append(domain)
 
     return False, domains
+
+
+def get_domain_size(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]):
+    total_domain_size = 0
+    for is_column in domains:
+        for lines in is_column:
+            for domain in lines:
+                total_domain_size += len(domain)
+    return total_domain_size
 
 
 def get_no_singleton_domain(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]):

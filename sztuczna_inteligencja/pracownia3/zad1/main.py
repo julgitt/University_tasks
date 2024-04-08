@@ -5,6 +5,7 @@ from itertools import combinations
 
 # region AC3
 def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
+    counter = 0
     lines_queue = deque()
     for i in range(len(domains[0])):
         lines_queue.append((0, i))
@@ -13,6 +14,7 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
         lines_queue.append((1, i))
 
     while lines_queue:
+        counter += 1
         is_column, line_idx = lines_queue.popleft()
         revised_indexes = revise_domains(is_column, line_idx, domains)
         if revised_indexes:
@@ -21,6 +23,7 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
                     return False
                 lines_queue.append((not is_column, k))
 
+    print(counter)
     return True
 
 
