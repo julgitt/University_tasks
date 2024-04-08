@@ -1,7 +1,6 @@
 from collections import deque
 from typing import List, Tuple, Set
-import itertools
-
+from itertools import combinations
 
 # region AC3
 def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
@@ -28,7 +27,7 @@ def revise(is_column: bool, index: int, domains: Tuple[List[List[List[int]]], Li
     certain_indexes = get_line_certain_indexes(is_column, index, domains)
     indexes_to_revise = set()
 
-    for line in list(domains[is_column][index]):
+    for line in domains[is_column][index]:
         for other_index, _ in enumerate(domains[not is_column]):
             if other_index in certain_indexes:
                 not_satisfies = False
@@ -46,16 +45,11 @@ def revise(is_column: bool, index: int, domains: Tuple[List[List[List[int]]], Li
 # region AC3 Helper
 def get_line_certain_indexes(is_col: bool, idx: int,
                              domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> Set[int]:
-    line_cells_on = set()
-    line_cells_off = set()
     if not domains[is_col][idx]:
         return set()
 
-    for i, bit in enumerate(domains[is_col][idx][0]):
-        if bit == 1:
-            line_cells_on.add(i)
-        elif bit == 0:
-            line_cells_off.add(i)
+    line_cells_on = {i for i, bit in enumerate(domains[is_col][idx][0]) if bit == 1}
+    line_cells_off = {i for i, bit in enumerate(domains[is_col][idx][0]) if bit == 0}
 
     for example_solution in domains[is_col][idx][1:]:
         for i, bit in enumerate(example_solution):
@@ -89,12 +83,12 @@ def generate_nonogram(domains: Tuple[List[List[List[int]]], List[List[List[int]]
 # region Domain
 def generate_initial_domains(row_len: int, col_len: int, row_desc: List[List[int]], col_desc: List[List[int]]) \
         -> Tuple[List[List[List[int]]], List[List[List[int]]]]:
-    row_domains = [get_all_possible_lines(row_len, desc) for desc in row_desc]
-    col_domains = [get_all_possible_lines(col_len, desc) for desc in col_desc]
+    row_domains = [get_all_valid_lines(row_len, desc) for desc in row_desc]
+    col_domains = [get_all_valid_lines(col_len, desc) for desc in col_desc]
     return row_domains, col_domains
 
 
-def get_all_possible_lines(line_len: int, blocks_desc: List[int]) -> List[List[int]]:
+def get_all_valid_lines(line_len: int, blocks_desc: List[int]) -> List[List[int]]:
     def is_valid_line(blocks_start_ids: Tuple[int, ...]) -> bool:
         for i, start_id in enumerate(blocks_start_ids):
             if start_id + blocks_desc[i] > line_len:
@@ -110,7 +104,7 @@ def get_all_possible_lines(line_len: int, blocks_desc: List[int]) -> List[List[i
                 line[start_id + j] = 1
         return line
 
-    all_combinations = itertools.combinations(range(line_len), len(blocks_desc))
+    all_combinations = combinations(range(line_len), len(blocks_desc))
     valid_combinations = filter(is_valid_line, all_combinations)
     return [generate_line(comb) for comb in valid_combinations]
 
@@ -121,10 +115,10 @@ def get_all_possible_lines(line_len: int, blocks_desc: List[int]) -> List[List[i
 def main():
     with open("zad_input.txt", 'r') as file:
         height, width = map(int, file.readline().split())
-        rows_descriptions = [list(map(int, file.readline().strip().split())) for _ in range(height)]
-        columns_descriptions = [list(map(int, file.readline().strip().split())) for _ in range(width)]
+        rows_desc = [list(map(int, file.readline().strip().split())) for _ in range(height)]
+        col_desc = [list(map(int, file.readline().strip().split())) for _ in range(width)]
 
-    result = solve(rows_descriptions, columns_descriptions, height, width)
+    result = solve(rows_desc, col_desc, height, width)
 
     with open("zad_output.txt", "w", encoding='utf-8') as output_file:
         for line in result:
