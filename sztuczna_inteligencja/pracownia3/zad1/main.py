@@ -3,6 +3,7 @@ from typing import List, Tuple, Set
 import itertools
 
 
+# region AC3
 def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
     queue = deque()
     for i in range(len(domains[0])):
@@ -13,44 +14,41 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
 
     while queue:
         is_col, index = queue.popleft()
-        is_revised, revised_indexes = revise(is_col, index, domains)
-        if is_revised:
+        to_revise = revise(is_col, index, domains)
+        if len(to_revise) > 0:
             if len(domains[is_col][index]) == 0:
                 return False
-            for k in revised_indexes:
+            for k in to_revise:
                 queue.append((not is_col, k))
 
     return True
 
 
 def revise(is_col: bool, idx: int, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
-        -> Tuple[bool, Set[int]]:
-    revised = False
-    certain = get_all_line_uncertain_indexes(is_col, idx, domains)
+        -> Set[int]:
+    certain_indexes = get_line_certain_indexes(is_col, idx, domains)
     to_revise = set()
     for line_from_domain in list(domains[is_col][idx]):  # bierzemy przykładową linijkę z dziedziny, np wiersz
         for idx2 in range(len(list(domains[not is_col]))):  # iterujemy się po kolejnych np kolumnach
-            if idx2 in certain:
+            if idx2 in certain_indexes:
                 not_satisfies = False
                 for line_from_domain2 in list(domains[not is_col][idx2]):  # bierzemy jakies rozwiazanie np kolumny
                     if line_from_domain[idx2] != line_from_domain2[idx]:  # sprawdzamy czy pasi
                         domains[not is_col][idx2].remove(line_from_domain2)
                         not_satisfies = True
                 if not_satisfies:
-                    revised = True
                     to_revise.add(idx2)
 
-    return revised, to_revise
+    return to_revise
+# endregion
 
 
 # region AC3 Helper
-def get_all_line_uncertain_indexes(is_col: bool, idx: int,
-                                   domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> Set[int]:
-    uncertain_line_cells = set()
+def get_line_certain_indexes(is_col: bool, idx: int,
+                             domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> Set[int]:
     line_cells_on = set()
     line_cells_off = set()
     for i, bit in enumerate(domains[is_col][idx][0]):
-        uncertain_line_cells.add(i)
         if bit == 1:
             line_cells_on.add(i)
         elif bit == 0:
@@ -69,8 +67,6 @@ def get_all_line_uncertain_indexes(is_col: bool, idx: int,
                 except KeyError:
                     pass
 
-    uncertain_line_cells.difference_update(line_cells_on)
-    uncertain_line_cells.difference_update(line_cells_off)
     return line_cells_on.union(line_cells_off)
 # endregion
 
@@ -84,8 +80,6 @@ def solve(rows_descriptions: List[List[int]], cols_descriptions: List[List[int]]
         exit(1)
     nonogram = generate_nonogram(domains)
     return nonogram
-
-
 # endregion
 
 # region Nonogram Operations
