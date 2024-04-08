@@ -48,6 +48,9 @@ def get_line_certain_indexes(is_col: bool, idx: int,
                              domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> Set[int]:
     line_cells_on = set()
     line_cells_off = set()
+    if len(domains[is_col][idx]) == 0:
+        return set()
+
     for i, bit in enumerate(domains[is_col][idx][0]):
         if bit == 1:
             line_cells_on.add(i)
@@ -81,6 +84,7 @@ def solve(rows_descriptions: List[List[int]], cols_descriptions: List[List[int]]
     nonogram = generate_nonogram(domains)
     return nonogram
 # endregion
+
 
 # region Nonogram Operations
 def generate_nonogram(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> List[List[int]]:
