@@ -17,8 +17,10 @@ namespace Zad4
     public abstract class PersonRegistry
     {
         protected PersonNotifier notifier;
-        public PersonRegistry(PersonNotifier notifier)
+        protected List<Person> persons;
+        public PersonRegistry(PersonNotifier notifier, List<Person> persons)
         {
+            this.persons = persons;
             this.notifier = notifier;
         }
 
@@ -32,11 +34,12 @@ namespace Zad4
 
     public class XMLPersonRegistry : PersonRegistry
     {
-        public XMLPersonRegistry(PersonNotifier notifier) : base(notifier) { }
+
+        public XMLPersonRegistry(PersonNotifier notifier, List<Person> persons) : base(notifier, persons) { }
 
         public override IEnumerable<Person> GetPersons()
         {
-            throw new NotImplementedException();
+            return persons;
         }
     }
 
@@ -46,7 +49,7 @@ namespace Zad4
         {
             foreach (var elem in parameters)
             {
-                Console.WriteLine("Powadomiono" + elem.name);
+                Console.WriteLine("Powadomiono: " + elem.name);
             }
         }
     }
@@ -71,7 +74,7 @@ namespace Zad4
 
             SmtpPersonNotifier notifier = new SmtpPersonNotifier();
 
-            XMLPersonRegistry registry = new XMLPersonRegistry(notifier);
+            XMLPersonRegistry registry = new XMLPersonRegistry(notifier, new List<Person> { fstPerson, sndPerson, trdPerson });
 
             var persons = registry.GetPersons();
 

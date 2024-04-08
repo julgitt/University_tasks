@@ -23,7 +23,7 @@ namespace Zad1
                 client.EnableSsl = true;
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = true;
-                //client.Credentials = new NetworkCredential("username", "password");
+                client.Credentials = new NetworkCredential("username", "password");
 
                 MailMessage mailMessage = new MailMessage();
                 mailMessage.From = new MailAddress(From);

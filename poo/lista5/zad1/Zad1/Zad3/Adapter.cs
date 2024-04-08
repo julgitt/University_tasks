@@ -44,6 +44,8 @@ namespace Zad3
         static void Main(string[] args)
         {
             ArrayList a = new ArrayList() { 1, 5, 3, 3, 2, 4, 3 };
+            /* the ArrayList's Sort method accepts ONLY an IComparer */
+            /*a.Sort(how to pass the IntComparer here ? );*/
             a.Sort(new ComparisonAdapter<int>(IntComparer));
 
             for (int i = 0; i < a.Count; i++) 
