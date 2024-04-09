@@ -1,8 +1,8 @@
 import time
 from collections import deque
+from random import randint
 from typing import List, Tuple, Set
 from itertools import combinations
-from copy import deepcopy
 
 
 # region AC3
@@ -25,6 +25,12 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
 
     return True
 
+
+def forward_checking(is_col, idx, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
+    is_column, line_idx = lines_queue.popleft()
+    revise_domains(is_col, dx, domains)
+
+    return True
 
 def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
         -> Set[int]:
@@ -73,9 +79,9 @@ def get_constrained_indexes_for_line(is_column: bool, line_idx: int,
 # endregion
 
 # region Backtracking
-def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
+def backtrack_rec(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
         -> Tuple[bool, Tuple[List[List[List[int]]], List[List[List[int]]]]]:
-
+    print("dupa")
     is_col, idx, domain = get_no_singleton_domain(domains)
     if is_col == -1:  # all domains are singletons
         return True, domains
@@ -92,6 +98,45 @@ def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
                 return result, d
 
     return False, domains
+
+
+def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
+        -> Tuple[bool, Tuple[List[List[List[int]]], List[List[List[int]]]]]:
+    stack = [domains]
+    counter = 0
+    while stack:
+        domains = stack.pop()
+        counter += 1
+        print(counter)
+        if not ac3(domains):
+            continue
+        is_col, idx, domain = get_no_singleton_domain(domains)
+        if is_col == -1:  # all domains are singletons
+            return True, domains
+
+        if randint(0, 100) < 100:
+            domain = sorted(domain, key=lambda x: how_many_incorrect(is_col, idx, x, domains), reverse=False)
+
+        for element in reversed(domain):
+            domains_to_backtrack = (
+                [row[:] for row in domains[0]],
+                [col[:] for col in domains[1]]
+            )
+            domains_to_backtrack[is_col][idx] = [element]
+            stack.append(domains_to_backtrack)
+
+    return False, domains
+
+
+def how_many_incorrect(is_col, line_idx, line, domains):
+    counter = 0
+
+    for other_line_idx, _ in enumerate(domains[not is_col]):
+        for other_line in list(domains[not is_col][other_line_idx]):
+            if line[other_line_idx] != other_line[line_idx]:
+                counter += 1
+
+    return counter
 
 
 def get_no_singleton_domain(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]):
