@@ -24,7 +24,6 @@ def ac3(domains: Tuple[List[List[int]], List[List[int]]]) -> bool:
                 lines_queue.append((not is_column, k))
 
     return True
-![](../../../../../../AppData/Local/Temp/9jh5iark.bmp)
 
 def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[int]], List[List[int]]]) \
         -> Set[int]:
