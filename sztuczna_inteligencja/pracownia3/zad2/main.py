@@ -26,6 +26,7 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
     return True
 
 
+<<<<<<< Updated upstream
 def forward_checking(is_col, idx, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
     revised_indexes = revise_domains(is_col, idx, domains)
     for k in revised_indexes:
@@ -33,6 +34,8 @@ def forward_checking(is_col, idx, domains: Tuple[List[List[List[int]]], List[Lis
             return False
     return True
 
+=======
+>>>>>>> Stashed changes
 def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
         -> Set[int]:
     constrained_indexes = get_constrained_indexes_for_line(is_column, line_idx, domains)
@@ -94,11 +97,16 @@ def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
             if randint(0, 100) < 0:
                 is_ac3_run = True
 
+<<<<<<< Updated upstream
             if is_ac3_run and not ac3(domains):
                 continue
             is_col, idx, domain = get_no_singleton_domain(domains)
             if is_col == -1:  # all domains are singletons
                 return True, domains
+=======
+        #if randint(0, 100) < 40:
+        #    domain = sorted(domain, key=lambda x: how_many_incorrect(is_col, idx, x, domains), reverse=False)
+>>>>>>> Stashed changes
 
             if not is_ac3_run and not forward_checking(is_col, idx, domains):
                 continue
@@ -212,7 +220,8 @@ def generate_valid_lines(line_len: int, block_lengths: List[int]) -> List[List[i
 
     all_combinations = combinations(range(line_len), len(block_lengths))
     valid_combinations = filter(is_valid_line, all_combinations)
-    return [generate_line(comb) for comb in valid_combinations]
+    result = [generate_line(comb) for comb in valid_combinations]
+    return result[len(result):] + result[: len(result)]
 # endregion
 
 

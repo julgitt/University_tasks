@@ -4,7 +4,7 @@ from itertools import combinations
 
 
 # region AC3
-def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
+def ac3(domains: Tuple[List[List[int]], List[List[int]]]) -> bool:
     counter = 0
     lines_queue = deque()
     for i in range(len(domains[0])):
@@ -27,14 +27,14 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
     return True
 
 
-def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
+def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[int]], List[List[int]]]) \
         -> Set[int]:
-    constrained_indexes = get_constrained_indexes_for_line(is_column, line_idx, domains)
+    cells_off, cells_on = get_constrained_indexes_for_line(is_column, line_idx, domains)
     indexes_to_revise = set()
 
     for line in domains[is_column][line_idx]:
         for other_line_idx, _ in enumerate(domains[not is_column]):
-            if other_line_idx in constrained_indexes:  # index is correct
+            if ((cells_off >> other_line_idx) & 1) == ((cells_on >> other_line_idx) & 1):
                 revised = False
                 for other_line in list(domains[not is_column][other_line_idx]):
                     if line[other_line_idx] != other_line[line_idx]:
@@ -52,21 +52,18 @@ def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[List
 
 # region AC3 Helper
 def get_constrained_indexes_for_line(is_column: bool, line_idx: int,
-                                     domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> Set[int]:
+                                     domains: Tuple[List[List[int]], List[List[int]]]) -> Tuple[int, int]:
     if not domains[is_column][line_idx]:
-        return set()
+        return 0, 0
 
-    set_of_cells_on = {i for i, bit in enumerate(domains[is_column][line_idx][0]) if bit == 1}
-    set_of_cells_off = {i for i, bit in enumerate(domains[is_column][line_idx][0]) if bit == 0}
+    cells_on = domains[is_column][line_idx][0]
+    cells_off = domains[is_column][line_idx][0]
 
-    for example_solution in domains[is_column][line_idx][1:]:
-        for i, bit in enumerate(example_solution):
-            if bit == 1:
-                set_of_cells_off.discard(i)
-            elif bit == 0:
-                set_of_cells_on.discard(i)
+    for line in domains[is_column][line_idx][1:]:
+        cells_on &= line
+        cells_off |= line
 
-    return set_of_cells_on.union(set_of_cells_off)
+    return cells_off, cells_on
 
 
 # endregion
@@ -95,13 +92,13 @@ def generate_nonogram_from_domains(domains: Tuple[List[List[List[int]]], List[Li
 
 # region Domain
 def initialize_domains(row_len: int, col_len: int, row_constraints: List[List[int]], col_constraints: List[List[int]]) \
-        -> Tuple[List[List[List[int]]], List[List[List[int]]]]:
+        -> Tuple[List[List[int]], List[List[int]]]:
     row_domains = [generate_valid_lines(row_len, desc) for desc in row_constraints]
     col_domains = [generate_valid_lines(col_len, desc) for desc in col_constraints]
     return row_domains, col_domains
 
 
-def generate_valid_lines(line_len: int, block_lengths: List[int]) -> List[List[int]]:
+def generate_valid_lines(line_len: int, block_lengths: List[int]) -> List[int]:
     def is_valid_line(blocks_start_indexes: Tuple[int, ...]) -> bool:
         for i, start_id in enumerate(blocks_start_indexes):
             if start_id + block_lengths[i] > line_len:
@@ -110,16 +107,17 @@ def generate_valid_lines(line_len: int, block_lengths: List[int]) -> List[List[i
                 return False
         return True
 
-    def generate_line(blocks_start_ids: Tuple[int, ...]) -> List[int]:
-        line = [0] * line_len
+    def generate_line(blocks_start_ids: Tuple[int, ...]) -> int:
+        line = 0
         for start_id, length in zip(blocks_start_ids, block_lengths):
             for j in range(length):
-                line[start_id + j] = 1
+                line |= (1 << (start_id + j))
         return line
 
     all_combinations = combinations(range(line_len), len(block_lengths))
     valid_combinations = filter(is_valid_line, all_combinations)
-    return [generate_line(comb) for comb in valid_combinations]
+    generated_lines = list(map(generate_line, valid_combinations))
+    return generated_lines
 # endregion
 
 
