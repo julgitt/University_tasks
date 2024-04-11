@@ -1,6 +1,6 @@
 import time
 from collections import deque
-from random import randint
+from random import randint, choice
 from typing import List, Tuple, Set
 from itertools import combinations
 
@@ -27,9 +27,10 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
 
 
 def forward_checking(is_col, idx, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
-    is_column, line_idx = lines_queue.popleft()
-    revise_domains(is_col, dx, domains)
-
+    revised_indexes = revise_domains(is_col, idx, domains)
+    for k in revised_indexes:
+        if len(domains[not is_col][k]) == 0:
+            return False
     return True
 
 def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
@@ -79,52 +80,40 @@ def get_constrained_indexes_for_line(is_column: bool, line_idx: int,
 # endregion
 
 # region Backtracking
-def backtrack_rec(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
-        -> Tuple[bool, Tuple[List[List[List[int]]], List[List[List[int]]]]]:
-    print("dupa")
-    is_col, idx, domain = get_no_singleton_domain(domains)
-    if is_col == -1:  # all domains are singletons
-        return True, domains
-
-    for element in domain:
-        domains_to_backtrack = (
-            [row[:] for row in domains[0]],
-            [col[:] for col in domains[1]]
-        )
-        domains_to_backtrack[is_col][idx] = [element]
-        if ac3(domains_to_backtrack):
-            result, d = backtrack(domains_to_backtrack)
-            if result:
-                return result, d
-
-    return False, domains
-
-
 def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
         -> Tuple[bool, Tuple[List[List[List[int]]], List[List[List[int]]]]]:
     stack = [domains]
     counter = 0
-    while stack:
-        domains = stack.pop()
-        counter += 1
-        print(counter)
-        if not ac3(domains):
-            continue
-        is_col, idx, domain = get_no_singleton_domain(domains)
-        if is_col == -1:  # all domains are singletons
-            return True, domains
+    iterations = 100
+    while iterations > 0:
+        while stack:
+            domains = stack.pop()
+            counter += 1
+            print(counter)
+            is_ac3_run = False
+            if randint(0, 100) < 0:
+                is_ac3_run = True
 
-        if randint(0, 100) < 100:
-            domain = sorted(domain, key=lambda x: how_many_incorrect(is_col, idx, x, domains), reverse=False)
+            if is_ac3_run and not ac3(domains):
+                continue
+            is_col, idx, domain = get_no_singleton_domain(domains)
+            if is_col == -1:  # all domains are singletons
+                return True, domains
 
-        for element in reversed(domain):
-            domains_to_backtrack = (
-                [row[:] for row in domains[0]],
-                [col[:] for col in domains[1]]
-            )
-            domains_to_backtrack[is_col][idx] = [element]
-            stack.append(domains_to_backtrack)
+            if not is_ac3_run and not forward_checking(is_col, idx, domains):
+                continue
+            if randint(0, 100) < 100:
+                domain = sorted(domain, key=lambda x: how_many_incorrect(is_col, idx, x, domains), reverse=False)
 
+            for element in reversed(domain):
+                domains_to_backtrack = (
+                    [row[:] for row in domains[0]],
+                    [col[:] for col in domains[1]]
+                )
+                domains_to_backtrack[is_col][idx] = [element]
+
+                stack.append(domains_to_backtrack)
+            iterations -= 1
     return False, domains
 
 
@@ -140,22 +129,28 @@ def how_many_incorrect(is_col, line_idx, line, domains):
 
 
 def get_no_singleton_domain(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]):
-    min_val = float('inf')
-    min_idx = -1
-    min_domain = []
-    min_is_col = -1
+    min_vals = [float('inf')] * 5
+    min_idxs = [-1] * 5
+    min_domains = [[]] * 5
+    min_is_cols = [-1] * 5
 
     for is_col, domain_list in enumerate(domains):
         for idx, domain in enumerate(domain_list):
-            if 1 < len(domain) < min_val:
-                min_domain = domain
-                min_val = len(domain)
-                min_idx = idx
-                min_is_col = is_col
+            if 1 < len(domain):
+                max_min_val = max(min_vals)
+                max_min_idx = min_vals.index(max_min_val)
+                if len(domain) < max_min_val:
+                    min_vals[max_min_idx] = len(domain)
+                    min_domains[max_min_idx] = domain
+                    min_idxs[max_min_idx] = idx
+                    min_is_cols[max_min_idx] = is_col
 
-    if min_idx != -1:
-        return min_is_col, min_idx, min_domain
-    return -1, 0, []
+    result = []
+    for i in range(5):
+        if min_idxs[i] != -1:
+            result.append((min_is_cols[i], min_idxs[i], min_domains[i]))
+
+    return choice(result)
 
 
 # endregion
