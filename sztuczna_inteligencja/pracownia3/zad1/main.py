@@ -37,7 +37,7 @@ def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[int]
             if ((cells_off >> other_line_idx) & 1) == ((cells_on >> other_line_idx) & 1):
                 revised = False
                 for other_line in list(domains[not is_column][other_line_idx]):
-                    if line[other_line_idx] != other_line[line_idx]:
+                    if (line >> other_line_idx) & 1 != (other_line >> line_idx) & 1:
                         domains[not is_column][other_line_idx].remove(other_line)
                         if len(domains[not is_column][other_line_idx]) == 0:
                             return {other_line_idx}
@@ -71,7 +71,7 @@ def get_constrained_indexes_for_line(is_column: bool, line_idx: int,
 
 # region Solve
 def solve_nonogram(row_constraints: List[List[int]], column_constraints: List[List[int]], height: int, width: int) \
-        -> List[List[int]]:
+        -> List[int]:
     domains = initialize_domains(width, height, row_constraints, column_constraints)
 
     if not ac3(domains):
@@ -85,7 +85,7 @@ def solve_nonogram(row_constraints: List[List[int]], column_constraints: List[Li
 
 
 # region Nonogram Operations
-def generate_nonogram_from_domains(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> List[List[int]]:
+def generate_nonogram_from_domains(domains: Tuple[List[List[int]], List[List[int]]]) -> List[int]:
     return [row_domain[0] for row_domain in domains[0]]
 # endregion
 
@@ -132,8 +132,11 @@ def main():
     with open("zad_output.txt", "w", encoding='utf-8') as output_file:
         for line in result:
             new_line = ""
-            for i in range(len(line)):
-                new_line += ("#" if line[i] else ".")
+            binary_string = format(line, f"0{width}b")
+            binary_line = [int(bit) for bit in binary_string]
+            binary_line.reverse()
+            for i in range(len(binary_line)):
+                new_line += ("#" if binary_line[i] else ".")
 
             output_file.write(new_line + "\n")
 

@@ -1,12 +1,12 @@
 import time
 from collections import deque
-from random import randint, choice
+from random import randint
 from typing import List, Tuple, Set
 from itertools import combinations
 
 
 # region AC3
-def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
+def ac3(domains: Tuple[List[List[int]], List[List[int]]]) -> bool:
     lines_queue = deque()
     for i in range(len(domains[0])):
         lines_queue.append((0, i))
@@ -24,29 +24,19 @@ def ac3(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
                 lines_queue.append((not is_column, k))
 
     return True
+![](../../../../../../AppData/Local/Temp/9jh5iark.bmp)
 
-
-<<<<<<< Updated upstream
-def forward_checking(is_col, idx, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> bool:
-    revised_indexes = revise_domains(is_col, idx, domains)
-    for k in revised_indexes:
-        if len(domains[not is_col][k]) == 0:
-            return False
-    return True
-
-=======
->>>>>>> Stashed changes
-def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
+def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[int]], List[List[int]]]) \
         -> Set[int]:
-    constrained_indexes = get_constrained_indexes_for_line(is_column, line_idx, domains)
+    cells_off, cells_on = get_constrained_indexes_for_line(is_column, line_idx, domains)
     indexes_to_revise = set()
 
     for line in domains[is_column][line_idx]:
         for other_line_idx, _ in enumerate(domains[not is_column]):
-            if other_line_idx in constrained_indexes:  # index is correct
+            if ((cells_off >> other_line_idx) & 1) == ((cells_on >> other_line_idx) & 1):
                 revised = False
                 for other_line in list(domains[not is_column][other_line_idx]):
-                    if line[other_line_idx] != other_line[line_idx]:
+                    if (line >> other_line_idx) & 1 != (other_line >> line_idx) & 1:
                         domains[not is_column][other_line_idx].remove(other_line)
                         if len(domains[not is_column][other_line_idx]) == 0:
                             return {other_line_idx}
@@ -63,65 +53,42 @@ def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[List
 
 # region AC3 Helper
 def get_constrained_indexes_for_line(is_column: bool, line_idx: int,
-                                     domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> Set[int]:
+                                     domains: Tuple[List[List[int]], List[List[int]]]) -> Tuple[int, int]:
     if not domains[is_column][line_idx]:
-        return set()
+        return 0, 0
 
-    set_of_cells_on = {i for i, bit in enumerate(domains[is_column][line_idx][0]) if bit == 1}
-    set_of_cells_off = {i for i, bit in enumerate(domains[is_column][line_idx][0]) if bit == 0}
+    cells_on = domains[is_column][line_idx][0]
+    cells_off = domains[is_column][line_idx][0]
 
-    for example_solution in domains[is_column][line_idx][1:]:
-        for i, bit in enumerate(example_solution):
-            if bit == 1:
-                set_of_cells_off.discard(i)
-            elif bit == 0:
-                set_of_cells_on.discard(i)
+    for line in domains[is_column][line_idx][1:]:
+        cells_on &= line
+        cells_off |= line
 
-    return set_of_cells_on.union(set_of_cells_off)
+    return cells_off, cells_on
 
 
 # endregion
 
 # region Backtracking
-def backtrack(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) \
-        -> Tuple[bool, Tuple[List[List[List[int]]], List[List[List[int]]]]]:
+def backtrack(domains: Tuple[List[List[int]], List[List[int]]]) \
+        -> Tuple[bool, Tuple[List[List[int]], List[List[int]]]]:
     stack = [domains]
-    counter = 0
-    iterations = 100
-    while iterations > 0:
-        while stack:
-            domains = stack.pop()
-            counter += 1
-            print(counter)
-            is_ac3_run = False
-            if randint(0, 100) < 0:
-                is_ac3_run = True
+    while stack:
+        domains = stack.pop()
+        if not ac3(domains):
+            continue
+        is_col, idx, domain = get_no_singleton_domain(domains)
+        if is_col == -1:  # all domains are singletons
+            return True, domains
 
-<<<<<<< Updated upstream
-            if is_ac3_run and not ac3(domains):
-                continue
-            is_col, idx, domain = get_no_singleton_domain(domains)
-            if is_col == -1:  # all domains are singletons
-                return True, domains
-=======
-        #if randint(0, 100) < 40:
-        #    domain = sorted(domain, key=lambda x: how_many_incorrect(is_col, idx, x, domains), reverse=False)
->>>>>>> Stashed changes
+        for element in domain:
+            domains_to_backtrack = (
+                [row[:] for row in domains[0]],
+                [col[:] for col in domains[1]]
+            )
+            domains_to_backtrack[is_col][idx] = [element]
 
-            if not is_ac3_run and not forward_checking(is_col, idx, domains):
-                continue
-            if randint(0, 100) < 100:
-                domain = sorted(domain, key=lambda x: how_many_incorrect(is_col, idx, x, domains), reverse=False)
-
-            for element in reversed(domain):
-                domains_to_backtrack = (
-                    [row[:] for row in domains[0]],
-                    [col[:] for col in domains[1]]
-                )
-                domains_to_backtrack[is_col][idx] = [element]
-
-                stack.append(domains_to_backtrack)
-            iterations -= 1
+            stack.append(domains_to_backtrack)
     return False, domains
 
 
@@ -130,35 +97,27 @@ def how_many_incorrect(is_col, line_idx, line, domains):
 
     for other_line_idx, _ in enumerate(domains[not is_col]):
         for other_line in list(domains[not is_col][other_line_idx]):
-            if line[other_line_idx] != other_line[line_idx]:
+            if (line >> other_line_idx) & 1 != (other_line >> line_idx) & 1:
                 counter += 1
 
     return counter
 
 
-def get_no_singleton_domain(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]):
-    min_vals = [float('inf')] * 5
-    min_idxs = [-1] * 5
-    min_domains = [[]] * 5
-    min_is_cols = [-1] * 5
-
+def get_no_singleton_domain(domains: Tuple[List[List[int]], List[List[int]]]):
+    min_val = float('inf')
+    min_idx = -1
+    min_domain = []
+    min_is_col = -1
     for is_col, domain_list in enumerate(domains):
         for idx, domain in enumerate(domain_list):
-            if 1 < len(domain):
-                max_min_val = max(min_vals)
-                max_min_idx = min_vals.index(max_min_val)
-                if len(domain) < max_min_val:
-                    min_vals[max_min_idx] = len(domain)
-                    min_domains[max_min_idx] = domain
-                    min_idxs[max_min_idx] = idx
-                    min_is_cols[max_min_idx] = is_col
-
-    result = []
-    for i in range(5):
-        if min_idxs[i] != -1:
-            result.append((min_is_cols[i], min_idxs[i], min_domains[i]))
-
-    return choice(result)
+            if 1 < len(domain) < min_val:
+                min_domain = domain
+                min_val = len(domain)
+                min_idx = idx
+                min_is_col = is_col
+    if min_idx != -1:
+        return min_is_col, min_idx, min_domain
+    return -1, 0, []
 
 
 # endregion
@@ -166,16 +125,13 @@ def get_no_singleton_domain(domains: Tuple[List[List[List[int]]], List[List[List
 
 # region Solve
 def solve_nonogram(row_constraints: List[List[int]], column_constraints: List[List[int]], height: int, width: int) \
-        -> List[List[int]]:
+        -> List[int]:
     domains = initialize_domains(width, height, row_constraints, column_constraints)
 
     if not ac3(domains):
         exit(1)
 
-    start_time = time.time()
     solution_found, domains = backtrack(domains)
-    end_time = time.time()
-    print(end_time - start_time)
     if not solution_found:
         exit(2)
 
@@ -187,22 +143,22 @@ def solve_nonogram(row_constraints: List[List[int]], column_constraints: List[Li
 
 
 # region Nonogram Operations
-def generate_nonogram_from_domains(domains: Tuple[List[List[List[int]]], List[List[List[int]]]]) -> List[List[int]]:
+def generate_nonogram_from_domains(domains: Tuple[List[List[int]], List[List[int]]]) -> List[int]:
     return [row_domain[0] for row_domain in domains[0]]
 
 
 # endregion
 
 
-# region Generating Initial Domain
+# region Domain
 def initialize_domains(row_len: int, col_len: int, row_constraints: List[List[int]], col_constraints: List[List[int]]) \
-        -> Tuple[List[List[List[int]]], List[List[List[int]]]]:
+        -> Tuple[List[List[int]], List[List[int]]]:
     row_domains = [generate_valid_lines(row_len, desc) for desc in row_constraints]
     col_domains = [generate_valid_lines(col_len, desc) for desc in col_constraints]
     return row_domains, col_domains
 
 
-def generate_valid_lines(line_len: int, block_lengths: List[int]) -> List[List[int]]:
+def generate_valid_lines(line_len: int, block_lengths: List[int]) -> List[int]:
     def is_valid_line(blocks_start_indexes: Tuple[int, ...]) -> bool:
         for i, start_id in enumerate(blocks_start_indexes):
             if start_id + block_lengths[i] > line_len:
@@ -211,17 +167,19 @@ def generate_valid_lines(line_len: int, block_lengths: List[int]) -> List[List[i
                 return False
         return True
 
-    def generate_line(blocks_start_ids: Tuple[int, ...]) -> List[int]:
-        line = [0] * line_len
+    def generate_line(blocks_start_ids: Tuple[int, ...]) -> int:
+        line = 0
         for start_id, length in zip(blocks_start_ids, block_lengths):
             for j in range(length):
-                line[start_id + j] = 1
+                line |= (1 << (start_id + j))
         return line
 
     all_combinations = combinations(range(line_len), len(block_lengths))
     valid_combinations = filter(is_valid_line, all_combinations)
-    result = [generate_line(comb) for comb in valid_combinations]
-    return result[len(result):] + result[: len(result)]
+    generated_lines = list(map(generate_line, valid_combinations))
+    return generated_lines
+
+
 # endregion
 
 
@@ -236,8 +194,11 @@ def main():
     with open("zad_output.txt", "w", encoding='utf-8') as output_file:
         for line in result:
             new_line = ""
-            for i in range(len(line)):
-                new_line += ("#" if line[i] else ".")
+            binary_string = format(line, f"0{width}b")
+            binary_line = [int(bit) for bit in binary_string]
+            binary_line.reverse()
+            for i in range(len(binary_line)):
+                new_line += ("#" if binary_line[i] else ".")
 
             output_file.write(new_line + "\n")
 
