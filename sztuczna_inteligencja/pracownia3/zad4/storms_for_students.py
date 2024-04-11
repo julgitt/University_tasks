@@ -26,8 +26,8 @@ def writeln(s):
 txt = open('zad_input.txt').readlines()
 output = open('zad_output.txt', 'w')
 
-rows = map(int, txt[0].split())
-cols = map(int, txt[1].split())
+rows = list(map(int, txt[0].split()))
+cols = list(map(int, txt[1].split()))
 triples = []
 
 for i in range(2, len(txt)):
