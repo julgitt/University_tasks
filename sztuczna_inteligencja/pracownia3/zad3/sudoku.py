@@ -29,14 +29,14 @@ def vertical():
     return [all_different(get_column(j)) for j in range(9)]
 
 
-def get_square(i, j):
-    inside = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
-    return [V(i + k[0], j + k[1]) for k in inside]
+def get_square_variables(i, j):
+    cells_inside_square = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
+    return [V(i + k[0], j + k[1]) for k in cells_inside_square]
 
 
 def squares():
-    all_squares = [(0, 0), (0, 3), (0, 6), (3, 3), (3, 6), (6, 6), (3, 0), (6, 0)]
-    return [all_different(get_square(s[0], s[1])) for s in all_squares]
+    all_squares = [(0, 0), (0, 3), (0, 6), (3, 3), (3, 6), (6, 6), (3, 0), (6, 0), [6, 3]]
+    return [all_different(get_square_variables(s[0], s[1])) for s in all_squares]
 
 
 def print_constraints(Cs, indent, d):
