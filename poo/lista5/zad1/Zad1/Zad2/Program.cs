@@ -18,8 +18,8 @@ namespace Zad2
             caeToWrite.Close();
             fileToWrite.Close();
             FileStream fileToRead = File.Open("./example.txt", FileMode.Open, FileAccess.Read);
-            CaesarStream caeToRead = new CaesarStream(fileToRead, -5);
             // -5 znosi 5
+            CaesarStream caeToRead = new CaesarStream(fileToRead, -5);
             byte[] readBuffer = new byte[1024];
             int bytesRead = caeToRead.Read(readBuffer, 0, readBuffer.Length);
             caeToRead.Close();
