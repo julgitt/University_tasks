@@ -31,12 +31,12 @@ def vertical():
 
 def get_square_variables(i, j):
     cells_inside_square = [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)]
-    return [V(i + k[0], j + k[1]) for k in cells_inside_square]
+    return [V(i + cell[0], j + cell[1]) for cell in cells_inside_square]
 
 
 def squares():
-    all_squares = [(0, 0), (0, 3), (0, 6), (3, 3), (3, 6), (6, 6), (3, 0), (6, 0), [6, 3]]
-    return [all_different(get_square_variables(s[0], s[1])) for s in all_squares]
+    all_squares_offsets = [(0, 0), (0, 3), (0, 6), (3, 3), (3, 6), (6, 6), (3, 0), (6, 0), [6, 3]]
+    return [all_different(get_square_variables(offset[0], offset[1])) for offset in all_squares_offsets]
 
 
 def print_constraints(Cs, indent, d):

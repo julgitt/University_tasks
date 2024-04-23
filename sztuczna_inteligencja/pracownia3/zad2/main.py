@@ -25,6 +25,7 @@ def ac3(domains: Tuple[List[List[int]], List[List[int]]]) -> bool:
 
     return True
 
+
 def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[int]], List[List[int]]]) \
         -> Set[int]:
     cells_off, cells_on = get_constrained_indexes_for_line(is_column, line_idx, domains)

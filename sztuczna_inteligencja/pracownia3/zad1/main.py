@@ -5,53 +5,43 @@ from itertools import combinations
 
 # region AC3
 def ac3(domains: Tuple[List[List[int]], List[List[int]]]) -> bool:
-    counter = 0
-    lines_queue = deque()
-    for i in range(len(domains[0])):
-        lines_queue.append((0, i))
-
-    for i in range(len(domains[1])):
-        lines_queue.append((1, i))
+    lines_queue = deque((False, i) for i in range(len(domains[False]))) \
+                  + deque((1, i) for i in range(len(domains[True])))
 
     while lines_queue:
-        counter += 1
         is_column, line_idx = lines_queue.popleft()
         revised_indexes = revise_domains(is_column, line_idx, domains)
         if revised_indexes:
             for k in revised_indexes:
-                if len(domains[not is_column][k]) == 0:
+                if not domains[not is_column][k]:
                     return False
                 lines_queue.append((not is_column, k))
 
-    print(counter)
     return True
 
 
-def revise_domains(is_column: bool, line_idx: int, domains: Tuple[List[List[int]], List[List[int]]]) \
+def revise_domains(is_column: bool, idx: int, domains: Tuple[List[List[int]], List[List[int]]]) \
         -> Set[int]:
-    cells_off, cells_on = get_constrained_indexes_for_line(is_column, line_idx, domains)
+    cells_off, cells_on = get_certain_cells_for_line(is_column, idx, domains)
     indexes_to_revise = set()
 
-    for line in domains[is_column][line_idx]:
-        for other_line_idx, _ in enumerate(domains[not is_column]):
-            if ((cells_off >> other_line_idx) & 1) == ((cells_on >> other_line_idx) & 1):
-                revised = False
-                for other_line in list(domains[not is_column][other_line_idx]):
-                    if (line >> other_line_idx) & 1 != (other_line >> line_idx) & 1:
-                        domains[not is_column][other_line_idx].remove(other_line)
-                        if len(domains[not is_column][other_line_idx]) == 0:
-                            return {other_line_idx}
-                        revised = True
-
-                if revised:
-                    indexes_to_revise.add(other_line_idx)
+    for line in domains[is_column][idx]:        # iterate lines from the given domain
+        for idx2, neighbour_domain in enumerate(domains[not is_column]):
+            is_cell_certain = (cells_off >> idx2) & 1 == (cells_on >> idx2) & 1
+            if is_cell_certain:
+                for neighbour_line in list(neighbour_domain):
+                    if (line >> idx2) & 1 != (neighbour_line >> idx) & 1:
+                        neighbour_domain.remove(neighbour_line)
+                        if not neighbour_domain:
+                            return {idx2}
+                        indexes_to_revise.add(idx2)
 
     return indexes_to_revise
 # endregion
 
 
 # region AC3 Helper
-def get_constrained_indexes_for_line(is_column: bool, line_idx: int,
+def get_certain_cells_for_line(is_column: bool, line_idx: int,
                                      domains: Tuple[List[List[int]], List[List[int]]]) -> Tuple[int, int]:
     if not domains[is_column][line_idx]:
         return 0, 0
