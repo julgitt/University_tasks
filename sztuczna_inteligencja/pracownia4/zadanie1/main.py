@@ -11,7 +11,7 @@ class Program:
         start_t = time()
         search = AlphaBetaSearch()
 
-        for i in range(1000):
+        for i in range(10000):
             reversi = ReversiState()
             move_count = 0
             player = agent_player
@@ -35,7 +35,7 @@ class Program:
                     break
 
             # board.draw()
-            # print(f'Result: {reversi.result()}, depth: {depth}')
+            print(f'Result: {reversi.result()}, depth: {depth}')
             if (reversi.result() > 0 and agent_player == 0) or (reversi.result() < 0 and agent_player == 1):
                 lost_games += 1
 
