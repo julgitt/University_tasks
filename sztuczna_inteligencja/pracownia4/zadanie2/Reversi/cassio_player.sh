@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pypy3 cassio_player.py 2
+pypy3 Reversi/cassio.py 2

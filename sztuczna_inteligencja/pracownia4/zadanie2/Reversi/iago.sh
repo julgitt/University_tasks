@@ -1,2 +1,2 @@
 #!/bin/bash
-python3 Reversi/iago.py
+pypy3 Reversi/iago.py

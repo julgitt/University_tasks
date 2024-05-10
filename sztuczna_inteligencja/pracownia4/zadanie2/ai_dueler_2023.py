@@ -454,11 +454,11 @@ class Player(object):
         self.threads = [
             threading.Thread(target=self._reader),
             threading.Thread(target=self._writer), ]
-        self.total_time = 0
-        self.start_time = None
         for t in self.threads:
             t.setDaemon(True)
             t.start()
+        self.total_time = 0
+        self.start_time = None
 
 
     def _reader(self):
