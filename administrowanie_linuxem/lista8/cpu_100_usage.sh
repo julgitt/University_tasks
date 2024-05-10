@@ -3,8 +3,7 @@
 function infinite_fun {
     sum=0
     while true; do
-        sum=$((sum + 3))
-        sum=$((sum / 2))
+        sum=$((sum + 1))
     done
 }
 

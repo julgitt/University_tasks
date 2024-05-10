@@ -1,7 +1,7 @@
 from random import shuffle
 from typing import Tuple, Optional
 from reversi import ReversiState
-
+import sys
 
 class AlphaBetaSearch:
 
@@ -27,9 +27,9 @@ class AlphaBetaSearch:
         if depth == 0:
             return self.heuristic(state), best_move
         elif state.terminal():
-            return state.result(), best_move
+            return state.result() * 10, best_move
 
-        value = - float("inf")
+        value = - sys.maxsize
         moves = state.moves(player)
         shuffle(moves)
         for move in moves:
@@ -51,7 +51,7 @@ class AlphaBetaSearch:
         elif state.terminal():
             return state.result(), best_move
 
-        value = float("inf")
+        value = sys.maxsize
         moves = state.moves(player)
         shuffle(moves)
         for move in moves:
