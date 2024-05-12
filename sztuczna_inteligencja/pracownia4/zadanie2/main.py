@@ -16,15 +16,15 @@ def send_output(output):
 
 class Program:
     if __name__ == "__main__":
+        send_output("RDY")
         player = 1
         reversi = ReversiState()
         search = AlphaBetaSearch()
         moves = 0
-        send_output("RDY")
 
         while True:
             command = read_input()
-            depth = (moves ** 3) // 50000 + 1
+            depth = (moves ** 3) // 14000 + 1
             if command[0] == "UGO":
                 player = 0
                 move_time = float(command[1])
@@ -60,3 +60,4 @@ class Program:
                 search = AlphaBetaSearch()
             elif command[0] == "BYE":
                 break
+

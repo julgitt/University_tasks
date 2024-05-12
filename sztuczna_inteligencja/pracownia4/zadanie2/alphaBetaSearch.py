@@ -61,6 +61,9 @@ class AlphaBetaSearch:
             penalty = 100.0 * (max_close - min_close)/(max_close + min_close)
         return -d
 
+    #def mobility(self):
+    #    return Max Player Moves - Min Player Moves) / (Max Player Moves + Min Player Moves)
+
     @staticmethod
     def another_heuristic(state: ReversiState):
         return state.result()
@@ -72,7 +75,7 @@ class AlphaBetaSearch:
         if depth == 0:
             return int(
                 1.2 * self.heuristic(state) + self.another_heuristic(state)
-                + 3.5 * self.corners_heuristic(state) + 2 * self.close_corner_penalty(state)
+                + 1 * self.corners_heuristic(state) + 0 * self.close_corner_penalty(state)
             ), best_move
         elif state.terminal():
             return state.result() * 1000, best_move
@@ -97,7 +100,7 @@ class AlphaBetaSearch:
         if depth == 0:
           return int(
                 1.2 * self.heuristic(state) + self.another_heuristic(state)
-                + 1.2 * self.corners_heuristic(state) + 2.5 * self.close_corner_penalty(state)
+                + 1 * self.corners_heuristic(state) + 0 * self.close_corner_penalty(state)
             ), best_move
         elif state.terminal():
             return state.result(), best_move
