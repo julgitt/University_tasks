@@ -52,6 +52,7 @@ class ReversiState:
         [-20, -50, -4,  1,  1, -4, -50, -20],
         [50, -20, 11,  8,  8, 11, -20, 50]
     ]
+
     def heuristic(self) -> int:
         res = 0
         for y in range(self.size):

@@ -24,7 +24,7 @@ class Program:
 
         while True:
             command = read_input()
-            depth = (moves ** 3) // 14000 + 1
+            depth =  (moves ** 3) // 14000 + 1 # 5
             if command[0] == "UGO":
                 player = 0
                 move_time = float(command[1])

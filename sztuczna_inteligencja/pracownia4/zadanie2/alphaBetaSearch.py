@@ -11,71 +11,67 @@ class AlphaBetaSearch:
         self.beta = beta
 
     @staticmethod
-    def heuristic(state: ReversiState):
+    def discs_score_heuristic(state: ReversiState):
+        return state.result()
+
+    @staticmethod
+    def weight_heuristic(state: ReversiState) -> int:
         res = 0
-        res2 = 0
         for y in range(state.size):
             for x in range(state.size):
                 b = state.board[y][x]
                 if b == 0:
                     res -= state.WEIGHTS[y][x]
-                    res2 += state.WEIGHTS[y][x]
                 elif b == 1:
                     res += state.WEIGHTS[y][x]
-                    res2 += state.WEIGHTS[y][x]
 
-        if res2 == 0:
-            res2 = 1
         return res
 
     @staticmethod
-    def corners_heuristic(state: ReversiState):
-        max_corners = min_corners = 0
+    def corners_heuristic(state: ReversiState) -> int:
+        res = 0
         for y, x in state.CORNERS:
             b = state.board[y][x]
             if b == 1:
-                max_corners += 1
+                res += 1
             if b == 0:
-                min_corners += 1
-        bonus = 0
-        d = max_corners - min_corners
-        if max_corners + min_corners != 0:
-            bonus = 100 * (max_corners - min_corners)/(max_corners + min_corners)
-        return d
+                res -= 1
+        return res
 
-
-    def close_corner_penalty(self, state):
-        min_close = max_close = 0
+    @staticmethod
+    def close_corner_heuristic(state: ReversiState) -> int:
+        res = 0
         for y, x in state.CLOSE_CORNERS:
             b = state.board[y][x]
             if b is None:
                 for _y, _x in state.CLOSE_CORNERS[(y, x)]:
                     _b = state.board[_y][_x]
                     if _b == 1:
-                        max_close += 1.0
+                        res += 1.0
                     if _b == 0:
-                        min_close += 1.0
-        penalty = 0
-        d = max_close - min_close
-        if (max_close + min_close != 0):
-            penalty = 100.0 * (max_close - min_close)/(max_close + min_close)
-        return -d
-
-    #def mobility(self):
-    #    return Max Player Moves - Min Player Moves) / (Max Player Moves + Min Player Moves)
+                        res -= 1.0
+        return - res
 
     @staticmethod
-    def another_heuristic(state: ReversiState):
-        return state.result()
-        #return 100 * state.result() / ((state.size * state.size) - len(state.free_fields))
+    def mobility_heuristic(state: ReversiState) -> int:
+        if state.moves(0) is None:
+            moves_min = 0
+        else:
+            moves_min = len(state.moves(0))
+        if state.moves(1) is None:
+            moves_max = 0
+        else:
+            moves_max = len(state.moves(1))
+        return moves_max - moves_min
 
     def max_value(self, state: ReversiState, depth: int, player: int, alpha: int, beta: int) \
             -> Tuple[int, Optional[Tuple[int, int]]]:
         best_move = None
         if depth == 0:
             return int(
-                1.2 * self.heuristic(state) + self.another_heuristic(state)
-                + 1 * self.corners_heuristic(state) + 0 * self.close_corner_penalty(state)
+                1.5 * self.discs_score_heuristic(state) + 1.2 * self.weight_heuristic(state)
+                + 6 * self.corners_heuristic(state) + 5 * self.close_corner_heuristic(state)
+                + 5 * self.mobility_heuristic(state)
             ), best_move
         elif state.terminal():
             return state.result() * 1000, best_move
@@ -98,9 +94,10 @@ class AlphaBetaSearch:
     def min_value(self, state: ReversiState, depth, player: int, alpha, beta) -> Tuple[int, Optional[Tuple[int, int]]]:
         best_move = None
         if depth == 0:
-          return int(
-                1.2 * self.heuristic(state) + self.another_heuristic(state)
-                + 1 * self.corners_heuristic(state) + 0 * self.close_corner_penalty(state)
+            return int(
+                2 * self.discs_score_heuristic(state) + self.weight_heuristic(state)
+                + 6 * self.corners_heuristic(state) + 5 * self.close_corner_heuristic(state)
+                + 5 * self.mobility_heuristic(state)
             ), best_move
         elif state.terminal():
             return state.result(), best_move
