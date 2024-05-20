@@ -18,7 +18,6 @@ class ReversiState:
         self.board: List[List[Optional[int]]] = self.initial_board()
         self.free_fields = set()
         self.move_list = []
-        self.history = []
         for i in range(self.size):
             for j in range(self.size):
                 if self.board[i][j] is None:
@@ -92,9 +91,8 @@ class ReversiState:
 
     # endregion
 
-    # region Do/Undo Move
+    # region Do Move
     def do_move(self, move: Optional[Tuple[int, int]], player: int) -> None:
-        self.history.append([x.copy() for x in self.board])
         self.move_list.append(move)
 
         if move is None:
@@ -116,12 +114,6 @@ class ReversiState:
             if self.get(x, y) == player:
                 for (nx, ny) in to_beat:
                     self.board[ny][nx] = player
-
-    def undo_move(self) -> None:
-        self.board = self.history.pop()
-        last_move = self.move_list.pop()
-        if last_move is not None:
-            self.free_fields |= {last_move}
 
     # endregion
 
@@ -159,6 +151,15 @@ class ReversiState:
         [50, -20, 11, 8, 8, 11, -20, 50]
     ]
 
+    # WEIGHTS = [[4, -3, 2, 2, 2, 2, -3, 4],
+    #        [-3, -4, -1, -1, -1, -1, -4, -3],
+    #        [2, -1, 1, 0, 0, 1, -1, 2],
+    #        [2, -1, 0, 1, 1, 0, -1, 2],
+    #        [2, -1, 0, 1, 1, 0, -1, 2],
+    #        [2, -1, 1, 0, 0, 1, -1, 2],
+    #        [-3, -4, -1, -1, -1, -1, -4, -3],
+    #        [4, -3, 2, 2, 2, 2, -3, 4]]
+
     def score_heuristic(self):
         return self.result()
 
@@ -195,21 +196,5 @@ class ReversiState:
         return moves_max - moves_min
 
     def heuristic(self) -> int:
-        return int(
-            1.5 * self.score_heuristic() + 1.2 * self.weight_heuristic()
-            + 6 * self.corners_heuristic() + 5 * self.mobility_heuristic()
-        )
+        return int(self.weight_heuristic())
     # endregion
-
-    # region Ways of Moving
-    def random_move(self, player: int) -> Optional[Tuple[int, int]]:
-        ms = self.moves(player)
-        if ms:
-            return choice(ms)
-        return None
-
-    def best_move(self, player: int, search, depth: int) -> Optional[Tuple[int, int]]:
-        _, move = search.min_value(self, depth, player, search.alpha, search.beta) if player == 0 else \
-            search.max_value(self, depth, player, search.alpha, search.beta)
-        return move
-# endregion

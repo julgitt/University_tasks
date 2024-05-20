@@ -260,29 +260,6 @@ class Jungle:
         return self.run_simulations(moves, player)
 
 
-    # def update(self, player: int, move_string):
-    #     assert player == self.curplayer
-    #     move = tuple(int(m) for m in move_string.split())
-    #     if len(move) != 4:
-    #         raise WrongMove
-    #     possible_moves = self.moves(player)
-    #     if not possible_moves:
-    #         if move != (-1, -1, -1, -1):
-    #             raise WrongMove
-    #         move = None
-    #     else:
-    #         move = ((move[0], move[1]), (move[2], move[3]))
-    #         if move not in possible_moves:
-    #             raise WrongMove
-    #     self.do_move(move)
-    #
-    #     if self.victory(player):
-    #         assert self.winner is not None
-    #         return 2 * self.winner - 1
-    #     else:
-    #         return None
-
-
 class Player(object):
     def __init__(self):
         self.game: Jungle = Jungle()

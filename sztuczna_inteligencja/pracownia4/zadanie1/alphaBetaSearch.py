@@ -9,23 +9,11 @@ class AlphaBetaSearch:
         self.alpha = alpha
         self.beta = beta
 
-    @staticmethod
-    def heuristic(state: ReversiState):
-        res = 0
-        for y in range(state.size):
-            for x in range(state.size):
-                b = state.board[y][x]
-                if b == 0:
-                    res -= state.WEIGHTS[y][x]
-                elif b == 1:
-                    res += state.WEIGHTS[y][x]
-        return res
-
     def max_value(self, state: ReversiState, depth: int, player: int, alpha: int, beta: int) \
             -> Tuple[int, Optional[Tuple[int, int]]]:
         best_move = None
         if depth == 0:
-            return self.heuristic(state), best_move
+            return state.heuristic(), best_move
         elif state.terminal():
             return state.result(), best_move
 
@@ -47,7 +35,7 @@ class AlphaBetaSearch:
     def min_value(self, state: ReversiState, depth, player: int, alpha, beta) -> Tuple[int, Optional[Tuple[int, int]]]:
         best_move = None
         if depth == 0:
-            return self.heuristic(state), best_move
+            return state.heuristic(), best_move
         elif state.terminal():
             return state.result(), best_move
 

@@ -27,29 +27,7 @@ class ReversiState:
         board[4][3] = 0
         return board
 
-# region Heuristic
-    WEIGHTS = [[20, -3, 11, 8, 8, 11, -3, 20],
-               [-3, -7, -4, 1, 1, -4, -7, -3],
-               [11, -4, 2, 2, 2, 2, -4, 11],
-               [8, 1, 2, -3, -3, 2, 1, 8],
-               [8, 1, 2, -3, -3, 2, 1, 8],
-               [11, -4, 2, 2, 2, 2, -4, 11],
-               [-3, -7, -4, 1, 1, -4, -7, -3],
-               [20, -3, 11, 8, 8, 11, -3, 20]]
-
-    def heuristic(self) -> int:
-        res = 0
-        for y in range(self.size):
-            for x in range(self.size):
-                board = self.board[y][x]
-                if board == 0:
-                    res -= self.WEIGHTS[y][x]
-                elif board == 1:
-                    res += self.WEIGHTS[y][x]
-        return res
-# endregion
-
-# region Debug
+    # region Debug
     def draw(self):
         for i in range(self.size):
             res = []
@@ -75,9 +53,10 @@ class ReversiState:
                     self.printer.print_circle(j, i, 'black')
                 if self.board[i][j] == 0:
                     self.printer.print_circle(j, i, 'white')
-# endregion
 
-# region Get Possible Moves
+    # endregion
+
+    # region Get Possible Moves
     def moves(self, player: int) -> List[Optional[Tuple[int, int]]]:
         res = []
         for (x, y) in self.free_fields:
@@ -104,9 +83,10 @@ class ReversiState:
         if 0 <= x < self.size and 0 <= y < self.size:
             return self.board[y][x]
         return None
-# endregion
 
-# region Do/Undo Move
+    # endregion
+
+    # region Do/Undo Move
     def do_move(self, move: Optional[Tuple[int, int]], player: int) -> None:
         self.history.append([x.copy() for x in self.board])
         self.move_list.append(move)
@@ -136,9 +116,10 @@ class ReversiState:
         last_move = self.move_list.pop()
         if last_move is not None:
             self.free_fields |= {last_move}
-# endregion
 
-# region Board State
+    # endregion
+
+    # region Board State
     def result(self) -> int:
         res = 0
         for y in range(self.size):
@@ -157,9 +138,36 @@ class ReversiState:
             return False
         is_move_impossible = self.move_list[-1] == self.move_list[-2] is None
         return is_move_impossible
-# endregion
 
-# region Ways of Moving
+    # endregion
+
+    # region Heuristic
+    # https://courses.cs.washington.edu/courses/cse573/04au/Project/mini1/RUSSIA/Final_Paper.pdf
+    WEIGHTS = [[4, -3, 2, 2, 2, 2, -3, 4],
+               [-3, -4, -1, -1, -1, -1, -4, -3],
+               [2, -1, 1, 0, 0, 1, -1, 2],
+               [2, -1, 0, 1, 1, 0, -1, 2],
+               [2, -1, 0, 1, 1, 0, -1, 2],
+               [2, -1, 1, 0, 0, 1, -1, 2],
+               [-3, -4, -1, -1, -1, -1, -4, -3],
+               [4, -3, 2, 2, 2, 2, -3, 4]]
+
+    def stability(self) -> int:
+        res = 0
+        for y in range(self.size):
+            for x in range(self.size):
+                board = self.board[y][x]
+                if board == 0:
+                    res -= self.WEIGHTS[y][x]
+                elif board == 1:
+                    res += self.WEIGHTS[y][x]
+        return res
+
+    def heuristic(self) -> float:
+        return self.stability()
+    # endregion
+
+    # region Ways of Moving
     def random_move(self, player: int) -> Optional[Tuple[int, int]]:
         ms = self.moves(player)
         if ms:
