@@ -8,16 +8,16 @@ C = 1.5
 
 
 class Node:
-    def __init__(self, state: chess.Board, done: bool, parent, action, player: int, agent):
+    def __init__(self, state: chess.Board, done: bool, parent: Optional['Node'],
+                 action: Optional[chess.Move], agent: chess.COLORS):
         self.children: dict = {}
         self.total_reward: int = 0
         self.visit_count: int = 0
         self.game: chess.Board = state
         self.done: bool = done
         self.parent: Optional[Node] = parent
-        self.action = action
-        self.player = player
-        self.agent = agent
+        self.action: chess.Move = action
+        self.agent: int = agent
 
     def get_ucb_score(self) -> float:
         if self.visit_count == 0:
@@ -27,9 +27,9 @@ class Node:
         if top_node.parent:
             top_node = top_node.parent
 
-        return self.total_reward / self.visit_count + 1.5 * sqrt(log(top_node.visit_count) / self.visit_count)
+        return self.total_reward / self.visit_count + 1 * sqrt(log(top_node.visit_count) / self.visit_count)
 
-    def expand(self):
+    def expand(self) -> None:
         if self.done:
             return
 
@@ -38,7 +38,7 @@ class Node:
         for move in moves:
             new_game = deepcopy(self.game)
             new_game.push(move)
-            children[move] = Node(new_game, new_game.is_game_over(), self, move, 1 - self.player, self.agent)
+            children[move] = Node(new_game, new_game.is_game_over(), self, move, self.agent)
 
         self.children = children
 
@@ -49,7 +49,7 @@ class Node:
             children = current.children
             max_score = max(c.get_ucb_score() for c in children.values())
             actions = [a for a, c in children.items() if c.get_ucb_score() == max_score]
-            if len(actions) == 0:
+            if not actions:
                 print("error zero length ", max_score)
             action = choice(actions)
             current = children[action]
@@ -57,7 +57,7 @@ class Node:
         if current.visit_count < 1:
             current.total_reward += current.simulation()
         else:
-            current.create_children()
+            current.expand()
             if current.children:
                 current = choice(list(current.children.values()))
             current.total_reward += current.simulation()
@@ -76,17 +76,16 @@ class Node:
             return 0
         v = 0
         new_game = deepcopy(self.game)
-        while not new_game.is_game_over():
+        for _ in range(20):
+            if new_game.is_game_over():
+                break
             action = choice(list(new_game.legal_moves))
             new_game.push(action)
-            if self.agent == 1:
-                v += Node.heuristic(new_game)
-            else:
-                v -= Node.heuristic(new_game)
+            v += heuristic(new_game, self.agent)
 
         return v
 
-    def next(self):
+    def next(self) -> Tuple['Node', str]:
         if self.done:
             raise ValueError("game has ended")
 
@@ -99,64 +98,78 @@ class Node:
 
         max_children = [c for a, c in children.items() if c.visit_count == max_visit_count]
 
-        if len(max_children) == 0:
-            print("error zero length ", max_visit_count)
+        #if len(max_children) == 0:
+        #    print("error zero length ", max_visit_count)
 
         max_child = choice(max_children)
 
         max_child.parent = None
 
-        return max_child, max_child.move.uci()
+        return max_child, max_child.action.uci()
 
-    def next_opponent(self, move):
+    def next_opponent(self, move: str) -> 'Node':
         if self.done:
             raise ValueError("game has ended")
 
-        #if not self.children:
-        #    self.extend()
-
         if not self.children:
-            new_state = deepcopy(self.game)
-            if move != (-1, -1):
-                new_state.push(move)
-            self.children[move] = Node(new_state, new_state.is_game_over(), self, move, 1 - self.player, self.agent)
+            self.expand()
 
         children = self.children
 
-        for m, c in list(children.keys()):
+        for m, c in list(children.items()):
             if m.uci() == move:
-                children[m].parent = None
-                return children[m]
+                c.parent = None
+                return c
 
         raise ValueError("Move is not possible")
 
-    @staticmethod
-    def heuristic(game: chess.Board, player: int):
-        return 0
 
-        # piece_values = {
-        #     chess.PAWN: 1,
-        #     chess.KNIGHT: 3,
-        #     chess.BISHOP: 3,
-        #     chess.ROOK: 5,
-        #     chess.QUEEN: 9
-        # }
-        #
-        # white_material = 0
-        # black_material = 0
-        #
-        # for square in chess.SQUARES:
-        #     piece = game.piece_at(square)
-        #     if piece:
-        #         value = piece_values.get(piece.piece_type, 0)
-        #         if piece.color == chess.WHITE:
-        #             white_material += value
-        #         else:
-        #             black_material += value
-        # if player == 0:
-        #     return white_material - black_material
-        #
-        # return black_material - white_material
+def check(game: chess.Board, player: chess.COLORS) -> float:
+    if game.is_checkmate():
+        if game.turn == player:
+            return -float("inf")
+        return float("inf")
+    return 0
+
+
+def mobility(game: chess.Board, player: chess.COLORS) -> int:
+    res = 0
+    if game.legal_moves:
+        for move in game.legal_moves:
+            if game.color_at(move.from_square) == player:
+                res += 1
+            else:
+                res -= 1
+    return res
+
+
+def score_heuristic(game: chess.Board, player: chess.COLORS) -> int:
+    piece_values = {
+        chess.PAWN: 1,
+        chess.KNIGHT: 3,
+        chess.BISHOP: 3,
+        chess.ROOK: 5,
+        chess.QUEEN: 9
+    }
+    white = 0
+    black = 0
+
+    for square in chess.SQUARES:
+        piece = game.piece_at(square)
+        if piece:
+            value = piece_values.get(piece.piece_type, 0)
+            if piece.color == chess.WHITE:
+                white += value
+            else:
+                black += value
+    if player == 0:
+        return white - black
+
+    return black - white
+
+
+def heuristic(game: chess.Board, player: int) -> float:
+    return score_heuristic(game, player) + 0.5 * mobility(game, player) + check(game, player)
 
 
 class MCTS:
@@ -164,9 +177,10 @@ class MCTS:
         self.explores = explores
 
     @staticmethod
-    def next(tree: Node) -> Tuple[Node, Tuple[int, int]]:
+    def next(tree: Node) -> Tuple[Node, str]:
         start = time()
-        while time() - start < 0.45:
+        while time() - start < 0.60:
+        #for i in range(100):
             tree.explore()
 
         next_tree, next_action = tree.next()
@@ -174,7 +188,7 @@ class MCTS:
         return next_tree, next_action
 
     @staticmethod
-    def next_opponent(tree: Node, move: Tuple[int, int]) -> Node:
+    def next_opponent(tree: Node, move: str) -> Node:
         next_tree = tree.next_opponent(move)
 
         return next_tree

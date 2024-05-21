@@ -1,15 +1,15 @@
 from time import time
 from math import sqrt, log
 from random import choice
-from typing import Tuple, Optional, Any
+from typing import Tuple, Optional, Dict
 from reversi import ReversiState
 from copy import deepcopy
 import sys
 
 
 class Node:
-    def __init__(self, state: ReversiState, done: bool, parent, action: Tuple[int, int], player: int, agent: int):
-        self.children: dict[Tuple[int, int], Node] = {}
+    def __init__(self, state: ReversiState, done: bool, parent: Optional['Node'], action: Tuple[int, int], player: int, agent: int):
+        self.children: Dict[Tuple[int, int], Node] = {}
         self.total_reward: int = 0
         self.visit_count: int = 0
         self.state: ReversiState = state
@@ -27,28 +27,20 @@ class Node:
         if top_node.parent:
             top_node = top_node.parent
 
-        return self.total_reward / self.visit_count + 1.5 * sqrt((log(top_node.visit_count)) / self.visit_count)
+        return self.total_reward / self.visit_count + 2 * sqrt(log(top_node.visit_count) / self.visit_count)
 
     def expand(self) -> None:
         if self.done:
             return
-        actions = []
-        games = []
+
+        children = {}
         moves = self.state.moves(self.player)
         for move in moves:
             new_game = deepcopy(self.state)
             new_game.do_move(move, self.player)
-            games.append(new_game)
             if move is None:
                 move = (-1, -1)
-            actions.append(move)
-
-        children = {}
-        for action, game in zip(actions, games):
-            children[action] = Node(game, game.terminal(), self, action, 1 - self.player, self.agent)
-
-        if not actions:
-            children[(-1, -1)] = Node(deepcopy(self.state), self.done, self, (-1, -1), 1 - self.player, self.agent)
+            children[move] = Node(new_game, new_game.terminal(), self, move, 1 - self.player, self.agent)
 
         self.children = children
 
@@ -87,6 +79,9 @@ class Node:
         v = 0
         new_game = deepcopy(self.state)
         player = self.player
+        # for i in range(20):
+        #     if new_game.terminal():
+        #         break
         while not new_game.terminal():
             action = choice(new_game.moves(player))
             new_game.do_move(action, player)
@@ -98,7 +93,7 @@ class Node:
 
         return v
 
-    def next(self) -> Tuple[Any, Tuple[int, int]]:
+    def next(self) -> Tuple['Node', Tuple[int, int]]:
         if self.done:
             raise ValueError("game has ended")
 
@@ -120,20 +115,18 @@ class Node:
 
         return max_child, max_child.action
 
-    def next_opponent(self, move) -> Any:
+    def next_opponent(self, move: Tuple[int, int]) -> 'Node':
         if self.done:
             raise ValueError("game has ended")
 
         if not self.children:
-            new_state = deepcopy(self.state)
-            if move != (-1, -1):
-                new_state.do_move(move, self.player)
-            self.children[move] = Node(new_state, new_state.terminal(), self, move, 1 - self.player, self.agent)
+            self.expand()
 
         children = self.children
 
         for m, c in children.items():
             if m == move:
+                c.parent = None
                 return c
 
         raise ValueError("Move is not possible")
@@ -146,7 +139,7 @@ class MCTS:
     @staticmethod
     def next(tree: Node) -> Tuple[Node, Tuple[int, int]]:
         start = time()
-        while time() - start < 0.45:
+        while time() - start < 0.5:
             tree.explore()
 
         next_tree, next_action = tree.next()

@@ -4,11 +4,6 @@ from printer import Printer
 
 
 class ReversiState:
-    CORNERS = [(0, 0), (0, 7), (7, 0), (7, 7)]
-    CLOSE_CORNERS = {(0, 0): [(0, 1), (1, 0), (1, 1)],  # top left
-                     (0, 7): [(0, 6), (1, 7), (1, 6)],  # top right
-                     (7, 0): [(6, 0), (7, 1), (6, 1)],  # bot left
-                     (7, 7): [(6, 7), (7, 6), (6, 6)]}  # bot right
     DIRS: List[Tuple[int, int]] = [(0, 1), (1, 0), (-1, 0), (0, -1),
                                    (1, 1), (-1, -1), (1, -1), (-1, 1)]
 
@@ -151,15 +146,6 @@ class ReversiState:
         [50, -20, 11, 8, 8, 11, -20, 50]
     ]
 
-    # WEIGHTS = [[4, -3, 2, 2, 2, 2, -3, 4],
-    #        [-3, -4, -1, -1, -1, -1, -4, -3],
-    #        [2, -1, 1, 0, 0, 1, -1, 2],
-    #        [2, -1, 0, 1, 1, 0, -1, 2],
-    #        [2, -1, 0, 1, 1, 0, -1, 2],
-    #        [2, -1, 1, 0, 0, 1, -1, 2],
-    #        [-3, -4, -1, -1, -1, -1, -4, -3],
-    #        [4, -3, 2, 2, 2, 2, -3, 4]]
-
     def score_heuristic(self):
         return self.result()
 
@@ -173,27 +159,6 @@ class ReversiState:
                 elif b == 1:
                     res += self.WEIGHTS[y][x]
         return res
-
-    def corners_heuristic(self) -> int:
-        res = 0
-        for y, x in self.CORNERS:
-            b = self.board[y][x]
-            if b == 1:
-                res += 1
-            if b == 0:
-                res -= 1
-        return res
-
-    def mobility_heuristic(self) -> int:
-        if self.moves(0) is None:
-            moves_min = 0
-        else:
-            moves_min = len(self.moves(0))
-        if self.moves(1) is None:
-            moves_max = 0
-        else:
-            moves_max = len(self.moves(1))
-        return moves_max - moves_min
 
     def heuristic(self) -> int:
         return int(self.weight_heuristic())
