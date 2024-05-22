@@ -25,7 +25,6 @@ class Jungle:
     dirs: List[Tuple[int, int]] = [(0, 1), (1, 0), (-1, 0), (0, -1)]
     rat, cat, dog, wolf, jaguar, tiger, lion, elephant = range(8)
 
-
     def __init__(self):
         self.board: List[List[Optional[Tuple[int, int]]]] = self.initial_board()
         self.pieces: dict[int, dict[int, Tuple[int, int]]] = {0: {}, 1: {}}
@@ -325,7 +324,6 @@ class Player(object):
                 break
             else:
                 assert cmd == 'UGO'
-                #  assert not self.game.move_list
                 self.my_player = 0
 
             moves = self.game.moves(self.my_player)
