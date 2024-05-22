@@ -1,9 +1,13 @@
-from random import choice
 from typing import List, Tuple, Optional
 from printer import Printer
 
 
 class ReversiState:
+    CORNERS = [(0, 0), (0, 7), (7, 0), (7, 7)]
+    CLOSE_CORNERS = {(0, 0): [(0, 1), (1, 0), (1, 1)],  # top left
+                     (0, 7): [(0, 6), (1, 7), (1, 6)],  # top right
+                     (7, 0): [(6, 0), (7, 1), (6, 1)],  # bot left
+                     (7, 7): [(6, 7), (7, 6), (6, 6)]}  # bot right
     DIRS: List[Tuple[int, int]] = [(0, 1), (1, 0), (-1, 0), (0, -1),
                                    (1, 1), (-1, -1), (1, -1), (-1, 1)]
 
@@ -13,6 +17,7 @@ class ReversiState:
         self.board: List[List[Optional[int]]] = self.initial_board()
         self.free_fields = set()
         self.move_list = []
+        self.history = []
         for i in range(self.size):
             for j in range(self.size):
                 if self.board[i][j] is None:
@@ -86,8 +91,9 @@ class ReversiState:
 
     # endregion
 
-    # region Do Move
+    # region Do/Undo Move
     def do_move(self, move: Optional[Tuple[int, int]], player: int) -> None:
+        self.history.append([x.copy() for x in self.board])
         self.move_list.append(move)
 
         if move is None:
@@ -109,6 +115,12 @@ class ReversiState:
             if self.get(x, y) == player:
                 for (nx, ny) in to_beat:
                     self.board[ny][nx] = player
+
+    def undo_move(self) -> None:
+        self.board = self.history.pop()
+        last_move = self.move_list.pop()
+        if last_move is not None:
+            self.free_fields |= {last_move}
 
     # endregion
 
@@ -149,17 +161,17 @@ class ReversiState:
     def score_heuristic(self):
         return self.result()
 
-    def weight_heuristic(self) -> int:
+    def weight_heuristic(self, player: int) -> int:
         res = 0
         for y in range(self.size):
             for x in range(self.size):
                 b = self.board[y][x]
-                if b == 0:
-                    res -= self.WEIGHTS[y][x]
-                elif b == 1:
+                if b == player:
                     res += self.WEIGHTS[y][x]
+                else:
+                    res -= self.WEIGHTS[y][x]
         return res
 
-    def heuristic(self) -> int:
-        return int(self.weight_heuristic())
+    def heuristic(self, player: int) -> int:
+        return int(self.weight_heuristic(player))
     # endregion

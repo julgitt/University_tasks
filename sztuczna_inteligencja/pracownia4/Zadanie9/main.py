@@ -24,14 +24,10 @@ class Program:
         while True:
             command = read_input()
             if command[0] == "UGO":
-                move_time = float(command[1])
-                game_time = float(command[2])
                 mcts_tree = Node(reversi, False, None, (0, 0), 0, 0)
                 mcts_tree, m = mcts.next(mcts_tree)
                 send_output(f"IDO {m[0]} {m[1]}")
             elif command[0] == "HEDID":
-                move_time = float(command[1])
-                game_time = float(command[2])
                 # opponents move
                 opponent_move = int(command[3]), int(command[4])
                 mcts_tree = mcts.next_opponent(mcts_tree, opponent_move)
