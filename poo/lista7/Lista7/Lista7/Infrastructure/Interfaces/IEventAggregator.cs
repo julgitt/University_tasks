@@ -1,11 +1,4 @@
-﻿using Lista7.ViewModels.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Lista7.ViewModels.Interfaces
+﻿namespace Lista7.Infrastructure.Interfaces
 {
     public interface IEventAggregator
     {

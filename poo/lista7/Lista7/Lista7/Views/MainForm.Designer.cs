@@ -1,23 +1,10 @@
-﻿using Lista7.ViewModels.Classes.Notifications;
-using Lista7.ViewModels.Classes;
-using Lista7.ViewModels;
-using Microsoft.VisualBasic.ApplicationServices;
-using Lista7.Models;
-using Lista7.Repositories;
-
-namespace Lista7
+﻿
+namespace Lista7.Views
 {
     partial class MainForm
     {
-        /// <summary>
-        ///  Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        ///  Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -29,24 +16,11 @@ namespace Lista7
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            TreeNode treeNode1 = new TreeNode("Jan Kowalski");
-            TreeNode treeNode2 = new TreeNode("Studenci", new TreeNode[] { treeNode1 });
-            TreeNode treeNode3 = new TreeNode("Bożydar Adamski");
-            TreeNode treeNode4 = new TreeNode("Wykładowcy", new TreeNode[] { treeNode3 });
             splitContainer1 = new SplitContainer();
             treeView1 = new TreeView();
             dataGridView1 = new DataGridView();
-            surname = new DataGridViewTextBoxColumn();
-            name = new DataGridViewTextBoxColumn();
-            birthdate = new DataGridViewTextBoxColumn();
-            adress = new DataGridViewTextBoxColumn();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -76,19 +50,6 @@ namespace Lista7
             treeView1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             treeView1.Location = new Point(35, 12);
             treeView1.Name = "treeView1";
-            treeNode1.Name = "jan_kowalski";
-            treeNode1.Tag = "1";
-            treeNode1.Text = "Jan Kowalski";
-            treeNode2.Name = "Studenci";
-            treeNode2.Tag = "students";
-            treeNode2.Text = "Studenci";
-            treeNode3.Name = "bozydar_adamski";
-            treeNode3.Tag = "1";
-            treeNode3.Text = "Bożydar Adamski";
-            treeNode4.Name = "teachers";
-            treeNode4.Tag = "teachers";
-            treeNode4.Text = "Wykładowcy";
-            treeView1.Nodes.AddRange(new TreeNode[] { treeNode2, treeNode4 });
             treeView1.Size = new Size(272, 426);
             treeView1.TabIndex = 0;
             treeView1.AfterSelect += treeViewCategories_AfterSelect;
@@ -97,7 +58,6 @@ namespace Lista7
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { });
             dataGridView1.Dock = DockStyle.Fill;
             dataGridView1.Location = new Point(0, 0);
             dataGridView1.Name = "dataGridView1";
@@ -127,10 +87,5 @@ namespace Lista7
         private SplitContainer splitContainer1;
         private TreeView treeView1;
         private DataGridView dataGridView1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private DataGridViewTextBoxColumn surname;
-        private DataGridViewTextBoxColumn name;
-        private DataGridViewTextBoxColumn birthdate;
-        private DataGridViewTextBoxColumn adress;
     }
 }

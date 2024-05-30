@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Lista7.ViewModels.Classes.Notifications;
-using Lista7.Repositories;
+﻿using Lista7.Repositories;
 using Lista7.Models;
-using Lista7.ViewModels.Interfaces;
-using Lista7.ViewModels.Classes;
-using Microsoft.VisualBasic.ApplicationServices;
-
+using Lista7.Infrastructure.Notifications;
+using Lista7.Infrastructure.Interfaces;
+    
 namespace Lista7.ViewModels
 {
     public partial class UserDataGrid :
@@ -18,38 +11,59 @@ namespace Lista7.ViewModels
         private DataGridView _dataGridView;
         private StudentsRepository _studentsRepository;
         private TeachersRepository _teachersRepository;
-           
-        public UserDataGrid(DataGridView grid, StudentsRepository students, TeachersRepository teachers )
+        private IEventAggregator _eventAggregator;
+
+        public UserDataGrid(DataGridView grid, StudentsRepository students, TeachersRepository teachers, IEventAggregator eventAggregator)
         {
             _dataGridView = grid;
             _studentsRepository = students;
             _teachersRepository = teachers;
+            _eventAggregator = eventAggregator;
+
+            _eventAggregator.AddSubscriber<CategorySelectedNotification>(this);
+            _eventAggregator.AddSubscriber<UserSelectedNotification>(this);
         }
 
         void ISubscriber<CategorySelectedNotification>.Handle(CategorySelectedNotification notification)
         {
-            var selectedCategory = notification.category;
-            if (selectedCategory == "students") {
-                _dataGridView.DataSource = _studentsRepository.GetAllStudents();
-            } else if (selectedCategory == "teachers")
+            switch (notification.Category)
             {
-                _dataGridView.DataSource = _teachersRepository.GetAllTeachers();
+                case UserCategory.Students:
+                    UpdateDataGrid(_studentsRepository.GetAllStudents().ToList());
+                    break;
+                case UserCategory.Teachers:
+                    UpdateDataGrid(_teachersRepository.GetAllTeachers().ToList());
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
         void ISubscriber<UserSelectedNotification>.Handle(UserSelectedNotification notification)
         {
-            var userType = notification.type;
-            var userId = notification.id;
-            if (userType == "students")
+            switch (notification.Category)
             {
-                _dataGridView.DataSource = new[] { _studentsRepository.GetStudentById(userId) };
+                case UserCategory.Students:
+                    UpdateDataGrid(new List<Student> { _studentsRepository.GetStudentById(notification.Id) });
+                    break;
+                case UserCategory.Teachers:
+                    UpdateDataGrid(new List<Teacher> { _teachersRepository.GetTeacherById(notification.Id) });
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            else if (userType == "teachers")
+        }
+
+        private void UpdateDataGrid<T>(List<T> data)
+        {
+            if (_dataGridView.InvokeRequired)
             {
-                _dataGridView.DataSource = new[] { _teachersRepository.GetTeacherById(userId) };
+                _dataGridView.Invoke(new Action(() => _dataGridView.DataSource = data));
+            }
+            else
+            {
+                _dataGridView.DataSource = data;
             }
         }
     }
-
 }

@@ -18,7 +18,7 @@ namespace Lista7.Repositories
 
         public IEnumerable<Student> GetAllStudents()
         {
-            return _students;
+            return new List<Student>(_students);
         }
 
         public Student GetStudentById(int id)

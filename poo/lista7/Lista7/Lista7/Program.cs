@@ -1,10 +1,5 @@
 using Lista7;
-using Lista7.ViewModels.Classes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Lista7.Views;
 
 namespace WindowsFormsApp1
 {
@@ -18,8 +13,6 @@ namespace WindowsFormsApp1
         {
             MainForm mainForm = new MainForm();
             
-
-
             Application.EnableVisualStyles();
             Application.Run(mainForm);
         }

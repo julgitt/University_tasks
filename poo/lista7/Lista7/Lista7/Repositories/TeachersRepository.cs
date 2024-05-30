@@ -18,7 +18,7 @@ namespace Lista7.Repositories
 
         public IEnumerable<Teacher> GetAllTeachers()
         {
-            return _teachers;
+            return new List<Teacher>(_teachers);
         }
 
         public Teacher GetTeacherById(int id)
