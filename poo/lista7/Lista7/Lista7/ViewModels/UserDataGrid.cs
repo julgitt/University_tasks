@@ -6,7 +6,8 @@ using Lista7.Infrastructure.Interfaces;
 namespace Lista7.ViewModels
 {
     public partial class UserDataGrid :
-        ISubscriber<CategorySelectedNotification>, ISubscriber<UserSelectedNotification>
+        ISubscriber<CategorySelectedNotification>,
+        ISubscriber<UserSelectedNotification>
     {
         private DataGridView _dataGridView;
         private StudentsRepository _studentsRepository;

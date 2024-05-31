@@ -2,8 +2,8 @@
 {
     public interface IEventAggregator
     {
-        void AddSubscriber<T>(ISubscriber<T> Subscriber);
-        void RemoveSubscriber<T>(ISubscriber<T> Subscriber);
-        void Publish<T>(T Event);
+        public void AddSubscriber<T>(ISubscriber<T> Subscriber);
+        public void RemoveSubscriber<T>(ISubscriber<T> Subscriber);
+        public void Publish<T>(T Event);
     }
 }

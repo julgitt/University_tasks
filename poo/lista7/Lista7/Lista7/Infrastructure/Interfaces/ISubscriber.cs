@@ -1,8 +1,7 @@
-﻿
-namespace Lista7.Infrastructure.Interfaces
+﻿namespace Lista7.Infrastructure.Interfaces
 {
     public interface ISubscriber<T>
     {
-        void Handle(T notification);
+        public void Handle(T notification);
     }
 }

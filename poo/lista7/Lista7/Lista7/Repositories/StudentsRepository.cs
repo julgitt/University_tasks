@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Lista7.Models;
-using System.Threading.Tasks;
+﻿using Lista7.Models;
 
 namespace Lista7.Repositories
 {
     public class StudentsRepository
     {
         private List<Student> _students;
+        private static int _nextId = 1;
 
         public StudentsRepository()
         {
@@ -23,11 +19,37 @@ namespace Lista7.Repositories
 
         public Student GetStudentById(int id)
         {
-            return _students.Find(student => student.Id == id);
+            Student? student = _students.Find(student => student.Id == id);
+            if (student == null)
+            {
+                throw new Exception("Student not found for given id");
+            }
+
+            return student;
+        }
+
+        public void UpdateStudent(Student student)
+        {
+            if (student == null)
+            {
+                throw new ArgumentNullException(nameof(student), "Student cannot be null.");
+            }
+
+            var existingStudent = _students.Find(s => s.Id == student.Id);
+            if (existingStudent != null)
+            {
+                existingStudent.Name = student.Name;
+                existingStudent.Age = student.Age;
+            }
         }
 
         public void AddStudent(Student student)
         {
+            if (student == null)
+            {
+                throw new ArgumentNullException(nameof(student), "Student cannot be null.");
+            }
+            student.Id = _nextId++;
             _students.Add(student);
         }
 

@@ -28,76 +28,73 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBox1 = new TextBox();
-            textBox2 = new TextBox();
-            textBox3 = new TextBox();
-            button_ok = new Button();
-            button_cancel = new Button();
-            SuspendLayout();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.button_ok = new System.Windows.Forms.Button();
+            this.button_cancel = new System.Windows.Forms.Button();
+            this.SuspendLayout();
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(84, 44);
-            textBox1.Name = "textBox1";
-            textBox1.PlaceholderText = "Imię";
-            textBox1.Size = new Size(150, 31);
-            textBox1.TabIndex = 0;
+            this.textBox1.Location = new System.Drawing.Point(59, 26);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.PlaceholderText = "Imię";
+            this.textBox1.Size = new System.Drawing.Size(106, 23);
+            this.textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
-            textBox2.Location = new Point(84, 105);
-            textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "Nazwisko";
-            textBox2.Size = new Size(150, 31);
-            textBox2.TabIndex = 1;
-            // 
-            // textBox3
-            // 
-            textBox3.Location = new Point(84, 166);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(150, 31);
-            textBox3.TabIndex = 2;
+            this.textBox2.Location = new System.Drawing.Point(59, 63);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.PlaceholderText = "Wiek";
+            this.textBox2.Size = new System.Drawing.Size(106, 23);
+            this.textBox2.TabIndex = 1;
             // 
             // button_ok
             // 
-            button_ok.Location = new Point(649, 406);
-            button_ok.Name = "button_ok";
-            button_ok.Size = new Size(112, 34);
-            button_ok.TabIndex = 3;
-            button_ok.Text = "Ok";
-            button_ok.UseVisualStyleBackColor = true;
-            button_ok.Click += button1_Click;
+            this.button_ok.Location = new System.Drawing.Point(454, 244);
+            this.button_ok.Margin = new System.Windows.Forms.Padding(2);
+            this.button_ok.Name = "button_ok";
+            this.button_ok.Size = new System.Drawing.Size(78, 20);
+            this.button_ok.TabIndex = 3;
+            this.button_ok.Text = "Ok";
+            this.button_ok.UseVisualStyleBackColor = true;
+            this.button_ok.Click += new System.EventHandler(this.button_ok_Click);
             // 
             // button_cancel
             // 
-            button_cancel.Location = new Point(531, 406);
-            button_cancel.Name = "button_cancel";
-            button_cancel.Size = new Size(112, 34);
-            button_cancel.TabIndex = 4;
-            button_cancel.Text = "Cancel";
-            button_cancel.UseVisualStyleBackColor = true;
+            this.button_cancel.Location = new System.Drawing.Point(372, 244);
+            this.button_cancel.Margin = new System.Windows.Forms.Padding(2);
+            this.button_cancel.Name = "button_cancel";
+            this.button_cancel.Size = new System.Drawing.Size(78, 20);
+            this.button_cancel.TabIndex = 4;
+            this.button_cancel.Text = "Cancel";
+            this.button_cancel.UseVisualStyleBackColor = true;
+            this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
             // 
-            // EditUserForm
+            // UserForm
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(button_cancel);
-            Controls.Add(button_ok);
-            Controls.Add(textBox3);
-            Controls.Add(textBox2);
-            Controls.Add(textBox1);
-            Name = "EditUserForm";
-            Text = "EditUserForm";
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(560, 270);
+            this.Controls.Add(this.button_cancel);
+            this.Controls.Add(this.button_ok);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBox1);
+            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Name = "UserForm";
+            this.Text = "EditUserForm";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
 
         private TextBox textBox1;
         private TextBox textBox2;
-        private TextBox textBox3;
         private Button button_ok;
         private Button button_cancel;
     }

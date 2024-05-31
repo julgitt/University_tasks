@@ -6,6 +6,7 @@ namespace Lista7.Infrastructure.Notifications
     {
         public int Id { get; }
         public UserCategory Category { get; }
+
         public UserSelectedNotification(int id, UserCategory category)
         {
             this.Id = id;

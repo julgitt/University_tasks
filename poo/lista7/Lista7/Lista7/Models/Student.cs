@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Lista7.Models.Interfaces;
 
 namespace Lista7.Models
 {
-    public class Student
+    public class Student : IUser
     {
         public int Id { get; set; }
         public string Name { get; set; }

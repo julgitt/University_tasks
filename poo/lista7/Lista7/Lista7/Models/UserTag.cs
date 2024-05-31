@@ -2,13 +2,13 @@
 {
     public class UserTag
     {
-        public UserCategory UserCategory { get; set; }
-        public int Id { get; set; }
+        public UserCategory userCategory;
+        public int id;
 
         public UserTag(UserCategory userCategory, int id)
         {
-            UserCategory = userCategory;
-            Id = id;
+            this.userCategory = userCategory;
+            this.id = id;
         }
     }
 }

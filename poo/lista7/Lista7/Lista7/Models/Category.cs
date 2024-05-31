@@ -1,5 +1,4 @@
-﻿
-namespace Lista7.Models
+﻿namespace Lista7.Models
 {
     public enum UserCategory
     {
