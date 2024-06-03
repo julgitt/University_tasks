@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Strategy_Pattern.Strategy
+﻿namespace StrategyPattern.Strategy
 {
-    internal interface IDataStrategy
+    public interface IDataStrategy
     {
+        void Connect();
+        object GetData();
+        void ProcessData(object data);
+        void Close();
     }
 }
