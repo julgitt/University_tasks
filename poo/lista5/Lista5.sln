@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zad1", "Zad1\Zad1.csproj", "{9C195458-477E-457B-98E7-E2A7FCF39A7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Facade", "Zad1\Facade.csproj", "{9C195458-477E-457B-98E7-E2A7FCF39A7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zad2", "Zad2\Zad2.csproj", "{8DBED69C-BCFB-4272-86B2-AE7AEC1D3EC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Decorator", "Zad2\Decorator.csproj", "{8DBED69C-BCFB-4272-86B2-AE7AEC1D3EC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zad3", "Zad3\Zad3.csproj", "{B3ED5E36-CEFD-40A8-AD4E-E31820F2037B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Adapter", "Zad3\Adapter.csproj", "{B3ED5E36-CEFD-40A8-AD4E-E31820F2037B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zad4", "Zad4\Zad4.csproj", "{481BA8B9-58C4-43F9-B724-C31431123FED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bridge", "Zad4\Bridge.csproj", "{481BA8B9-58C4-43F9-B724-C31431123FED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
