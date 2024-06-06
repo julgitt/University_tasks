@@ -16,7 +16,7 @@ class AlphaBetaSearch:
         if depth == 0:
             return state.heuristic(), best_move
         elif state.terminal():
-            return state.result(), best_move
+            return state.result() * 1000, best_move
 
         value = -float("inf")
         moves = state.moves(player)

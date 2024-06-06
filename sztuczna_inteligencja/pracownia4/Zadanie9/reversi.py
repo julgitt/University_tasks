@@ -3,11 +3,6 @@ from printer import Printer
 
 
 class ReversiState:
-    # CORNERS = [(0, 0), (0, 7), (7, 0), (7, 7)]
-    # CLOSE_CORNERS = {(0, 0): [(0, 1), (1, 0), (1, 1)],  # top left
-    #                  (0, 7): [(0, 6), (1, 7), (1, 6)],  # top right
-    #                  (7, 0): [(6, 0), (7, 1), (6, 1)],  # bot left
-    #                  (7, 7): [(6, 7), (7, 6), (6, 6)]}  # bot right
     DIRS: List[Tuple[int, int]] = [(0, 1), (1, 0), (-1, 0), (0, -1),
                                    (1, 1), (-1, -1), (1, -1), (-1, 1)]
 
