@@ -74,15 +74,15 @@ class Node:
             return 0
 
         total_value = 0
-        new_game = deepcopy(self.board)
-        player = self.player
-
         for i in range(7):
-            if not new_game.terminal():
+            new_game = deepcopy(self.board)
+            player = self.player
+            while not new_game.terminal():
                 move = choice(new_game.moves(player))
                 new_game.do_move(move, player)
-                total_value += new_game.heuristic(self.agent_player)
                 player = 1 - player
+
+            total_value += new_game.heuristic(self.agent_player)
 
         return total_value
 

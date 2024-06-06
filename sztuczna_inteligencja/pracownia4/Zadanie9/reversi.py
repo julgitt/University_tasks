@@ -142,31 +142,9 @@ class ReversiState:
     # endregion
 
     # region Heuristics
-    WEIGHTS = [
-        [50, -20, 11, 8, 8, 11, -20, 50],
-        [-20, -50, -4, 1, 1, -4, -50, -20],
-        [11, -4, 2, 2, 2, 2, -4, 11],
-        [8, 1, 2, -3, -3, 2, 1, 8],
-        [8, 1, 2, -3, -3, 2, 1, 8],
-        [11, -4, 2, 2, 2, 2, -4, 11],
-        [-20, -50, -4, 1, 1, -4, -50, -20],
-        [50, -20, 11, 8, 8, 11, -20, 50]
-    ]
-
-    # def score_heuristic(self):
-    #     return self.result()
-
-    def weight_heuristic(self, player: int) -> int:
-        res = 0
-        for y in range(self.size):
-            for x in range(self.size):
-                b = self.board[y][x]
-                if b == player:
-                    res += self.WEIGHTS[y][x]
-                else:
-                    res -= self.WEIGHTS[y][x]
-        return res
-
-    def heuristic(self, player: int) -> int:
-        return int(self.weight_heuristic(player))
+    def heuristic(self, agent: int) -> int:
+        if 1 == agent:
+            return self.result()
+        else:
+            return -self.result()
     # endregion
