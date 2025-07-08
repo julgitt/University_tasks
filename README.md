@@ -1,5 +1,5 @@
-# University_tasks
-### Some programming tasks and courses completed in college.
+# University Tasks
+### This repository contains projects and coursework developed as part of university classes.
 <br>
 
 ## FIRST YEAR
@@ -45,7 +45,7 @@
 - Computer Networks
 - Project: "System Zapisów"
 
-- ## FOURTH YEAR
+## FOURTH YEAR
 ### VII TERM
 - [Engineering Thesis Project - Electronic School Enrollment System](https://github.com/julgitt/Electronic-School-Enrollment-System)
 - Data Visualisation Seminar
