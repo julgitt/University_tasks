@@ -44,3 +44,8 @@
 - [Linux Administration Course](https://github.com/julgitt/University_tasks/tree/master/administrowanie_linuxem)
 - Computer Networks
 - Project: "System Zapisów"
+
+- ## FOURTH YEAR
+### VII TERM
+- [Engineering Thesis Project - Electronic School Enrollment System](https://github.com/julgitt/Electronic-School-Enrollment-System)
+- Data Visualisation Seminar
